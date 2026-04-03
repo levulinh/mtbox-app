@@ -72,3 +72,4 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 5 | MTB-7 | Data persistence — backend only, no mockup needed, noted in comment | Awaiting Design Approval |
 | 2026-04-04 run 6 | (none) | No active "In Design" issues found — only MTB-5 (archived) visible, already handled | Idle run |
 | 2026-04-04 run 7 | (none) | No active "In Design" issues found — only MTB-5 (archived) visible, already handled | Idle run |
+| 2026-04-04 run 8 | (none) | No active "In Design" issues found | Idle run |
