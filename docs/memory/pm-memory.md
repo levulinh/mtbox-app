@@ -4,7 +4,7 @@
 Track issues processed, routing decisions made, and patterns noticed across all runs.
 
 ## Last Updated
-2026-04-04 (run 13)
+2026-04-04 (run 14)
 
 ## Issues Processed
 (format: YYYY-MM-DD | issue-id | title | action taken)
@@ -35,3 +35,4 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | Eleventh run. No Backlog or Awaiting Decision issues. MTB-7 in Awaiting Design Approval — still no CEO reply, skipped. MTB-8 in Awaiting Design Approval — CEO replied "Good" after Designer mockup, approved, moved to In Progress. Two issues now In Progress: MTB-8 and MTB-9.
 2026-04-04 | Twelfth run. No Backlog or Awaiting Decision issues. MTB-7 still in Awaiting Design Approval — Designer noted no mockup needed (backend-only task), but CEO has not yet replied. Skipped. Nothing to route this run.
 2026-04-04 | Thirteenth run. No Backlog or Awaiting Decision issues. MTB-7 still in Awaiting Design Approval — Designer noted no mockup needed (backend-only task), CEO still has not replied. Skipped again. Nothing to route this run.
+2026-04-04 | Fourteenth run. No Backlog or Awaiting Decision issues. MTB-7 still in Awaiting Design Approval — Designer noted no mockup needed (backend-only task), CEO still has not replied. Skipped again. Nothing to route this run. MTB-7 has been blocked here for multiple runs waiting on CEO acknowledgement.
