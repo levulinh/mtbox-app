@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 375px; height: 812px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      background: #FAFAFA; overflow: hidden; position: relative;
+    }
+
+    .status-bar {
+      height: 44px; background: #1E50FF;
+      display: flex; align-items: center; padding: 0 20px;
+      color: white; font-size: 12px; justify-content: space-between; font-weight: 600;
+    }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-icons .material-icons { font-size: 14px; }
+
+    .app-bar {
+      height: 56px; background: #1E50FF;
+      display: flex; align-items: center; padding: 0 16px; color: white;
+      border-bottom: 2px solid #000; box-shadow: 0 2px 0 #000;
+    }
+    .app-bar-title { font-size: 18px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+    .content {
+      padding: 16px;
+      height: calc(812px - 44px - 56px - 60px);
+      overflow: hidden;
+    }
+
+    .section-header {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: #555;
+      margin-bottom: 10px; padding-left: 8px;
+      border-left: 3px solid #1E50FF;
+    }
+
+    /* Campaign Card */
+    .campaign-card {
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .card-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; margin-bottom: 8px;
+    }
+    .card-name { font-size: 14px; font-weight: 700; color: #000; }
+    .card-goal { font-size: 11px; font-weight: 500; color: #555; margin-top: 2px; }
+    .status-chip {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+      text-transform: uppercase; padding: 2px 7px; border: 2px solid; flex-shrink: 0;
+    }
+    .status-chip.active { background: #1E50FF; color: #fff; border-color: #1E50FF; }
+    .status-chip.done { background: #fff; color: #000; border-color: #000; }
+
+    /* Progress section */
+    .progress-section { }
+    .progress-labels {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 4px;
+    }
+    .progress-day { font-size: 11px; font-weight: 700; color: #000; }
+    .progress-pct { font-size: 11px; font-weight: 700; color: #1E50FF; }
+
+    .progress-track {
+      height: 10px; background: #FAFAFA;
+      border: 2px solid #000; position: relative; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: #1E50FF;
+      position: absolute; top: 0; left: 0;
+    }
+
+    /* Day ticks row */
+    .day-ticks {
+      display: flex; gap: 2px; margin-top: 6px;
+    }
+    .day-tick {
+      height: 6px; flex: 1;
+      border: 1px solid #000;
+    }
+    .day-tick.completed { background: #1E50FF; }
+    .day-tick.missed { background: #fff; }
+    .day-tick.future { background: #FAFAFA; border-color: #ccc; }
+
+    /* FAB */
+    .fab {
+      position: absolute; bottom: 76px; right: 16px;
+      width: 52px; height: 52px;
+      background: #1E50FF; border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .fab .material-icons { font-size: 24px; color: #fff; }
+
+    .bottom-nav {
+      position: absolute; bottom: 0; width: 375px; height: 60px;
+      background: #fff; border-top: 2px solid #000; display: flex;
+    }
+    .nav-tab {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2px;
+    }
+    .nav-tab.active { background: #1E50FF; }
+    .nav-tab .material-icons { font-size: 20px; color: #000; }
+    .nav-tab.active .material-icons { color: #fff; }
+    .nav-tab-label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #000; }
+    .nav-tab.active .nav-tab-label { color: #fff; }
+    .nav-divider { width: 2px; background: #000; }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <div class="app-bar">
+    <span class="app-bar-title">Campaigns</span>
+  </div>
+
+  <div class="content">
+    <div class="section-header">Active Campaigns</div>
+
+    <!-- Campaign 1: Morning Run -->
+    <div class="campaign-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">Morning Run</div>
+          <div class="card-goal">Goal: 30 days</div>
+        </div>
+        <div class="status-chip active">Active</div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-labels">
+          <span class="progress-day">Day 12 of 30</span>
+          <span class="progress-pct">40%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:40%"></div>
+        </div>
+        <div class="day-ticks">
+          <!-- 12 completed, 1 missed, rest future — show 20 ticks total -->
+          <div class="day-tick completed"></div><div class="day-tick completed"></div>
+          <div class="day-tick completed"></div><div class="day-tick completed"></div>
+          <div class="day-tick completed"></div><div class="day-tick completed"></div>
+          <div class="day-tick completed"></div><div class="day-tick missed"></div>
+          <div class="day-tick completed"></div><div class="day-tick completed"></div>
+          <div class="day-tick completed"></div><div class="day-tick completed"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign 2: Read 20 Pages -->
+    <div class="campaign-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">Read 20 Pages</div>
+          <div class="card-goal">Goal: 21 days</div>
+        </div>
+        <div class="status-chip active">Active</div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-labels">
+          <span class="progress-day">Day 7 of 21</span>
+          <span class="progress-pct">33%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:33%"></div>
+        </div>
+        <div class="day-ticks">
+          <div class="day-tick completed"></div><div class="day-tick completed"></div>
+          <div class="day-tick completed"></div><div class="day-tick completed"></div>
+          <div class="day-tick completed"></div><div class="day-tick completed"></div>
+          <div class="day-tick completed"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+          <div class="day-tick future"></div><div class="day-tick future"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign 3: No Sugar — completed -->
+    <div class="campaign-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">No Sugar</div>
+          <div class="card-goal">Goal: 30 days</div>
+        </div>
+        <div class="status-chip done">Done</div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-labels">
+          <span class="progress-day">Day 30 of 30</span>
+          <span class="progress-pct">100%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:100%; background:#000;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <div class="fab">
+    <span class="material-icons">add</span>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-tab">
+      <span class="material-icons">home</span>
+      <span class="nav-tab-label">Home</span>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-tab active">
+      <span class="material-icons">list_alt</span>
+      <span class="nav-tab-label">Campaigns</span>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      <span class="nav-tab-label">Profile</span>
+    </div>
+  </div>
+</body>
+</html>
