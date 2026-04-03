@@ -4,7 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
-2026-04-04 (run 2)
+2026-04-04 (run 3)
 
 ## Color Palette
 Established on first mockup run (2026-04-04). All screens must use these values exactly.
@@ -63,3 +63,4 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 | MTB-6 v1 | App shell — Home tab (active), bottom nav with Campaigns + Profile tabs | Sent back for revision by CEO |
 | 2026-04-04 run 2 | MTB-6 v2 | All 3 tabs revised: Home (less bold, font icons), Campaigns (progress bar + day-ticks), Profile (avatar, stats, settings) | Awaiting Design Approval |
 | 2026-04-04 | MTB-5 | Campaign list screen with FAB | Archived issue — mockup created for reference, no Linear comment posted |
+| 2026-04-04 run 3 | (none) | No active "In Design" issues found — MTB-5 archived, MTB-6 already in Awaiting Design Approval | Idle run |
