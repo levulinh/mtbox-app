@@ -4,7 +4,7 @@
 Track issues processed, routing decisions made, and patterns noticed across all runs.
 
 ## Last Updated
-2026-04-04 (run 24)
+2026-04-04 (run 25)
 
 ## Issues Processed
 (format: YYYY-MM-DD | issue-id | title | action taken)
@@ -19,6 +19,7 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | MTB-8 | Campaign creation flow | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | MTB-9 | Campaign list screen | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | MTB-8 | Campaign creation flow | CEO approved Designer mockup ("Good"), moved Awaiting Design Approval → In Progress
+2026-04-04 | MTB-7 | Campaign data model & persistence | CEO said "Go" after Designer's no-mockup-needed comment, moved Awaiting Design Approval → In Progress
 
 ## Patterns & Learnings
 (append observations about team dynamics, delays, recurring issues)
@@ -47,3 +48,4 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | Twenty-third run. No Backlog or Awaiting Decision issues. MTB-7 still in Awaiting Design Approval — Designer noted no mockup needed (backend-only task), CEO still has not replied (14th run waiting). Skipped again. Nothing to route this run.
 2026-04-04 | Twenty-fourth run. No Backlog or Awaiting Decision issues. MTB-7 still in Awaiting Design Approval — Designer noted no mockup needed (backend-only task), CEO still has not replied (15th run waiting). Skipped again. Nothing to route this run.
 2026-04-04 | Twenty-fifth run. No Backlog or Awaiting Decision issues. MTB-7 still in Awaiting Design Approval — Designer noted no mockup needed (backend-only task), CEO still has not replied (16th run waiting). Skipped again. Nothing to route this run.
+2026-04-04 | Twenty-sixth run. No Backlog or Awaiting Decision issues. MTB-7 in Awaiting Design Approval — CEO finally replied "Go" (after 16 runs of waiting), posted after the Designer comment. Approved. Moved MTB-7 to In Progress.
