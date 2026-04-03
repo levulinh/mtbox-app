@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/mock_data_provider.dart';
 import '../theme.dart';
 import '../widgets/campaign_card.dart';
@@ -68,7 +69,7 @@ class CampaignsScreen extends ConsumerWidget {
         height: 52,
         decoration: brutalistBox(color: kBlue, filled: true),
         child: FloatingActionButton(
-          onPressed: null,
+          onPressed: () => context.push('/campaigns/new'),
           backgroundColor: Colors.transparent,
           elevation: 0,
           shape: const RoundedRectangleBorder(),

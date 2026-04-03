@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/home_screen.dart';
 import 'screens/campaigns_screen.dart';
+import 'screens/create_campaign_screen.dart';
 import 'screens/profile_screen.dart';
 import 'theme.dart';
 
@@ -22,6 +23,11 @@ final router = GoRouter(
           name: 'campaigns',
           pageBuilder: (context, state) =>
               const NoTransitionPage(child: CampaignsScreen()),
+        ),
+        GoRoute(
+          path: '/campaigns/new',
+          name: 'create-campaign',
+          builder: (context, state) => const CreateCampaignScreen(),
         ),
         GoRoute(
           path: '/profile',
