@@ -21,12 +21,12 @@ flutter run
 ```bash
 export PATH="/Volumes/ex-ssd/flutter/bin:$PATH"
 
-# Unit + widget tests
+# Unit + widget tests (no device needed)
 flutter test test/
 
-# E2E integration tests (requires iOS Simulator running)
-open -a Simulator
-flutter test integration_test/
+# E2E integration tests (requires physical Android device via USB)
+flutter devices  # verify device is detected
+flutter test integration_test/ -d android
 ```
 
 ## Agent Roles

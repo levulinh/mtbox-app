@@ -43,3 +43,5 @@ It records cross-cutting decisions that all agents must follow.
 
 ## Known Issues / Things to Avoid
 - The external SSD (/Volumes/ex-ssd) may produce macOS ._* resource fork files. Run `find .git -name "._*" -delete` if git complains about non-monotonic index.
+- E2E tests run on physical Android device (USB, USB debugging enabled). iOS Simulator not currently set up. QA agent will skip E2E if no Android device detected and note it in the Linear comment.
+- When iOS Simulator is needed: symlink CoreSimulator to SSD first: `sudo mv ~/Library/Developer/CoreSimulator /Volumes/ex-ssd/CoreSimulator && ln -s /Volumes/ex-ssd/CoreSimulator ~/Library/Developer/CoreSimulator`
