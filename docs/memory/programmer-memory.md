@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (checked nine times — no In Progress issues any run)
+2026-04-04
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -12,6 +12,7 @@ Track architecture decisions, libraries used, patterns established, and things t
 | flutter_riverpod | ^3.3.1 | State management | 2026-04-04 |
 | riverpod_annotation | ^4.0.2 | Riverpod codegen support | 2026-04-04 |
 | go_router | ^17.2.0 | Tab and page navigation | 2026-04-04 |
+| hive_flutter | ^1.1.0 | Local persistence for campaign data | 2026-04-04 |
 
 ## Architecture Decisions
 - **Riverpod 3.x uses `Notifier<T>` + `NotifierProvider`** — `StateNotifier` was removed in Riverpod 3. Use `class Foo extends Notifier<T>` with a `build()` method, and `NotifierProvider<Foo, T>(Foo.new)`. The `state` field works the same way inside the notifier.
@@ -20,6 +21,10 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **`NoTransitionPage`** used for tab routes to prevent slide animations between tabs
 - **`brutalistBox()` helper in `lib/theme.dart`** — all card/container decoration goes through this to stay consistent
 - **Theme defined in `lib/theme.dart`** — global constants (`kBlue`, `kBackground`, `kBlack`, `kBorderWidth`, `kShadowOffset`) used everywhere; never hardcode colors in widgets
+- **Hive persistence**: `main()` is `async`; call `WidgetsFlutterBinding.ensureInitialized()`, `await Hive.initFlutter()`, register adapters, `await Hive.openBox<T>(name)` — then `runApp`. Box is synchronously accessible everywhere after that.
+- **Hive TypeAdapter**: use a manual `TypeAdapter<T>` (not build_runner codegen) — write fields sequentially in `write()`, read in the same order in `read()`. `typeId` must be unique across all registered adapters (Campaign = 0).
+- **Hive box key strategy**: use the model's own `id` field as the Hive key (`box.put(model.id, model)`) so campaigns can be looked up or updated by id later.
+- **Seed data on first launch**: if `box.isEmpty` in the notifier's `build()`, seed with mock data so existing integration tests (which expect `Morning Run`, `No Sugar` etc.) continue to pass.
 
 ## Patterns Established
 - All screens: `Scaffold > SafeArea > CustomScrollView > SliverAppBar + SliverPadding`
@@ -46,3 +51,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/1 | MTB-6 | Done |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/2 | MTB-9 | Done |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/3 | MTB-8 | Done |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/4 | MTB-7 | In Review |
