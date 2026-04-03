@@ -4,7 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
-2026-04-04 (run 4)
+2026-04-04 (run 5)
 
 ## Color Palette
 Established on first mockup run (2026-04-04). All screens must use these values exactly.
@@ -52,6 +52,8 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04: Stats grid: 3-column flex row, each cell a bordered card with Material Icon + blue value + uppercase label
 - 2026-04-04: FAB positioned bottom-right, above bottom nav (bottom: 76px to clear nav)
 - 2026-04-04 run 2: Profile tab: avatar = square with initials (no photo/emoji), settings list with icon + label + chevron rows
+- 2026-04-04 run 5: Campaign list screen (MTB-9) — two sections (Active / Completed) with section header showing count; campaign cards with name, goal, Day X of Y label, percentage, progress bar, day-tick strip; empty state: dashed border card with message pointing to FAB
+- 2026-04-04 run 5: Campaign creation (MTB-8) — full-screen pushed view (not modal); two-state design on one screen (error state + clean state separated by dashed annotation divider); error banner (red) at top of form; name field has red border + inline error on validation failure; goal uses number input + attached grey "DAYS" unit pill; Cancel (white) + Create (blue) buttons side by side
 
 ## Feedback Received
 - 2026-04-04: CEO on MTB-6 v1: "I want the design to be less bold, but still brutalism. Remove the emojis and use font icons. The campaign list should have a better way to show the progress (with UI elements). Also, give me the designs of the two other tabs too."
@@ -65,3 +67,6 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 | MTB-5 | Campaign list screen with FAB | Archived issue — mockup created for reference, no Linear comment posted |
 | 2026-04-04 run 3 | (none) | No active "In Design" issues found — MTB-5 archived, MTB-6 already in Awaiting Design Approval | Idle run |
 | 2026-04-04 run 4 | (none) | No active "In Design" issues found — same state as run 3 | Idle run |
+| 2026-04-04 run 5 | MTB-9 | Campaign list screen — Active + Completed sections, progress bars, day-ticks, FAB | Awaiting Design Approval |
+| 2026-04-04 run 5 | MTB-8 | Campaign creation flow — full-screen form with error + clean state shown | Awaiting Design Approval |
+| 2026-04-04 run 5 | MTB-7 | Data persistence — backend only, no mockup needed, noted in comment | Awaiting Design Approval |
