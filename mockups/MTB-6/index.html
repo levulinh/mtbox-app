@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 375px;
+      height: 812px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      background: #FAFAFA;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 44px;
+      background: #1E50FF;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      color: white;
+      font-size: 12px;
+      justify-content: space-between;
+      font-weight: 700;
+    }
+
+    /* App Bar */
+    .app-bar {
+      height: 56px;
+      background: #1E50FF;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border-bottom: 3px solid #000;
+      box-shadow: 0 3px 0 #000;
+    }
+    .app-bar-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Content */
+    .content {
+      padding: 16px;
+      height: calc(812px - 44px - 56px - 60px);
+      overflow-y: auto;
+      background: #FAFAFA;
+    }
+
+    /* Greeting */
+    .greeting {
+      font-size: 26px;
+      font-weight: 900;
+      color: #000;
+      margin-bottom: 4px;
+      letter-spacing: -1px;
+    }
+    .greeting-sub {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      flex: 1;
+      background: #fff;
+      border: 3px solid #000;
+      box-shadow: 3px 3px 0 #000;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 900;
+      color: #1E50FF;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-top: 4px;
+    }
+
+    /* Section Header */
+    .section-header {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #000;
+      margin-bottom: 10px;
+      border-left: 4px solid #1E50FF;
+      padding-left: 8px;
+    }
+
+    /* Activity Feed */
+    .activity-item {
+      background: #fff;
+      border: 3px solid #000;
+      box-shadow: 3px 3px 0 #000;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .activity-dot {
+      width: 12px;
+      height: 12px;
+      background: #1E50FF;
+      border: 2px solid #000;
+      flex-shrink: 0;
+    }
+    .activity-text {
+      flex: 1;
+    }
+    .activity-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #000;
+    }
+    .activity-meta {
+      font-size: 11px;
+      color: #555;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .activity-badge {
+      background: #1E50FF;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 7px;
+      border: 2px solid #000;
+      text-transform: uppercase;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #fff;
+      border-top: 3px solid #000;
+      display: flex;
+      align-items: center;
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      height: 100%;
+      cursor: pointer;
+    }
+    .nav-item.active {
+      background: #1E50FF;
+    }
+    .nav-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+    .nav-label {
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #000;
+    }
+    .nav-item.active .nav-label {
+      color: #fff;
+    }
+    .nav-divider {
+      width: 3px;
+      height: 100%;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>▲▲▲ WiFi ▮▮▮</span>
+  </div>
+
+  <div class="app-bar">
+    <span class="app-bar-title">MTBox</span>
+  </div>
+
+  <div class="content">
+    <!-- Greeting -->
+    <div class="greeting">Hey Drew 👋</div>
+    <div class="greeting-sub">Friday, April 4 · Keep going!</div>
+
+    <!-- Stats Summary -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Total<br>Campaigns</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Active<br>Campaigns</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Longest<br>Streak</div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="section-header">Recent Activity</div>
+
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text">
+        <div class="activity-title">Morning Run</div>
+        <div class="activity-meta">Day 12 of 30 · 2 hrs ago</div>
+      </div>
+      <div class="activity-badge">✓ Done</div>
+    </div>
+
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text">
+        <div class="activity-title">Read 20 Pages</div>
+        <div class="activity-meta">Day 7 of 21 · Yesterday</div>
+      </div>
+      <div class="activity-badge">✓ Done</div>
+    </div>
+
+    <div class="activity-item">
+      <div class="activity-dot" style="background:#FAFAFA;"></div>
+      <div class="activity-text">
+        <div class="activity-title">No Sugar</div>
+        <div class="activity-meta">Day 5 of 30 · Yesterday</div>
+      </div>
+      <div class="activity-badge" style="background:#FAFAFA;color:#000;">Missed</div>
+    </div>
+
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text">
+        <div class="activity-title">Cold Shower</div>
+        <div class="activity-meta">Day 3 of 7 · 2 days ago</div>
+      </div>
+      <div class="activity-badge">✓ Done</div>
+    </div>
+
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text">
+        <div class="activity-title">Morning Run</div>
+        <div class="activity-meta">Day 11 of 30 · 2 days ago</div>
+      </div>
+      <div class="activity-badge">✓ Done</div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Home</div>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-item">
+      <div class="nav-icon">📋</div>
+      <div class="nav-label">Campaigns</div>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-item">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">Profile</div>
+    </div>
+  </div>
+</body>
+</html>
