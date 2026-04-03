@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (MTB-8)
+2026-04-04 (checked — no In Progress issues)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -43,6 +43,6 @@ Track architecture decisions, libraries used, patterns established, and things t
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
-| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/1 | MTB-6 | In Review |
-| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/2 | MTB-9 | In Review |
-| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/3 | MTB-8 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/1 | MTB-6 | Done |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/2 | MTB-9 | Done |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/3 | MTB-8 | Done |
