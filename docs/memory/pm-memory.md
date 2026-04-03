@@ -4,7 +4,7 @@
 Track issues processed, routing decisions made, and patterns noticed across all runs.
 
 ## Last Updated
-2026-04-04 (run 10)
+2026-04-04 (run 11)
 
 ## Issues Processed
 (format: YYYY-MM-DD | issue-id | title | action taken)
@@ -18,6 +18,7 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | MTB-7 | Campaign data model & persistence | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | MTB-8 | Campaign creation flow | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | MTB-9 | Campaign list screen | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | MTB-8 | Campaign creation flow | CEO approved Designer mockup ("Good"), moved Awaiting Design Approval → In Progress
 
 ## Patterns & Learnings
 (append observations about team dynamics, delays, recurring issues)
@@ -31,3 +32,4 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | Eighth run. No issues in Backlog, Awaiting Design Approval, or Awaiting Decision. All queues empty. Nothing to route this run.
 2026-04-04 | Ninth run. Three new Backlog issues: MTB-7 (data persistence), MTB-8 (campaign creation), MTB-9 (campaign list screen). All three had clear enough descriptions for direct acceptance criteria. No issues in Awaiting Design Approval or Awaiting Decision. All three moved to In Design.
 2026-04-04 | Tenth run. No Backlog issues. Three issues in Awaiting Design Approval: MTB-7 (Designer said no mockup needed, no CEO reply yet — skipped), MTB-8 (Designer posted mockup, no CEO reply yet — skipped), MTB-9 (CEO replied "Good 👍" — approved, moved to In Progress). No Awaiting Decision issues. Key technical learning: save_issue requires `state` parameter (not `status`, `statusId`, or `stateId`) to update workflow status.
+2026-04-04 | Eleventh run. No Backlog or Awaiting Decision issues. MTB-7 in Awaiting Design Approval — still no CEO reply, skipped. MTB-8 in Awaiting Design Approval — CEO replied "Good" after Designer mockup, approved, moved to In Progress. Two issues now In Progress: MTB-8 and MTB-9.
