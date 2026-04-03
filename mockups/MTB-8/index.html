@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 375px; height: 812px; font-family: -apple-system, 'SF Pro Display', sans-serif; background: #FAFAFA; overflow: hidden; }
+
+    /* ── Status bar ─────────────────────── */
+    .status-bar {
+      height: 44px; background: #1E50FF;
+      display: flex; align-items: center; padding: 0 20px;
+      color: white; font-size: 12px; font-weight: 700;
+      justify-content: space-between;
+    }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-icons .material-icons { font-size: 14px; }
+
+    /* ── App bar ────────────────────────── */
+    .app-bar {
+      height: 56px; background: #1E50FF;
+      display: flex; align-items: center; padding: 0 16px; gap: 12px;
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #000;
+    }
+    .app-bar .material-icons { color: white; font-size: 22px; }
+    .app-bar-title { font-size: 18px; font-weight: 700; color: white; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ── Form content ───────────────────── */
+    .content { padding: 20px 16px; }
+
+    .form-intro {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #555;
+      border-left: 3px solid #1E50FF; padding-left: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* Field group */
+    .field-group { margin-bottom: 18px; }
+    .field-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: #000;
+      margin-bottom: 6px; display: block;
+    }
+    .field-input {
+      width: 100%; height: 48px;
+      border: 2px solid #000;
+      background: white;
+      padding: 0 12px;
+      font-size: 15px; font-weight: 600; color: #000;
+      box-shadow: 2px 2px 0 #000;
+      display: flex; align-items: center;
+    }
+    .field-input.filled { color: #000; }
+    .field-input.placeholder { color: #AAA; }
+    .field-input.error-border { border-color: #CC2200; box-shadow: 2px 2px 0 #CC2200; }
+    .field-error {
+      font-size: 11px; font-weight: 700; color: #CC2200;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-top: 5px; display: flex; align-items: center; gap: 4px;
+    }
+    .field-error .material-icons { font-size: 13px; }
+    .field-hint {
+      font-size: 11px; font-weight: 600; color: #555; margin-top: 5px;
+    }
+
+    /* Goal input row with unit label */
+    .goal-row { display: flex; align-items: stretch; gap: 0; }
+    .goal-number {
+      width: 100px; height: 48px;
+      border: 2px solid #000;
+      background: white;
+      padding: 0 12px;
+      font-size: 15px; font-weight: 600; color: #000;
+      box-shadow: 2px 2px 0 #000;
+      display: flex; align-items: center;
+    }
+    .goal-unit {
+      height: 48px;
+      border: 2px solid #000; border-left: none;
+      background: #F0F0F0;
+      padding: 0 14px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      color: #555; letter-spacing: 0.8px;
+      display: flex; align-items: center;
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    /* Divider */
+    .divider { height: 2px; background: #000; margin: 20px 0; }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 10px; }
+    .btn {
+      flex: 1; height: 50px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; border: 2px solid #000;
+    }
+    .btn-cancel {
+      background: white; color: #000;
+      box-shadow: 2px 2px 0 #000;
+    }
+    .btn-create {
+      background: #1E50FF; color: white;
+      box-shadow: 2px 2px 0 #000;
+    }
+    .btn-create .material-icons { font-size: 16px; margin-right: 6px; }
+
+    /* ── "Two screens" layout ───────────── */
+    /* We show TWO screens side by side within the 375px:
+       Left half: empty/valid form  |  Right half: error state
+       But we need to show them stacked with a divider label.
+       Instead: show the form with the ERROR state (more informative). */
+
+    /* Validation banner */
+    .validation-banner {
+      background: #FFF0EE;
+      border: 2px solid #CC2200;
+      box-shadow: 2px 2px 0 #CC2200;
+      padding: 10px 12px;
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 18px;
+    }
+    .validation-banner .material-icons { color: #CC2200; font-size: 18px; flex-shrink: 0; }
+    .validation-banner-text { font-size: 12px; font-weight: 700; color: #CC2200; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: absolute; bottom: 0; left: 0;
+      width: 375px; height: 60px;
+      background: white;
+      border-top: 2px solid #000;
+      display: flex;
+    }
+    .nav-tab {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2px;
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: #555;
+      border-right: 2px solid #000;
+    }
+    .nav-tab:last-child { border-right: none; }
+    .nav-tab.active { background: #1E50FF; color: white; }
+    .nav-tab .material-icons { font-size: 20px; }
+  </style>
+</head>
+<body>
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar — shows back arrow since this is a new screen pushed on the stack -->
+  <div class="app-bar">
+    <span class="material-icons">arrow_back</span>
+    <span class="app-bar-title">New Campaign</span>
+  </div>
+
+  <!-- Form content — shown in error/validation state so all elements are visible -->
+  <div class="content">
+    <div class="form-intro">Fill in the details below to start tracking</div>
+
+    <!-- Validation banner -->
+    <div class="validation-banner">
+      <span class="material-icons">error_outline</span>
+      <span class="validation-banner-text">Please fix the errors below</span>
+    </div>
+
+    <!-- Campaign Name field — error state (empty) -->
+    <div class="field-group">
+      <label class="field-label">Campaign Name</label>
+      <div class="field-input placeholder error-border">Name your campaign…</div>
+      <div class="field-error">
+        <span class="material-icons">error</span> Name is required
+      </div>
+    </div>
+
+    <!-- Goal field — filled correctly -->
+    <div class="field-group">
+      <label class="field-label">Goal (days)</label>
+      <div class="goal-row">
+        <div class="goal-number">30</div>
+        <div class="goal-unit">days</div>
+      </div>
+      <div class="field-hint">How many days is this campaign?</div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Action buttons -->
+    <div class="btn-row">
+      <div class="btn btn-cancel">Cancel</div>
+      <div class="btn btn-create">
+        <span class="material-icons">check</span>
+        Create
+      </div>
+    </div>
+
+    <!-- Annotation: also show what the empty / clean form looks like -->
+    <div style="margin-top: 20px; border-top: 2px dashed #CCC; padding-top: 14px;">
+      <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #555; letter-spacing: 0.8px; margin-bottom: 12px; border-left: 3px solid #555; padding-left: 8px;">Clean state (no errors)</div>
+      <div class="field-group" style="margin-bottom: 12px;">
+        <label class="field-label">Campaign Name</label>
+        <div class="field-input filled">Morning Run</div>
+      </div>
+      <div class="field-group" style="margin-bottom: 0;">
+        <label class="field-label">Goal (days)</label>
+        <div class="goal-row">
+          <div class="goal-number">30</div>
+          <div class="goal-unit">days</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab">
+      <span class="material-icons">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-tab active">
+      <span class="material-icons">flag</span>
+      <span>Campaigns</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      <span>Profile</span>
+    </div>
+  </div>
+</body>
+</html>
