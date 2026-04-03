@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 5: no issues in review — confirmed via Linear state ID b45fd3f7)
+2026-04-04 (session 8: no issues in review — confirmed via Linear state ID b45fd3f7; all PRs merged)
 
 ## Known Flaky Tests
 (none yet)
