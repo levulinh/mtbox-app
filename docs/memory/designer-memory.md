@@ -4,7 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
-2026-04-04 (run 12)
+2026-04-04 (run 13)
 
 ## Color Palette
 Established on first mockup run (2026-04-04). All screens must use these values exactly.
@@ -77,3 +77,4 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 10 | (none) | No active "In Design" issues found | Idle run |
 | 2026-04-04 run 11 | (none) | No active "In Design" issues found | Idle run |
 | 2026-04-04 run 12 | (none) | No active "In Design" issues found | Idle run |
+| 2026-04-04 run 13 | (none) | No active "In Design" issues found — only MTB-5 (archived) visible, already handled | Idle run |
