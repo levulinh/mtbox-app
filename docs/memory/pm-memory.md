@@ -4,7 +4,7 @@
 Track issues processed, routing decisions made, and patterns noticed across all runs.
 
 ## Last Updated
-2026-04-04 (run 5)
+2026-04-04 (run 6)
 
 ## Issues Processed
 (format: YYYY-MM-DD | issue-id | title | action taken)
@@ -23,3 +23,4 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | Third run. No Backlog issues. MTB-6 was in Awaiting Design Approval — CEO rejected the first Designer mockup (too bold, emojis present, only Home tab shown). Moved back to In Design. No Awaiting Decision issues.
 2026-04-04 | Fourth run. No Backlog or Awaiting Decision issues. MTB-6 in Awaiting Design Approval — Designer submitted revised mockup (all 3 tabs, softer brutalism, Material Icons, redesigned progress bar). CEO replied "Good to go!" — approved. Moved MTB-6 to In Progress.
 2026-04-04 | Fifth run. No issues in Backlog, Awaiting Design Approval, or Awaiting Decision. MTB-6 is now "In Review" — Programmer completed implementation and QA is reviewing. MTB-5 remains in In Design. Nothing for PM to route this run. Note: Linear list_issues API does not filter by status — all issues are returned regardless of status filter; must filter client-side.
+2026-04-04 | Sixth run. No issues in Backlog, Awaiting Design Approval, or Awaiting Decision. MTB-6 still "In Review" — QA has not yet posted a review comment. MTB-5 remains In Design. Nothing to route. Waiting on QA result for MTB-6.
