@@ -210,11 +210,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap the CAMPAIGNS nav item (in the bottom nav bar)
-      final campaignsNavItem = find.descendant(
-        of: find.byType(BottomAppBar).first,
-        matching: find.text('CAMPAIGNS'),
-      );
-      // Fall back: tap by text directly in nav
+      // Tap by text directly in nav
       await tester.tap(find.text('CAMPAIGNS').last);
       await tester.pumpAndSettle();
 

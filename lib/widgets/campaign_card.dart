@@ -67,16 +67,17 @@ class CampaignCard extends StatelessWidget {
               const Spacer(),
               Text(
                 '$pct%',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: kBlue,
+                  color: campaign.isActive ? kBlue : kBlack,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 6),
-          _ProgressBar(percent: campaign.progressPercent),
+          _ProgressBar(
+              percent: campaign.progressPercent, isActive: campaign.isActive),
           const SizedBox(height: 10),
           _DayTickStrip(
             totalDays: campaign.totalDays,
@@ -90,8 +91,9 @@ class CampaignCard extends StatelessWidget {
 
 class _ProgressBar extends StatelessWidget {
   final double percent;
+  final bool isActive;
 
-  const _ProgressBar({required this.percent});
+  const _ProgressBar({required this.percent, required this.isActive});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +108,7 @@ class _ProgressBar extends StatelessWidget {
       child: FractionallySizedBox(
         widthFactor: percent.clamp(0.0, 1.0),
         alignment: Alignment.centerLeft,
-        child: Container(color: kBlue),
+        child: Container(color: isActive ? kBlue : kBlack),
       ),
     );
   }
@@ -133,10 +135,10 @@ class _DayTickStrip extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 1),
             decoration: BoxDecoration(
               color: future
-                  ? kBackground
+                  ? const Color(0xFFE8E8E8)
                   : done
                       ? kBlue
-                      : kBackground,
+                      : kWhite,
               border: Border.all(
                 color: future ? Colors.grey.shade300 : kBlack,
                 width: 1,
