@@ -4,7 +4,7 @@
 Track issues processed, routing decisions made, and patterns noticed across all runs.
 
 ## Last Updated
-2026-04-04 (run 8)
+2026-04-04 (run 9)
 
 ## Issues Processed
 (format: YYYY-MM-DD | issue-id | title | action taken)
@@ -15,6 +15,9 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 (format: YYYY-MM-DD | issue-id | CEO said: "..." | routed to: status | reason)
 2026-04-04 | MTB-6 | CEO said: "less bold, still brutalism; remove emojis, use font icons; better progress UI on campaigns; designs for two other tabs" | routed to: In Design | CEO requested changes to first Designer mockup
 2026-04-04 | MTB-6 | CEO said: "Good to go!" (after revised Designer mockup with all 3 tabs) | routed to: In Progress | CEO approved revised mockup
+2026-04-04 | MTB-7 | Campaign data model & persistence | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | MTB-8 | Campaign creation flow | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | MTB-9 | Campaign list screen | Posted acceptance criteria comment, moved Backlog → In Design
 
 ## Patterns & Learnings
 (append observations about team dynamics, delays, recurring issues)
@@ -26,3 +29,4 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | Sixth run. No issues in Backlog, Awaiting Design Approval, or Awaiting Decision. MTB-6 still "In Review" — QA has not yet posted a review comment. MTB-5 remains In Design. Nothing to route. Waiting on QA result for MTB-6.
 2026-04-04 | Seventh run. No issues in Backlog, Awaiting Design Approval, or Awaiting Decision. MTB-6 is now "Done" — fully completed. MTB-5 remains In Design (archived). Nothing to route this run.
 2026-04-04 | Eighth run. No issues in Backlog, Awaiting Design Approval, or Awaiting Decision. All queues empty. Nothing to route this run.
+2026-04-04 | Ninth run. Three new Backlog issues: MTB-7 (data persistence), MTB-8 (campaign creation), MTB-9 (campaign list screen). All three had clear enough descriptions for direct acceptance criteria. No issues in Awaiting Design Approval or Awaiting Decision. All three moved to In Design.
