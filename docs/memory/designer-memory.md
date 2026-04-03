@@ -4,7 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
-2026-04-04
+2026-04-04 (run 2)
 
 ## Color Palette
 Established on first mockup run (2026-04-04). All screens must use these values exactly.
@@ -26,34 +26,40 @@ Established on first mockup run (2026-04-04). All screens must use these values 
 - Badge / tag: 9–10px, weight 900, uppercase
 
 ## Design System: Light Brutalism
-Rules established 2026-04-04 — must apply to every screen:
+Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must apply to every screen:
 - NO border-radius anywhere (no rounded corners)
 - NO gradients
 - NO soft shadows — only hard drop shadows (offset X/Y, no blur)
-- Borders: minimum 3px solid #000
-- Card shadows: 4px 4px 0 #000
-- App bar shadow: border-bottom 3px solid #000 + box-shadow 0 3px 0 #000
-- Section headers: left border 4px solid #1E50FF + 8px padding-left
-- Status bar: 44px, primary blue background
-- App bar: 56px, primary blue background
-- Bottom nav: 60px, white background, 3px top border, 3px vertical dividers between tabs
-- Active nav tab: filled #1E50FF background, white label
-- FAB: blue fill, 3px black border, 4px 4px 0 #000 shadow
+- NO emojis — use Material Icons (Google Fonts CDN) for all icons
+- Borders: 2px solid #000 (revised from 3px — "less bold but still brutalism")
+- Card shadows: 2px 2px 0 #000 (revised from 4px — same reason)
+- App bar shadow: border-bottom 2px solid #000 + box-shadow 0 2px 0 #000
+- Section headers: left border 3px solid #1E50FF + 8px padding-left, 11px font, 700 weight (not 900), uppercase, #555 color
+- Status bar: 44px, primary blue background; icons use Material Icons (signal_cellular_alt, wifi, battery_full)
+- App bar: 56px, primary blue background; title 18px, 700 weight, uppercase
+- Bottom nav: 60px, white background, 2px top border, 2px vertical dividers between tabs
+- Active nav tab: filled #1E50FF background, white icon + label
+- FAB: blue fill, 2px black border, 2px 2px 0 #000 shadow; use Material Icons "add" icon
+- Font weight: 700 for headings (revised from 900), 500-600 for body/meta
 
 ## Component Decisions
 - 2026-04-04: Used 3-tab bottom navigation as persistent shell — tabs: Home, Campaigns, Profile
 - 2026-04-04: Active tab uses solid blue fill (not underline indicator) — more brutalist
-- 2026-04-04: Progress bars: 12px tall, 2px black border, blue fill for active, solid black fill for completed
+- 2026-04-04 run 2: Progress bars: 10px tall, 2px black border, blue fill for active, black fill for completed; labeled with "Day X of Y" + percentage
+- 2026-04-04 run 2: Day-tick strip below progress bar — shows history at a glance (blue=completed, white=missed, light grey=future)
 - 2026-04-04: Status badges: "Active" = blue fill + white text; "Done"/"Completed" = white fill + black border
-- 2026-04-04: Activity feed dots: blue for completed check-in, white for missed check-in
-- 2026-04-04: Stats grid: 3-column flex row, each cell a bordered card with blue value + uppercase label
+- 2026-04-04 run 2: Activity feed uses Material Icons check_circle (blue) for done, radio_button_unchecked (grey) for missed — no dots/emojis
+- 2026-04-04: Stats grid: 3-column flex row, each cell a bordered card with Material Icon + blue value + uppercase label
 - 2026-04-04: FAB positioned bottom-right, above bottom nav (bottom: 76px to clear nav)
+- 2026-04-04 run 2: Profile tab: avatar = square with initials (no photo/emoji), settings list with icon + label + chevron rows
 
 ## Feedback Received
-(none yet — awaiting CEO review)
+- 2026-04-04: CEO on MTB-6 v1: "I want the design to be less bold, but still brutalism. Remove the emojis and use font icons. The campaign list should have a better way to show the progress (with UI elements). Also, give me the designs of the two other tabs too."
+  → Action: Reduced border/shadow weight (3px→2px), switched all emojis to Material Icons, added progress bar + day-tick strip + percentage label to campaign cards, added Campaigns and Profile tab designs.
 
 ## Mockups Created
 | Date | Issue | Screen | Status |
 |------|-------|--------|--------|
-| 2026-04-04 | MTB-6 | App shell — Home tab (active), bottom nav with Campaigns + Profile tabs | Awaiting Design Approval |
+| 2026-04-04 | MTB-6 v1 | App shell — Home tab (active), bottom nav with Campaigns + Profile tabs | Sent back for revision by CEO |
+| 2026-04-04 run 2 | MTB-6 v2 | All 3 tabs revised: Home (less bold, font icons), Campaigns (progress bar + day-ticks), Profile (avatar, stats, settings) | Awaiting Design Approval |
 | 2026-04-04 | MTB-5 | Campaign list screen with FAB | Archived issue — mockup created for reference, no Linear comment posted |
