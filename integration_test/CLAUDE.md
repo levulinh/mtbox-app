@@ -1,30 +1,23 @@
 # E2E Integration Tests
 
-## Devices
-E2E tests run on a **physical Android device** (USB connected, USB debugging enabled).
-iOS Simulator can be used if available (see setup note below).
+## How It Works
+The QA agent starts a headless Android Emulator (AVD: MTBox_QA), runs tests, then stops it. No device needs to be connected.
 
-## How to Run
+## How to Run Manually
 ```bash
-export PATH="/Volumes/ex-ssd/flutter/bin:$PATH"
+export ANDROID_HOME=/Volumes/ex-ssd/android-sdk
+export PATH="/Volumes/ex-ssd/flutter/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator/emulator:$PATH"
 
-# List connected devices
-flutter devices
+# Start emulator (AVD is stored at ~/.android/avd/MTBox_QA.avd on internal APFS)
+$ANDROID_HOME/emulator/emulator/emulator -avd MTBox_QA -no-window -no-audio -no-boot-anim -no-metrics &
 
-# Run on connected Android device (auto-detects if only one connected)
-flutter test integration_test/ -d android
+# Wait for boot, then run
+adb wait-for-device shell getprop sys.boot_completed
+flutter test integration_test/ -d emulator-5554
 
-# Run on specific device ID
-flutter test integration_test/ -d <device-id>
+# Stop when done
+adb emu kill
 ```
-
-## iOS Simulator Setup (when needed)
-To avoid filling internal storage, symlink simulator runtimes to the SSD first:
-```bash
-sudo mv ~/Library/Developer/CoreSimulator /Volumes/ex-ssd/CoreSimulator
-ln -s /Volumes/ex-ssd/CoreSimulator ~/Library/Developer/CoreSimulator
-```
-Then install Xcode from App Store and download only the latest iOS runtime in Xcode → Settings → Platforms.
 
 ## Structure
 One file per major user flow:
@@ -59,7 +52,6 @@ void main() {
 ```
 
 ## Rules
-- Each test starts fresh (`app.main()` with clean state)
-- Use `Key()` on interactive widgets
-- `pumpAndSettle()` after every tap/navigation
-- Ensure Android device is connected before QA agent runs
+- Use `Key()` on all interactive widgets for reliable test targeting
+- `pumpAndSettle()` after every tap or navigation
+- The QA agent handles emulator lifecycle — no manual setup needed

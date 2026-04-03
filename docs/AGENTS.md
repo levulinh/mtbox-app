@@ -43,5 +43,8 @@ It records cross-cutting decisions that all agents must follow.
 
 ## Known Issues / Things to Avoid
 - The external SSD (/Volumes/ex-ssd) may produce macOS ._* resource fork files. Run `find .git -name "._*" -delete` if git complains about non-monotonic index.
-- E2E tests run on physical Android device (USB, USB debugging enabled). iOS Simulator not currently set up. QA agent will skip E2E if no Android device detected and note it in the Linear comment.
+- Android Emulator AVD "MTBox_QA" is configured at ~/.android/avd/MTBox_QA.avd (internal APFS — required because ExFAT on the SSD does not support hard links used by the emulator's file locking)
+- Android SDK is at /Volumes/ex-ssd/android-sdk (SDK binaries work fine on ExFAT; only the AVD runtime data must be on APFS)
+- QA agent starts/stops the emulator autonomously — no device needs to be connected
+- If emulator fails to start, QA agent will skip E2E and note it in the Linear comment
 - When iOS Simulator is needed: symlink CoreSimulator to SSD first: `sudo mv ~/Library/Developer/CoreSimulator /Volumes/ex-ssd/CoreSimulator && ln -s /Volumes/ex-ssd/CoreSimulator ~/Library/Developer/CoreSimulator`
