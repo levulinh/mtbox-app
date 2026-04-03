@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04
+2026-04-04 (MTB-9)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -26,6 +26,10 @@ Track architecture decisions, libraries used, patterns established, and things t
 - Mock data lives in `lib/providers/mock_data_provider.dart` as simple `Provider<List<T>>` — move to Hive-backed `StateNotifier` when persistence is added
 - Widgets > ~80 lines extracted to `lib/widgets/`
 - `StatCard`, `ActivityItem`, `CampaignCard` are the core reusable widgets established
+- **Section headers** (label + count, blue left border): built inline in the screen using a `Container` with `Border(left: BorderSide(color: kBlue, width: 3))` + `SliverChildListDelegate` — no dedicated widget needed for one-off headers
+- **Empty state**: dashed-border `Container` (use `Color(0xFFCCCCCC)` border, not `brutalistBox`) inside `SliverFillRemaining(hasScrollBody: false)` 
+- **Square icon-only FAB**: wrap `FloatingActionButton` in a sized `Container(decoration: brutalistBox(color: kBlue, filled: true))` with `backgroundColor: Colors.transparent, elevation: 0, shape: RoundedRectangleBorder()`
+- **`brutalistBox(filled: true)` always fills kBlue** — to fill another color, build the `BoxDecoration` manually
 
 ## Things to Avoid
 - Don't use `setState` in screens — use Riverpod `ref.watch()`
@@ -37,3 +41,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/1 | MTB-6 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/2 | MTB-9 | In Review |
