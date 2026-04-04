@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 375px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      background: #FAFAFA;
+    }
+
+    /* ── SHARED ── */
+    .screen {
+      width: 375px;
+      height: 812px;
+      position: relative;
+      overflow: hidden;
+      background: #FAFAFA;
+    }
+
+    .status-bar {
+      height: 44px;
+      background: #1E50FF;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      justify-content: space-between;
+    }
+    .status-time { font-size: 13px; font-weight: 700; color: #fff; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-icons .material-icons { font-size: 16px; color: #fff; }
+
+    .app-bar {
+      height: 56px;
+      background: #1E50FF;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #000;
+    }
+    .app-bar-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .app-bar-back {
+      display: flex;
+      align-items: center;
+    }
+    .app-bar-back .material-icons { font-size: 24px; color: #fff; margin-right: 8px; }
+
+    .btn-primary {
+      width: 100%;
+      height: 52px;
+      background: #1E50FF;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-primary .material-icons { font-size: 20px; color: #fff; }
+
+    .btn-secondary {
+      width: 100%;
+      height: 48px;
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Progress dots (brutalist squares) */
+    .progress-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border: 2px solid #000;
+    }
+    .dot-active { background: #1E50FF; border-color: #1E50FF; }
+    .dot-inactive { background: #fff; border-color: #000; }
+
+    /* Annotation divider */
+    .annotation-divider {
+      width: 375px;
+      padding: 16px 20px;
+      background: #F0F0F0;
+      border-top: 2px dashed #999;
+      border-bottom: 2px dashed #999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .annotation-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #999;
+    }
+    .annotation-line {
+      flex: 1;
+      height: 1px;
+      background: #ccc;
+    }
+
+    /* ── SCREEN 1: WELCOME ── */
+    .s1-hero {
+      height: 360px;
+      background: #1E50FF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #000;
+      position: relative;
+    }
+    .s1-icon-block {
+      width: 88px;
+      height: 88px;
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 3px 3px 0 #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .s1-icon-block .material-icons { font-size: 48px; color: #1E50FF; }
+    .s1-app-name {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+    .s1-tagline {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 6px;
+    }
+    .s1-body {
+      padding: 28px 20px 24px;
+    }
+    .s1-headline {
+      font-size: 22px;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: -0.4px;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .s1-subtext {
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .s1-progress {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .s1-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .skip-link {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      text-decoration: underline;
+    }
+
+    /* ── SCREEN 2: WHAT IS A CAMPAIGN ── */
+    .s2-content {
+      padding: 20px 16px;
+    }
+    .s2-icon-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      padding: 16px;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      background: #fff;
+    }
+    .s2-icon-box {
+      width: 56px;
+      height: 56px;
+      background: #1E50FF;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .s2-icon-box .material-icons { font-size: 30px; color: #fff; }
+    .s2-icon-text { flex: 1; }
+    .s2-icon-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 4px;
+    }
+    .s2-icon-desc {
+      font-size: 12px;
+      font-weight: 500;
+      color: #555;
+      line-height: 1.45;
+    }
+
+    .s2-example-label {
+      border-left: 3px solid #1E50FF;
+      padding-left: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #555;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+    }
+    .s2-example-card {
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    .s2-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .s2-card-name { font-size: 14px; font-weight: 700; color: #000; }
+    .s2-badge { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; padding: 3px 6px; background: #1E50FF; color: #fff; border: 2px solid #1E50FF; }
+    .s2-meta { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; margin-bottom: 5px; }
+    .s2-track { width: 100%; height: 10px; background: #fff; border: 2px solid #000; margin-bottom: 5px; }
+    .s2-fill { height: 100%; background: #1E50FF; width: 40%; }
+    .s2-ticks { display: flex; gap: 2px; }
+    .s2-tick { width: 7px; height: 7px; }
+    .s2-tick-done { background: #1E50FF; }
+    .s2-tick-future { background: #E8E8E8; border: 1px solid #E8E8E8; }
+
+    .s2-nav-row { display: flex; gap: 10px; margin-top: 4px; align-items: center; }
+    .s2-back-link { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: underline; }
+
+    /* ── SCREEN 3: CREATE FIRST CAMPAIGN ── */
+    .s3-content { padding: 20px 16px; }
+    .s3-intro {
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #555;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .form-input {
+      width: 100%;
+      height: 48px;
+      background: #fff;
+      border: 2px solid #000;
+      padding: 0 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #000;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+    }
+    .form-input::placeholder { color: #bbb; font-weight: 500; }
+    .form-input-active { border-color: #1E50FF; box-shadow: 0 0 0 2px rgba(30,80,255,0.12); }
+
+    .form-row { display: flex; gap: 10px; align-items: flex-end; }
+    .form-days-input {
+      width: 90px;
+      height: 48px;
+      background: #fff;
+      border: 2px solid #000;
+      padding: 0 12px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1E50FF;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      text-align: center;
+    }
+    .form-unit-pill {
+      height: 48px;
+      background: #E8E8E8;
+      border: 2px solid #000;
+      border-left: none;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #555;
+      flex: 1;
+    }
+    .s3-hint {
+      font-size: 11px;
+      font-weight: 500;
+      color: #999;
+      margin-top: 6px;
+    }
+
+    .s3-progress { display: flex; justify-content: center; margin-bottom: 16px; }
+    .s3-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    /* Bottom strip – success state preview */
+    .s3-success-note {
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: #000;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .s3-success-note .material-icons { font-size: 16px; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 1: WELCOME / INTRO
+  ══════════════════════════════════════════ -->
+  <div class="screen">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="s1-hero">
+      <div class="s1-icon-block">
+        <span class="material-icons">flag</span>
+      </div>
+      <div class="s1-app-name">MTBox</div>
+      <div class="s1-tagline">Build habits that stick</div>
+    </div>
+
+    <!-- Body -->
+    <div class="s1-body">
+      <div class="s1-headline">Track your goals, one day at a time.</div>
+      <div class="s1-subtext">MTBox helps you build lasting habits by breaking big goals into daily actions — and showing your real progress every step of the way.</div>
+
+      <div class="s1-progress">
+        <div class="progress-dots">
+          <div class="dot dot-active"></div>
+          <div class="dot dot-inactive"></div>
+          <div class="dot dot-inactive"></div>
+        </div>
+      </div>
+
+      <div class="s1-actions">
+        <div class="btn-primary">
+          <span>Get Started</span>
+          <span class="material-icons">arrow_forward</span>
+        </div>
+        <div class="skip-link">Skip — I know the drill</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Annotation divider -->
+  <div class="annotation-divider">
+    <div class="annotation-line"></div>
+    <div class="annotation-label">Screen 2 — What's a Campaign?</div>
+    <div class="annotation-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 2: WHAT IS A CAMPAIGN?
+  ══════════════════════════════════════════ -->
+  <div class="screen">
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+    <div class="app-bar">
+      <div class="app-bar-back">
+        <span class="material-icons">arrow_back</span>
+      </div>
+      <span class="app-bar-title">How It Works</span>
+    </div>
+
+    <div class="s2-content">
+
+      <!-- Feature row 1 -->
+      <div class="s2-icon-row">
+        <div class="s2-icon-box">
+          <span class="material-icons">flag</span>
+        </div>
+        <div class="s2-icon-text">
+          <div class="s2-icon-title">Create a Campaign</div>
+          <div class="s2-icon-desc">Pick a habit and set a goal — like "Exercise daily for 30 days".</div>
+        </div>
+      </div>
+
+      <!-- Feature row 2 -->
+      <div class="s2-icon-row">
+        <div class="s2-icon-box">
+          <span class="material-icons">add_task</span>
+        </div>
+        <div class="s2-icon-text">
+          <div class="s2-icon-title">Check In Daily</div>
+          <div class="s2-icon-desc">Tap once each day to log your progress and build your streak.</div>
+        </div>
+      </div>
+
+      <!-- Example card -->
+      <div class="s2-example-label">Example Campaign</div>
+      <div class="s2-example-card">
+        <div class="s2-card-header">
+          <div class="s2-card-name">Exercise Daily</div>
+          <div class="s2-badge">Active</div>
+        </div>
+        <div class="s2-meta">
+          <span>Day 12 of 30</span>
+          <span>40%</span>
+        </div>
+        <div class="s2-track">
+          <div class="s2-fill"></div>
+        </div>
+        <div class="s2-ticks">
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-done" style="width:7px;height:7px;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+          <div class="s2-tick s2-tick-future" style="width:7px;height:7px;border:1px solid #ccc;"></div>
+        </div>
+      </div>
+
+      <!-- Progress + CTA -->
+      <div class="progress-dots" style="justify-content:center; margin-bottom:16px;">
+        <div class="dot dot-inactive"></div>
+        <div class="dot dot-active"></div>
+        <div class="dot dot-inactive"></div>
+      </div>
+
+      <div class="s2-nav-row">
+        <div class="btn-primary" style="flex:1;">
+          <span>Next</span>
+          <span class="material-icons">arrow_forward</span>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <span class="s2-back-link">← Back</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Annotation divider -->
+  <div class="annotation-divider">
+    <div class="annotation-line"></div>
+    <div class="annotation-label">Screen 3 — Create First Campaign</div>
+    <div class="annotation-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 3: CREATE FIRST CAMPAIGN
+  ══════════════════════════════════════════ -->
+  <div class="screen">
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+    <div class="app-bar">
+      <div class="app-bar-back">
+        <span class="material-icons">arrow_back</span>
+      </div>
+      <span class="app-bar-title">First Campaign</span>
+    </div>
+
+    <div class="s3-content">
+      <div class="s3-intro">
+        Let's set up your first campaign. You can always add more later.
+      </div>
+
+      <!-- Name field (focused/active state) -->
+      <div class="form-group">
+        <label class="form-label">Campaign Name</label>
+        <input class="form-input form-input-active" type="text" placeholder="e.g. Exercise Daily" value="Exercise Daily">
+      </div>
+
+      <!-- Goal days -->
+      <div class="form-group">
+        <label class="form-label">Goal Duration</label>
+        <div class="form-row">
+          <input class="form-days-input" type="number" value="30">
+          <div class="form-unit-pill">
+            <span class="material-icons" style="font-size:16px;margin-right:6px;color:#555;">calendar_today</span>
+            Days
+          </div>
+        </div>
+        <div class="s3-hint">We recommend starting with 14–30 days.</div>
+      </div>
+
+      <!-- Progress dots -->
+      <div class="s3-progress">
+        <div class="progress-dots">
+          <div class="dot dot-inactive"></div>
+          <div class="dot dot-inactive"></div>
+          <div class="dot dot-active"></div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="s3-actions">
+        <div class="btn-primary">
+          <span class="material-icons">flag</span>
+          <span>Create &amp; Start</span>
+        </div>
+        <div class="btn-secondary">← Back</div>
+      </div>
+
+      <!-- After-creation toast preview -->
+      <div class="s3-success-note">
+        <span class="material-icons">check_circle</span>
+        After creation → goes to Home with campaign live
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
