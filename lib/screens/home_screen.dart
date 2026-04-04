@@ -4,13 +4,19 @@ import '../models/activity_entry.dart';
 import '../providers/mock_data_provider.dart';
 import '../theme.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
     final campaigns = ref.watch(campaignsProvider);
     final feed = ref.watch(activityFeedProvider);
+    final hasSampleData = ref.watch(hasSampleDataProvider);
 
     final active = campaigns.where((c) => c.isActive).toList();
     final doneToday = active.where((c) => c.checkedInToday).length;
@@ -55,22 +61,17 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF4AFF91),
-                            border: Border.all(
-                              color: Colors.black.withAlpha(77),
-                              width: 1,
-                            ),
-                          ),
+                    if (hasSampleData)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: kTerracotta,
+                          border: Border.all(
+                              color: kBlack, width: kSoftBorderWidth),
                         ),
-                        const SizedBox(width: 4),
-                        const Text(
-                          'LIVE DATA',
+                        child: const Text(
+                          'SAMPLE DATA',
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
@@ -78,8 +79,33 @@ class HomeScreen extends ConsumerWidget {
                             letterSpacing: 0.5,
                           ),
                         ),
-                      ],
-                    ),
+                      )
+                    else
+                      Row(
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF4AFF91),
+                              border: Border.all(
+                                color: Colors.black.withAlpha(77),
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Text(
+                            'LIVE DATA',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: kWhite,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -92,6 +118,11 @@ class HomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
+                  // Welcome card shown only while sample data is present
+                  if (hasSampleData) ...[
+                    _WelcomeCard(onDismiss: _showDismissDialog),
+                    const SizedBox(height: 12),
+                  ],
                   // Today section header
                   _SectionHeader(label: _formatDateHeader(DateTime.now())),
                   const SizedBox(height: 10),
@@ -127,6 +158,116 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showDismissDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          width: 300,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: kWhite,
+            border: Border.all(color: kBlack, width: kSoftBorderWidth),
+            boxShadow: const [
+              BoxShadow(
+                color: kBlack,
+                offset: Offset(3, 3),
+                blurRadius: 0,
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'REMOVE SAMPLE DATA?',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: kBlack,
+                  letterSpacing: 0.3,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "This will clear the 2 sample campaigns. You'll start with a clean slate.",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: kTextSecondary,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(dialogContext).pop(),
+                      child: Container(
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: kWhite,
+                          border: Border.all(color: kBlack, width: kSoftBorderWidth),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'KEEP SAMPLES',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: kBlack,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(dialogContext).pop();
+                        ref.read(campaignsProvider.notifier).dismissSamples();
+                        ref.read(hasSampleDataProvider.notifier).dismiss();
+                      },
+                      child: Container(
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: kBlue,
+                          border: Border.all(color: kBlack, width: kSoftBorderWidth),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: kBlack,
+                              offset: Offset(2, 2),
+                              blurRadius: 0,
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'START FRESH',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: kWhite,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -171,6 +312,66 @@ class HomeScreen extends ConsumerWidget {
     if (diff == 0) return 'Today — ${months[day.month - 1]} ${day.day}';
     if (diff == 1) return 'Yesterday — ${months[day.month - 1]} ${day.day}';
     return '${months[day.month - 1]} ${day.day}';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Welcome card shown during sample-data first-run state
+// ---------------------------------------------------------------------------
+class _WelcomeCard extends StatelessWidget {
+  final VoidCallback onDismiss;
+
+  const _WelcomeCard({required this.onDismiss});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: kWhite,
+        border: Border(
+          left: const BorderSide(color: kBlue, width: 3),
+          top: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+          right: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+          bottom: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: kSoftShadowColor,
+            offset: const Offset(2, 2),
+            blurRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            "You're all set! Explore these sample campaigns or dismiss them to start fresh.",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: kTextPrimary,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 6),
+          GestureDetector(
+            onTap: onDismiss,
+            child: const Text(
+              'Dismiss Samples →',
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: kTerracotta,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
