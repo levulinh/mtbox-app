@@ -5,9 +5,10 @@ _Last updated: 2026-04-05_
 ## Tech Stack
 - Platform: Flutter (v3.41.4) + Dart — already established, cross-platform mobile
 - State management: Riverpod — already in use, code-gen via `@riverpod`
-- Local storage: Hive — already in use, no cloud for MVP
+- Local storage: Hive — already in use for offline-first data layer
+- Backend/Cloud: Supabase — Auth (email/password), PostgreSQL for cloud data, Realtime for sync
 - Navigation: go_router — already in use, named routes
-- Key packages: flutter_riverpod, hive_flutter, go_router, cupertino_icons
+- Key packages: flutter_riverpod, hive_flutter, go_router, cupertino_icons, supabase_flutter
 
 ## Phase 1: MVP — Complete the core check-in loop
 - [x] Daily check-in flow
@@ -38,8 +39,15 @@ _Last updated: 2026-04-05_
 - [x] Flexible goal types (days, hours, sessions, or custom metric)
 - [x] Focus session mode (distraction-free timer with auto-record to campaign)
 
+## Phase 5: Cloud — Account management and cross-device sync
+<!-- CEO steering (MTB-10 mention 2026-04-05): add account management and cloud synchronization using Supabase -->
+- [ ] Account registration and sign-in (Supabase Auth — email/password) ← scheduled 2026-04-05
+- [ ] User profile screen (display name, avatar, account settings) ← scheduled 2026-04-05
+- [ ] Cloud sync — upload local campaign data to Supabase on sign-in ← scheduled 2026-04-05
+- [ ] Real-time multi-device sync (changes reflect across devices instantly) ← scheduled 2026-04-05
+- [ ] Sign-out and data management (delete account, clear local data) ← scheduled 2026-04-05
+
 ## Icebox (future ideas, not scheduled)
-- [ ] Cloud sync across devices
 - [ ] Multi-user / social accountability features
 - [ ] Campaign templates library
 - [ ] Apple Health / Google Fit integration
