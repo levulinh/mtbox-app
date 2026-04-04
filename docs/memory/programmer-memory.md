@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 24 — implemented MTB-19 campaign archive)
+2026-04-04 (run 25 — implemented MTB-21 onboarding flow)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -87,6 +87,12 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Date range from `lastCheckInDate`**: end date = parsed `lastCheckInDate`; start = end − (totalDays − 1) days. Falls back to "Completed" if `lastCheckInDate` is null. Formatted as "Mon D, YYYY – Mon D, YYYY".
 - **Archive entry point pattern**: rather than a nav tab, a tappable banner row inside the Campaigns tab `SliverList` (shown conditionally) routes to the archive. Keeps the nav tab count at 3.
 
+- **Onboarding flow (MTB-21)**: `OnboardingScreen` is a 3-page `PageView` (no bottom nav) at top-level GoRoute `/onboarding`. First-launch detection: `Hive.box('settings').get('onboardingDone')` read synchronously after `await Hive.openBox('settings')` in `main()`.
+- **Dynamic `initialLocation` pattern**: `router.dart` exports `createRouter(String initialLocation)` function instead of a top-level `router` constant — allows `main()` to decide `'/'` vs `'/onboarding'` before `runApp`. `MTBoxApp` takes `initialLocation` as required constructor param and calls `createRouter(initialLocation)`.
+- **Widget tests referencing `MTBoxApp`** must pass `initialLocation: '/'` explicitly now that the param is required.
+- **Onboarding completion**: sets `Hive.box('settings').put('onboardingDone', true)` then calls `context.go('/')`. Skip link also sets the flag. Campaign created in flow uses `DateTime.now().millisecondsSinceEpoch.toString()` as id.
+- **`PageView` with no swipe**: use `physics: const NeverScrollableScrollPhysics()` so only programmatic navigation (buttons) advances screens. `PageController.animateToPage()` used for transitions.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -103,3 +109,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/11 | MTB-17 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/12 | MTB-18 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/13 | MTB-19 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/14 | MTB-21 | In Review |
