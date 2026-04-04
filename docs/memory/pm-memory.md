@@ -76,3 +76,7 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | MTB-15 | Home screen with live data | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | Forty-sixth run. No Backlog, Awaiting Design Approval, or Awaiting Decision issues. All queues empty. Nothing to route this run.
 2026-04-04 | Forty-seventh run. No Backlog, Awaiting Design Approval, or Awaiting Decision issues. All queues empty. Nothing to route this run.
+2026-04-04 | MTB-16 | Streak indicators on campaign cards | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | MTB-17 | Activity history feed with real data | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | MTB-18 | Stats dashboard (total campaigns, longest streak, completion rate) | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | Forty-eighth run. Three new Backlog issues: MTB-16 (streak indicators), MTB-17 (activity history), MTB-18 (stats dashboard). All Phase 2 engagement features with clear intent. Acceptance criteria written and all moved to In Design. No Awaiting Design Approval or Awaiting Decision issues.
