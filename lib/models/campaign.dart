@@ -43,5 +43,17 @@ class Campaign {
     return streak;
   }
 
+  bool get hasStreak => dayHistory.isNotEmpty;
+
+  /// True when the current streak was preceded by a missed day (streak was broken).
+  bool get isStreakBroken {
+    if (dayHistory.isEmpty) return false;
+    final idx = dayHistory.length - currentStreak - 1;
+    return idx >= 0 && !dayHistory[idx];
+  }
+
+  /// Display count — never shows 0 (resets to 1 after a miss per design).
+  int get streakDisplayCount => currentStreak == 0 ? 1 : currentStreak;
+
   static String _pad(int n) => n.toString().padLeft(2, '0');
 }
