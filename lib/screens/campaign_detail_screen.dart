@@ -131,7 +131,13 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
 
                   // Share My Progress CTA
                   _ShareProgressButton(campaignId: campaign.id),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
+
+                  // Focus Session CTA (only for active campaigns)
+                  if (campaign.isActive && !campaign.checkedInToday)
+                    _FocusSessionButton(campaignId: campaign.id),
+                  if (campaign.isActive && !campaign.checkedInToday)
+                    const SizedBox(height: 16),
 
                   // Day grid
                   _SectionLabel(label: 'Campaign Days'),
@@ -191,6 +197,50 @@ class _ShareProgressButton extends StatelessWidget {
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
                 color: kWhite,
+                letterSpacing: 1.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FocusSessionButton extends StatelessWidget {
+  final String campaignId;
+
+  const _FocusSessionButton({required this.campaignId});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push('/campaigns/$campaignId/focus'),
+      child: Container(
+        width: double.infinity,
+        height: 50,
+        decoration: BoxDecoration(
+          color: kBackground,
+          border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
+          boxShadow: const [
+            BoxShadow(
+              color: kSoftShadowColor,
+              offset: Offset(kShadowOffset, kShadowOffset),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.timer, color: kBlack, size: 20),
+            SizedBox(width: 8),
+            Text(
+              'START FOCUS SESSION',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w900,
+                color: kBlack,
                 letterSpacing: 1.0,
               ),
             ),
