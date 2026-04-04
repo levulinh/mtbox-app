@@ -25,8 +25,8 @@ _Last updated: 2026-04-04_
 ## Phase 3: Polish — First-time and power-user experience
 <!-- CEO directive (MTB-20): improve overall look & feel — softer brutalism, muted colors, less bold shadows, more visual delight -->
 - [x] Onboarding flow for new users ← scheduled 2026-04-04
-- [ ] Local push notifications / daily reminders ← scheduled 2026-04-04
-- [ ] UI color palette refresh (softer brutalism — muted tones, reduced saturation) ← scheduled 2026-04-04
+- [x] Local push notifications / daily reminders ← scheduled 2026-04-04
+- [x] UI color palette refresh (softer brutalism — muted tones, reduced saturation) ← scheduled 2026-04-04
 - [ ] Shadow and border style refinement across all screens ← scheduled 2026-04-04
 - [ ] Visual delight polish (micro-interactions, empty states, subtle transitions) ← scheduled 2026-04-04
 - [ ] Custom campaign colors and icons ← scheduled 2026-04-04
