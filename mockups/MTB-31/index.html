@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4C6EAD;
+      --bg: #F7F3EF;
+      --surface: #FFFDF9;
+      --text: #1A1A1A;
+      --text-secondary: #6B6B6B;
+      --border: #2C2C2C;
+      --border-content: #5A5A5A;
+      --shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      --red: #C0392B;
+      --red-light: #FDF3F2;
+      --terracotta: #B5735A;
+    }
+
+    body {
+      width: 1205px;
+      background: #E8E2DA;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      padding: 24px;
+    }
+
+    /* ── COMPOSITE LAYOUT ── */
+    .composite {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .composite-title {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6B6B6B;
+      margin-bottom: 16px;
+    }
+
+    .screens-row {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    /* ── SCREEN WRAPPER ── */
+    .screen {
+      width: 375px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      box-shadow: 4px 4px 0 var(--border);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .screen-label {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      height: 44px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-icons .material-icons {
+      font-size: 14px;
+    }
+
+    /* ── AUTH SCREEN LAYOUT ── */
+    .auth-content {
+      min-height: 768px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 24px 32px;
+    }
+
+    /* ── LOGO BLOCK ── */
+    .logo-block {
+      margin-top: 48px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon-box {
+      width: 72px;
+      height: 72px;
+      background: var(--primary);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon-box .material-icons {
+      font-size: 40px;
+      color: white;
+    }
+
+    .app-name {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .app-tagline {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: -6px;
+    }
+
+    /* ── SCREEN HEADING ── */
+    .auth-heading {
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .auth-heading h1 {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .auth-heading p {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* ── FORM FIELDS ── */
+    .form-group {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .field-label {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .field-input {
+      width: 100%;
+      height: 48px;
+      background: var(--surface);
+      border: 1.5px solid var(--border-content);
+      box-shadow: var(--shadow);
+      padding: 0 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .field-input.active {
+      border: 2px solid var(--primary);
+      box-shadow: 2px 2px 0 var(--primary);
+    }
+
+    .field-input.error {
+      border: 2px solid var(--red);
+      box-shadow: 2px 2px 0 rgba(192, 57, 43, 0.4);
+      background: var(--red-light);
+    }
+
+    .field-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .field-value.placeholder {
+      color: #ABABAB;
+      font-weight: 500;
+    }
+
+    .field-value.filled {
+      color: var(--text);
+    }
+
+    .field-value.dots {
+      letter-spacing: 3px;
+      font-size: 16px;
+    }
+
+    .field-icon {
+      color: var(--text-secondary);
+    }
+
+    .field-icon .material-icons {
+      font-size: 18px;
+    }
+
+    .field-error {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .field-error .material-icons {
+      font-size: 11px;
+    }
+
+    /* ── ERROR BANNER ── */
+    .error-banner {
+      width: 100%;
+      background: var(--red);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .error-banner .material-icons {
+      font-size: 18px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .error-banner-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── CTA BUTTON ── */
+    .btn-primary {
+      width: 100%;
+      height: 52px;
+      background: var(--primary);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    .btn-primary .material-icons {
+      font-size: 20px;
+      color: white;
+    }
+
+    .btn-primary-label {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: white;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      height: 52px;
+      background: var(--surface);
+      border: 1.5px solid var(--border-content);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+
+    .btn-secondary .material-icons {
+      font-size: 20px;
+      color: var(--text);
+    }
+
+    .btn-secondary-label {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    /* ── DIVIDER ── */
+    .or-divider {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .or-line {
+      flex: 1;
+      height: 1.5px;
+      background: var(--border-content);
+      opacity: 0.4;
+    }
+
+    .or-label {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    /* ── FOOTER LINK ── */
+    .auth-footer {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .auth-footer p {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .auth-footer a {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--primary);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1.5px solid var(--primary);
+    }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .annotation-divider {
+      width: 1px;
+      background: transparent;
+      border-left: 2px dashed #B0A898;
+      align-self: stretch;
+      margin: 0 4px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .annotation-arrow {
+      position: absolute;
+      left: -6px;
+      background: #B0A898;
+      color: var(--bg);
+      font-size: 10px;
+      width: 10px;
+      height: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    /* ── VERTICAL COLUMN LABELS ── */
+    .screen-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    /* ── PASSWORD DOT MASKING ── */
+    .pwd-dots {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pwd-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--text);
+      border-radius: 50%;
+    }
+
+    /* ── SECURITY NOTE ── */
+    .security-note {
+      width: 100%;
+      background: #EEF2F8;
+      border: 1.5px solid var(--primary);
+      box-shadow: 2px 2px 0 rgba(76,110,173,0.3);
+      padding: 10px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .security-note .material-icons {
+      font-size: 16px;
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .security-note-text {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--primary);
+      line-height: 1.5;
+    }
+
+    /* ── REGISTER COMPACT LOGO ── */
+    .logo-inline {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 40px;
+      margin-bottom: 32px;
+    }
+
+    .logo-icon-sm {
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-icon-sm .material-icons {
+      font-size: 24px;
+      color: white;
+    }
+
+    .logo-inline-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-inline-name {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .logo-inline-sub {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="composite">
+  <div class="composite-title">MTB-31 — Account Registration &amp; Sign-in · Design Mockup · 3 States</div>
+
+  <div class="screens-row">
+
+    <!-- ══════════════════════════════ SCREEN 1: SIGN-IN (CLEAN) ══════════════════════════════ -->
+    <div class="screen-col">
+      <div class="screen-label">State 1 — Sign In (Default)</div>
+      <div class="screen">
+        <!-- Status Bar -->
+        <div class="status-bar">
+          <span>9:41</span>
+          <div class="status-icons">
+            <span class="material-icons">signal_cellular_alt</span>
+            <span class="material-icons">wifi</span>
+            <span class="material-icons">battery_full</span>
+          </div>
+        </div>
+
+        <div class="auth-content">
+          <!-- Logo -->
+          <div class="logo-block">
+            <div class="logo-icon-box">
+              <span class="material-icons">menu_book</span>
+            </div>
+            <div style="text-align:center;">
+              <div class="app-name">MTBox</div>
+              <div class="app-tagline">Campaign Tracker</div>
+            </div>
+          </div>
+
+          <!-- Heading -->
+          <div class="auth-heading">
+            <h1>Welcome Back</h1>
+            <p>Sign in to continue your campaigns</p>
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <span class="field-label">Email</span>
+            <div class="field-input active">
+              <span class="field-value filled">alex@example.com</span>
+              <div class="field-icon"><span class="material-icons">mail_outline</span></div>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <span class="field-label">Password</span>
+            <div class="field-input">
+              <div class="pwd-dots">
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+              </div>
+              <div class="field-icon"><span class="material-icons">visibility_off</span></div>
+            </div>
+          </div>
+
+          <!-- Forgot Password -->
+          <div style="width:100%; text-align:right; margin-top:-8px; margin-bottom:4px;">
+            <span style="font-size:10px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; border-bottom:1.5px solid var(--primary);">Forgot Password?</span>
+          </div>
+
+          <!-- Sign In Button -->
+          <div class="btn-primary" style="margin-top:16px;">
+            <span class="material-icons">login</span>
+            <span class="btn-primary-label">Sign In</span>
+          </div>
+
+          <!-- Divider -->
+          <div class="or-divider">
+            <div class="or-line"></div>
+            <span class="or-label">or</span>
+            <div class="or-line"></div>
+          </div>
+
+          <!-- Create Account -->
+          <div class="btn-secondary">
+            <span class="material-icons">person_add</span>
+            <span class="btn-secondary-label">Create Account</span>
+          </div>
+
+          <!-- Security Note -->
+          <div class="security-note">
+            <span class="material-icons">lock</span>
+            <span class="security-note-text">Your data is encrypted and synced securely. Your campaigns are backed up to the cloud.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════ ANNOTATION DIVIDER ══════════════════════════════ -->
+    <div class="annotation-divider" style="margin-top: 40px;">
+      <div class="annotation-arrow">→</div>
+    </div>
+
+    <!-- ══════════════════════════════ SCREEN 2: REGISTRATION ══════════════════════════════ -->
+    <div class="screen-col">
+      <div class="screen-label">State 2 — Create Account</div>
+      <div class="screen">
+        <div class="status-bar">
+          <span>9:41</span>
+          <div class="status-icons">
+            <span class="material-icons">signal_cellular_alt</span>
+            <span class="material-icons">wifi</span>
+            <span class="material-icons">battery_full</span>
+          </div>
+        </div>
+
+        <div class="auth-content" style="padding-bottom: 24px;">
+          <!-- Inline Logo (compact — more form space needed) -->
+          <div class="logo-inline">
+            <div class="logo-icon-sm">
+              <span class="material-icons">menu_book</span>
+            </div>
+            <div class="logo-inline-text">
+              <span class="logo-inline-name">MTBox</span>
+              <span class="logo-inline-sub">Campaign Tracker</span>
+            </div>
+          </div>
+
+          <!-- Heading -->
+          <div class="auth-heading" style="margin-bottom:20px;">
+            <h1>Create Account</h1>
+            <p>Start tracking your campaigns today</p>
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <span class="field-label">Email</span>
+            <div class="field-input active">
+              <span class="field-value filled">alex@example.com</span>
+              <div class="field-icon"><span class="material-icons">mail_outline</span></div>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <span class="field-label">Password</span>
+            <div class="field-input">
+              <div class="pwd-dots">
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+              </div>
+              <div class="field-icon"><span class="material-icons">visibility_off</span></div>
+            </div>
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="form-group">
+            <span class="field-label">Confirm Password</span>
+            <div class="field-input">
+              <div class="pwd-dots">
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+                <div class="pwd-dot"></div><div class="pwd-dot"></div>
+              </div>
+              <div class="field-icon"><span class="material-icons">visibility_off</span></div>
+            </div>
+          </div>
+
+          <!-- Password strength hint -->
+          <div style="width:100%; margin-top:-10px; margin-bottom:16px;">
+            <div style="display:flex; gap:3px; margin-bottom:4px;">
+              <div style="flex:1; height:3px; background:var(--primary); border:1px solid var(--border-content);"></div>
+              <div style="flex:1; height:3px; background:var(--primary); border:1px solid var(--border-content);"></div>
+              <div style="flex:1; height:3px; background:var(--primary); border:1px solid var(--border-content);"></div>
+              <div style="flex:1; height:3px; background:#E8E2DA; border:1px solid #B0A898;"></div>
+            </div>
+            <span style="font-size:10px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px;">Strong Password</span>
+          </div>
+
+          <!-- Create Account Button -->
+          <div class="btn-primary">
+            <span class="material-icons">person_add</span>
+            <span class="btn-primary-label">Create &amp; Sign In</span>
+          </div>
+
+          <!-- Divider -->
+          <div class="or-divider" style="margin: 18px 0;">
+            <div class="or-line"></div>
+            <span class="or-label">already have one?</span>
+            <div class="or-line"></div>
+          </div>
+
+          <!-- Back to Sign In -->
+          <div class="btn-secondary" style="margin-top:0;">
+            <span class="material-icons">login</span>
+            <span class="btn-secondary-label">Sign In Instead</span>
+          </div>
+
+          <!-- Persist Note -->
+          <div class="security-note">
+            <span class="material-icons">cloud_done</span>
+            <span class="security-note-text">Your account persists across app restarts. Sign in on any device to access your campaigns.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════ ANNOTATION DIVIDER ══════════════════════════════ -->
+    <div class="annotation-divider" style="margin-top: 40px;">
+      <div class="annotation-arrow">→</div>
+    </div>
+
+    <!-- ══════════════════════════════ SCREEN 3: SIGN-IN ERROR ══════════════════════════════ -->
+    <div class="screen-col">
+      <div class="screen-label">State 3 — Sign In (Invalid Credentials)</div>
+      <div class="screen">
+        <div class="status-bar">
+          <span>9:41</span>
+          <div class="status-icons">
+            <span class="material-icons">signal_cellular_alt</span>
+            <span class="material-icons">wifi</span>
+            <span class="material-icons">battery_full</span>
+          </div>
+        </div>
+
+        <div class="auth-content">
+          <!-- Logo -->
+          <div class="logo-block" style="margin-bottom:28px;">
+            <div class="logo-icon-box">
+              <span class="material-icons">menu_book</span>
+            </div>
+            <div style="text-align:center;">
+              <div class="app-name">MTBox</div>
+              <div class="app-tagline">Campaign Tracker</div>
+            </div>
+          </div>
+
+          <!-- Heading -->
+          <div class="auth-heading" style="margin-bottom:16px;">
+            <h1>Welcome Back</h1>
+            <p>Sign in to continue your campaigns</p>
+          </div>
+
+          <!-- Error Banner -->
+          <div class="error-banner">
+            <span class="material-icons">error_outline</span>
+            <span class="error-banner-text">Invalid email or password. Please try again.</span>
+          </div>
+
+          <!-- Email Field (error state) -->
+          <div class="form-group">
+            <span class="field-label">Email</span>
+            <div class="field-input error">
+              <span class="field-value filled">alex@wrongmail.com</span>
+              <div class="field-icon" style="color:var(--red);"><span class="material-icons">mail_outline</span></div>
+            </div>
+            <div class="field-error">
+              <span class="material-icons">cancel</span>
+              No account found for this email
+            </div>
+          </div>
+
+          <!-- Password Field (error state) -->
+          <div class="form-group">
+            <span class="field-label">Password</span>
+            <div class="field-input error">
+              <div class="pwd-dots">
+                <div class="pwd-dot" style="background:var(--red);"></div>
+                <div class="pwd-dot" style="background:var(--red);"></div>
+                <div class="pwd-dot" style="background:var(--red);"></div>
+                <div class="pwd-dot" style="background:var(--red);"></div>
+                <div class="pwd-dot" style="background:var(--red);"></div>
+              </div>
+              <div class="field-icon" style="color:var(--red);"><span class="material-icons">visibility_off</span></div>
+            </div>
+          </div>
+
+          <!-- Forgot Password -->
+          <div style="width:100%; text-align:right; margin-top:-8px; margin-bottom:4px;">
+            <span style="font-size:10px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; border-bottom:1.5px solid var(--primary);">Forgot Password?</span>
+          </div>
+
+          <!-- Sign In Button (active, shake feedback implied) -->
+          <div class="btn-primary" style="margin-top:16px; background: #C0392B; box-shadow: 2px 2px 0 rgba(192,57,43,0.5);">
+            <span class="material-icons">login</span>
+            <span class="btn-primary-label">Try Again</span>
+          </div>
+
+          <!-- Divider -->
+          <div class="or-divider">
+            <div class="or-line"></div>
+            <span class="or-label">or</span>
+            <div class="or-line"></div>
+          </div>
+
+          <!-- Create Account -->
+          <div class="btn-secondary">
+            <span class="material-icons">person_add</span>
+            <span class="btn-secondary-label">Create Account</span>
+          </div>
+
+          <!-- Annotation: existing account error -->
+          <div style="width:100%; margin-top:16px; border: 1.5px dashed #B0A898; padding:10px 12px; background: rgba(192,57,43,0.04);">
+            <span style="font-size:10px; font-weight:700; color:var(--red); text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:3px;">Also Handled:</span>
+            <span style="font-size:10px; font-weight:600; color:var(--text-secondary); line-height:1.5;">Registration with already-registered email shows same red banner: "This email is already in use. Sign in instead."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
