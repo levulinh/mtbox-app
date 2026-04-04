@@ -194,7 +194,7 @@ class _SectionHeader extends StatelessWidget {
         style: const TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF555555),
+          color: kTextSecondary,
           letterSpacing: 1.0,
         ),
       ),
@@ -229,7 +229,7 @@ class _TodaySummaryCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF555555),
+              color: kTextSecondary,
               letterSpacing: 1.0,
             ),
           ),
@@ -300,7 +300,7 @@ class _StatCell extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF555555),
+                color: kTextSecondary,
                 letterSpacing: 0.5,
               ),
             ),
@@ -320,7 +320,7 @@ class _RealTimeNotice extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: const BoxDecoration(
-        color: Color(0xFFE8EDFF),
+        color: Color(0xFFE4EAF4),
         border: Border.fromBorderSide(
           BorderSide(color: kBlue, width: kBorderWidth),
         ),
@@ -455,7 +455,7 @@ class _FeedEntry extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                   ),
                 ),
               ],
@@ -493,12 +493,12 @@ class _StatusBadge extends StatelessWidget {
     } else if (isPending) {
       label = 'PENDING';
       bg = kWhite;
-      fg = const Color(0xFF555555);
+      fg = kTextSecondary;
       border = const Color(0xFFBDBDBD);
     } else {
       label = 'MISSED';
       bg = kWhite;
-      fg = const Color(0xFF555555);
+      fg = kTextSecondary;
       border = const Color(0xFFBDBDBD);
     }
 
@@ -552,7 +552,7 @@ class _EmptyFeed extends StatelessWidget {
           Text(
             'Check in on a campaign to see your history here.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: Color(0xFF555555)),
+            style: TextStyle(fontSize: 12, color: kTextSecondary),
           ),
         ],
       ),

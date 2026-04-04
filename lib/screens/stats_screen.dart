@@ -97,7 +97,7 @@ class StatsScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              color: Color(0xFF555555),
+                              color: kTextSecondary,
                               height: 1,
                             ),
                           ),
@@ -130,7 +130,7 @@ class StatsScreen extends ConsumerWidget {
                     label: 'Active',
                     count: active,
                     total: total,
-                    barColor: const Color(0xFF555555),
+                    barColor: kTextSecondary,
                   ),
                   const SizedBox(height: 8),
                   _BreakdownRow(
@@ -169,7 +169,7 @@ class _SectionHeader extends StatelessWidget {
           fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 1.0,
-          color: Color(0xFF555555),
+          color: kTextSecondary,
         ),
       ),
     );
@@ -228,7 +228,7 @@ class _StatCard extends StatelessWidget {
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -237,7 +237,7 @@ class _StatCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF888888),
+                    color: kTextSecondary,
                   ),
                 ),
               ],
@@ -295,7 +295,7 @@ class _CompletionRateCard extends StatelessWidget {
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -304,7 +304,7 @@ class _CompletionRateCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF888888),
+                    color: kTextSecondary,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -330,7 +330,7 @@ class _CompletionRateCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF555555),
+                        color: kTextSecondary,
                       ),
                     ),
                     Text(
@@ -338,7 +338,7 @@ class _CompletionRateCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF555555),
+                        color: kTextSecondary,
                       ),
                     ),
                     const Text(
@@ -346,7 +346,7 @@ class _CompletionRateCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF555555),
+                        color: kTextSecondary,
                       ),
                     ),
                   ],

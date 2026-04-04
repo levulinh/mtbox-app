@@ -124,9 +124,9 @@ class _StreakBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final broken = campaign.isStreakBroken;
     final count = campaign.streakDisplayCount;
-    final iconColor = broken ? const Color(0xFF555555) : kWhite;
+    final iconColor = broken ? kTextSecondary : kWhite;
     final textColor = broken ? kBlack : kWhite;
-    final labelColor = broken ? const Color(0xFF555555) : kWhite.withAlpha(217);
+    final labelColor = broken ? kTextSecondary : kWhite.withAlpha(217);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

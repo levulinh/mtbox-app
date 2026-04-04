@@ -149,7 +149,7 @@ class _FormIntro extends StatelessWidget {
         style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF555555),
+          color: kTextSecondary,
           letterSpacing: 1.0,
         ),
       ),
@@ -374,7 +374,7 @@ class _GoalField extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF555555),
+                  color: kTextSecondary,
                   letterSpacing: 0.8,
                 ),
               ),
@@ -406,7 +406,7 @@ class _GoalField extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF555555),
+              color: kTextSecondary,
             ),
           ),
         ],

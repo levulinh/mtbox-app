@@ -207,7 +207,7 @@ class _WelcomePage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                     height: 1.55,
                   ),
                 ),
@@ -261,7 +261,7 @@ class _WelcomePage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF555555),
+                        color: kTextSecondary,
                         letterSpacing: 0.6,
                         decoration: TextDecoration.underline,
                       ),
@@ -368,7 +368,7 @@ class _HowItWorksPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF555555),
+                      color: kTextSecondary,
                       letterSpacing: 0.8,
                     ),
                   ),
@@ -428,7 +428,7 @@ class _HowItWorksPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF555555),
+                        color: kTextSecondary,
                         letterSpacing: 0.5,
                         decoration: TextDecoration.underline,
                       ),
@@ -497,7 +497,7 @@ class _FeatureRow extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                     height: 1.45,
                   ),
                 ),
@@ -566,7 +566,7 @@ class _ExampleCampaignCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF555555),
+                  color: kTextSecondary,
                   letterSpacing: 0.3,
                 ),
               ),
@@ -575,7 +575,7 @@ class _ExampleCampaignCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF555555),
+                  color: kTextSecondary,
                 ),
               ),
             ],
@@ -692,7 +692,7 @@ class _CreateCampaignPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                     height: 1.5,
                   ),
                 ),
@@ -704,7 +704,7 @@ class _CreateCampaignPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -752,7 +752,7 @@ class _CreateCampaignPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -798,14 +798,14 @@ class _CreateCampaignPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 14),
                         child: const Row(
                           children: [
-                            Icon(Icons.calendar_today, size: 16, color: Color(0xFF555555)),
+                            Icon(Icons.calendar_today, size: 16, color: kTextSecondary),
                             SizedBox(width: 6),
                             Text(
                               'DAYS',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFF555555),
+                                color: kTextSecondary,
                                 letterSpacing: 0.6,
                               ),
                             ),

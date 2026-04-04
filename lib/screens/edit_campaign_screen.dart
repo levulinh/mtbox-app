@@ -188,7 +188,7 @@ class _SectionLabel extends StatelessWidget {
         style: const TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF555555),
+          color: kTextSecondary,
           letterSpacing: 1.0,
         ),
       ),
@@ -401,7 +401,7 @@ class _GoalField extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF555555),
+                  color: kTextSecondary,
                   letterSpacing: 0.8,
                 ),
               ),

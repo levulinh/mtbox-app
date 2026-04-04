@@ -107,7 +107,7 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF555555),
+                            color: kTextSecondary,
                             letterSpacing: 0.5,
                           ),
                         ),
@@ -120,7 +120,7 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
                           style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF555555),
+                            color: kTextSecondary,
                           ),
                         ),
                       ],
@@ -168,7 +168,7 @@ class _SectionLabel extends StatelessWidget {
         style: const TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF555555),
+          color: kTextSecondary,
           letterSpacing: 1.0,
         ),
       ),
@@ -338,7 +338,7 @@ class _ActivityList extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF555555),
+                          color: kTextSecondary,
                           letterSpacing: 1.0,
                         ),
                       ),
