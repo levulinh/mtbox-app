@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375">
+  <title>MTB-25 — Visual Delight Polish</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4C6EAD;
+      --bg: #F7F3EF;
+      --surface: #FFFDF9;
+      --text: #1A1A1A;
+      --text-sec: #6B6B6B;
+      --border-dark: #2C2C2C;
+      --border-mid: #5A5A5A;
+      --accent: #B5735A;
+      --tick-future: #E8E2DA;
+      --divider-bg: #E8E2DA;
+    }
+
+    body {
+      width: 375px;
+      background: var(--bg);
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      color: var(--text);
+    }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .annotation-divider {
+      background: var(--divider-bg);
+      border-top: 2px dashed var(--border-mid);
+      border-bottom: 2px dashed var(--border-mid);
+      padding: 10px 16px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-sec);
+    }
+
+    /* ── MOBILE FRAME ── */
+    .mobile-frame {
+      width: 375px;
+      height: 812px;
+      background: var(--bg);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      height: 44px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      flex-shrink: 0;
+      border-bottom: 2px solid var(--border-dark);
+    }
+    .status-bar span {
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .status-bar .status-icons {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .status-bar .material-icons {
+      color: white;
+      font-size: 16px;
+    }
+
+    /* ── APP BAR ── */
+    .app-bar {
+      height: 56px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      border-bottom: 2px solid var(--border-dark);
+      box-shadow: 0 2px 0 var(--border-dark);
+      flex-shrink: 0;
+      position: relative;
+    }
+    .app-bar-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: white;
+      letter-spacing: 0.5px;
+    }
+    .app-bar .material-icons {
+      color: white;
+      font-size: 24px;
+    }
+    .app-bar-badge {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--divider-bg);
+      border: 1.5px solid var(--border-mid);
+      padding: 3px 7px;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text-sec);
+      white-space: nowrap;
+    }
+
+    /* ── CONTENT AREA ── */
+    .content {
+      flex: 1;
+      overflow: hidden;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      height: 60px;
+      background: var(--surface);
+      border-top: 2px solid var(--border-dark);
+      display: flex;
+      align-items: stretch;
+      flex-shrink: 0;
+    }
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      border-right: 1.5px solid var(--border-mid);
+    }
+    .nav-tab:last-child { border-right: none; }
+    .nav-tab .material-icons { font-size: 22px; color: var(--text-sec); }
+    .nav-tab span.label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-sec); }
+    .nav-tab.active { background: var(--primary); }
+    .nav-tab.active .material-icons { color: white; }
+    .nav-tab.active span.label { color: white; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-mid);
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 12px;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-sec);
+      border-left: 3px solid var(--primary);
+      padding-left: 8px;
+      margin-bottom: 4px;
+    }
+
+    /* ── BUTTON ── */
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: 1.5px solid var(--border-mid);
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ── FAB ── */
+    .fab {
+      position: absolute;
+      bottom: 76px;
+      right: 16px;
+      width: 52px;
+      height: 52px;
+      background: var(--primary);
+      border: 1.5px solid var(--border-mid);
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fab .material-icons { color: white; font-size: 24px; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      background: var(--bg);
+      border: 1.5px solid var(--border-mid);
+      height: 10px;
+      position: relative;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+    }
+    .progress-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-sec);
+      margin-top: 2px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .anim-label {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.3px;
+      border: 1px dashed var(--accent);
+      padding: 1px 4px;
+      text-transform: uppercase;
+    }
+
+    /* ── DAY TICK STRIP ── */
+    .tick-strip {
+      display: flex;
+      gap: 2px;
+      margin-top: 6px;
+    }
+    .tick {
+      width: 18px;
+      height: 12px;
+      border: 1.5px solid var(--border-mid);
+      box-shadow: 1px 1px 0 rgba(44,44,44,0.45);
+    }
+    .tick.done { background: var(--primary); }
+    .tick.missed { background: var(--surface); }
+    .tick.future { background: var(--tick-future); border-color: #A0A0A0; }
+
+    /* ── STATS GRID ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .stat-cell {
+      background: var(--surface);
+      border: 1.5px solid var(--border-mid);
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 8px 6px;
+      text-align: center;
+    }
+    .stat-cell .material-icons { font-size: 18px; color: var(--primary); }
+    .stat-value { font-size: 18px; font-weight: 700; color: var(--primary); line-height: 1.1; }
+    .stat-label { font-size: 8px; font-weight: 700; text-transform: uppercase; color: var(--text-sec); letter-spacing: 0.5px; }
+
+    /* ═══════════════════════════════════════
+       PANEL 1 — SPECIFIC STYLES
+       ═══════════════════════════════════════ */
+
+    .celebration-banner {
+      background: var(--primary);
+      border: 1.5px solid var(--border-mid);
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+    }
+    .celebration-banner .material-icons { font-size: 24px; color: white; }
+    .celebration-banner-text { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+    .celebration-banner-sub { font-size: 10px; font-weight: 600; opacity: 0.85; }
+
+    /* Confetti squares */
+    .confetti-row {
+      display: flex;
+      gap: 3px;
+      justify-content: center;
+      margin: 2px 0;
+    }
+    .confetti-sq {
+      width: 8px;
+      height: 8px;
+    }
+
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 2px solid var(--border-dark);
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .streak-badge .material-icons { color: var(--primary); font-size: 18px; }
+    .streak-badge-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pulse-annotation {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--accent);
+      border: 1px dashed var(--accent);
+      padding: 2px 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .campaign-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .campaign-name { font-size: 14px; font-weight: 700; }
+    .badge-done {
+      background: #2E7D32;
+      color: white;
+      font-size: 8px;
+      font-weight: 900;
+      padding: 2px 6px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1.5px solid var(--border-mid);
+    }
+
+    /* ═══════════════════════════════════════
+       PANEL 2 — EMPTY STATE
+       ═══════════════════════════════════════ */
+    .empty-state-box {
+      border: 2px dashed var(--border-mid);
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+    .empty-icon { font-size: 48px; color: var(--primary); }
+    .empty-headline { font-size: 18px; font-weight: 700; text-transform: uppercase; color: var(--text); }
+    .empty-subtext { font-size: 13px; color: var(--text-sec); line-height: 1.5; }
+
+    /* ═══════════════════════════════════════
+       PANEL 3 — EMPTY FEED
+       ═══════════════════════════════════════ */
+    .empty-feed-box {
+      border: 2px dashed var(--border-mid);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .empty-feed-icon { font-size: 40px; color: var(--text-sec); }
+    .empty-feed-headline { font-size: 14px; font-weight: 700; text-transform: uppercase; }
+    .empty-feed-sub { font-size: 11px; color: var(--text-sec); line-height: 1.5; }
+    .text-link {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ═══════════════════════════════════════
+       PANEL 4 — MICRO-INTERACTION SPEC
+       ═══════════════════════════════════════ */
+    .spec-panel {
+      background: var(--bg);
+      padding: 16px;
+    }
+    .spec-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text);
+      border-left: 3px solid var(--primary);
+      padding-left: 10px;
+      margin-bottom: 12px;
+    }
+    .spec-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      background: var(--surface);
+      border: 1.5px solid var(--border-mid);
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      margin-bottom: 8px;
+    }
+    .spec-icon-box {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .spec-icon-box .material-icons { color: white; font-size: 18px; }
+    .spec-text { flex: 1; }
+    .spec-name { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text); margin-bottom: 3px; }
+    .spec-desc { font-size: 10px; color: var(--text-sec); line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 1 — CHECK-IN CELEBRATION STATE
+     ════════════════════════════════════════════════════ -->
+<div class="annotation-divider">── PANEL 1: CHECK-IN CELEBRATION STATE ──</div>
+
+<div class="mobile-frame">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar -->
+  <div class="app-bar">
+    <span class="app-bar-title">Home</span>
+    <span class="app-bar-badge">STATE: POST CHECK-IN</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Celebration Banner -->
+    <div class="celebration-banner">
+      <span class="material-icons">check_circle</span>
+      <div>
+        <div class="celebration-banner-text">Check-In Complete!</div>
+        <div class="celebration-banner-sub">Keep up the streak — great work!</div>
+      </div>
+    </div>
+
+    <!-- Confetti rows -->
+    <div style="padding: 4px 0;">
+      <div class="confetti-row">
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(15deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(-8deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(20deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(-5deg)"></div>
+        <div class="confetti-sq" style="background:#F7F3EF;border:1px solid #5A5A5A;transform:rotate(12deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(-18deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(7deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(-12deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(22deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(-3deg)"></div>
+        <div class="confetti-sq" style="background:#F7F3EF;border:1px solid #5A5A5A;transform:rotate(16deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(-9deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(11deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(-6deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(19deg)"></div>
+      </div>
+      <div class="confetti-row" style="margin-top:3px;">
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(-14deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(6deg)"></div>
+        <div class="confetti-sq" style="background:#F7F3EF;border:1px solid #5A5A5A;transform:rotate(-11deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(17deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(-4deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(13deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(-21deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(8deg)"></div>
+        <div class="confetti-sq" style="background:#F7F3EF;border:1px solid #5A5A5A;transform:rotate(-7deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(23deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(-10deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(5deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(-16deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(9deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(-20deg)"></div>
+      </div>
+      <div class="confetti-row" style="margin-top:3px;">
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(10deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(-13deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(18deg)"></div>
+        <div class="confetti-sq" style="background:#F7F3EF;border:1px solid #5A5A5A;transform:rotate(-8deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(14deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(-19deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(7deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(-5deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(21deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(-12deg)"></div>
+        <div class="confetti-sq" style="background:#F7F3EF;border:1px solid #5A5A5A;transform:rotate(16deg)"></div>
+        <div class="confetti-sq" style="background:#1A1A1A;transform:rotate(-9deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(11deg)"></div>
+        <div class="confetti-sq" style="background:#B5735A;transform:rotate(-6deg)"></div>
+        <div class="confetti-sq" style="background:#4C6EAD;transform:rotate(19deg)"></div>
+      </div>
+    </div>
+
+    <!-- Streak Badge + Pulse annotation -->
+    <div class="streak-badge-wrap">
+      <div class="streak-badge">
+        <span class="material-icons">local_fire_department</span>
+        7 DAY STREAK
+      </div>
+      <span class="pulse-annotation">↑ PULSE ANIM</span>
+    </div>
+
+    <!-- Campaign Card -->
+    <div class="card">
+      <div class="campaign-card-header">
+        <span class="campaign-name">Morning Run</span>
+        <span class="badge-done">Done Today</span>
+      </div>
+      <div style="font-size:10px; color:var(--text-sec); font-weight:600; text-transform:uppercase; margin-bottom:6px;">Day 7 of 30 · 23%</div>
+      <div class="progress-wrap">
+        <div class="progress-fill" style="width:70%"></div>
+      </div>
+      <div class="progress-label">
+        <span>Day 7 of 30</span>
+        <span class="anim-label">[ANIMATED: bar fills from left]</span>
+      </div>
+      <div class="tick-strip">
+        <div class="tick done"></div>
+        <div class="tick done"></div>
+        <div class="tick done"></div>
+        <div class="tick done"></div>
+        <div class="tick done"></div>
+        <div class="tick missed"></div>
+        <div class="tick done"></div>
+        <div class="tick future"></div>
+        <div class="tick future"></div>
+        <div class="tick future"></div>
+        <div class="tick future"></div>
+        <div class="tick future"></div>
+        <div class="tick future"></div>
+        <div class="tick future"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      <span class="label">Home</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">campaign</span>
+      <span class="label">Campaigns</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      <span class="label">Profile</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 2 — EMPTY CAMPAIGNS SCREEN
+     ════════════════════════════════════════════════════ -->
+<div class="annotation-divider">── PANEL 2: EMPTY CAMPAIGNS SCREEN ──</div>
+
+<div class="mobile-frame" style="position:relative;">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar -->
+  <div class="app-bar">
+    <span class="app-bar-title">Campaigns</span>
+    <span class="app-bar-badge">STATE: EMPTY CAMPAIGNS</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content" style="justify-content:center; align-items:stretch;">
+
+    <div class="empty-state-box">
+      <span class="material-icons empty-icon">flag</span>
+      <div class="empty-headline">No Campaigns Yet</div>
+      <div class="empty-subtext">Start tracking a habit or goal by creating your first campaign.</div>
+      <button class="btn-primary" style="margin-top:8px;">
+        <span class="material-icons" style="font-size:16px;">add</span>
+        Create Your First Campaign
+      </button>
+    </div>
+
+  </div>
+
+  <!-- FAB -->
+  <div class="fab">
+    <span class="material-icons">add</span>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab">
+      <span class="material-icons">home</span>
+      <span class="label">Home</span>
+    </div>
+    <div class="nav-tab active">
+      <span class="material-icons">campaign</span>
+      <span class="label">Campaigns</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      <span class="label">Profile</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 3 — EMPTY ACTIVITY FEED
+     ════════════════════════════════════════════════════ -->
+<div class="annotation-divider">── PANEL 3: EMPTY ACTIVITY FEED ──</div>
+
+<div class="mobile-frame">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar -->
+  <div class="app-bar">
+    <span class="app-bar-title">Home</span>
+    <span class="app-bar-badge">STATE: EMPTY FEED</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Today Summary Card -->
+    <div class="section-header">Today</div>
+    <div class="card" style="padding:10px;">
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <span class="material-icons">campaign</span>
+          <div class="stat-value">0</div>
+          <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-cell">
+          <span class="material-icons">check_circle</span>
+          <div class="stat-value">0</div>
+          <div class="stat-label">Done Today</div>
+        </div>
+        <div class="stat-cell">
+          <span class="material-icons">local_fire_department</span>
+          <div class="stat-value">0</div>
+          <div class="stat-label">Best Streak</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="section-header" style="margin-top:4px;">Recent Activity</div>
+
+    <!-- Empty state for feed -->
+    <div class="empty-feed-box">
+      <span class="material-icons empty-feed-icon">history</span>
+      <div class="empty-feed-headline">No Activity Yet</div>
+      <div class="empty-feed-sub">Check in to your first campaign to see your activity history here.</div>
+      <a class="text-link" href="#">Go To Campaigns →</a>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      <span class="label">Home</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">campaign</span>
+      <span class="label">Campaigns</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      <span class="label">Profile</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 4 — MICRO-INTERACTION SPEC
+     ════════════════════════════════════════════════════ -->
+<div class="annotation-divider">── PANEL 4: MICRO-INTERACTION SPEC ──</div>
+
+<div class="spec-panel">
+  <div class="spec-title">Micro-Interaction Spec</div>
+
+  <div class="spec-row">
+    <div class="spec-icon-box">
+      <span class="material-icons">check_circle</span>
+    </div>
+    <div class="spec-text">
+      <div class="spec-name">Check-In Tap</div>
+      <div class="spec-desc">Button depresses (scale 0.96) → blue fill floods in → streak badge counts up</div>
+    </div>
+  </div>
+
+  <div class="spec-row">
+    <div class="spec-icon-box">
+      <span class="material-icons">local_fire_department</span>
+    </div>
+    <div class="spec-text">
+      <div class="spec-name">Streak Pulse</div>
+      <div class="spec-desc">Fire icon + count scales 1.0→1.15→1.0 on new check-in (300ms ease)</div>
+    </div>
+  </div>
+
+  <div class="spec-row">
+    <div class="spec-icon-box">
+      <span class="material-icons">trending_up</span>
+    </div>
+    <div class="spec-text">
+      <div class="spec-name">Progress Bar Fill</div>
+      <div class="spec-desc">Bar animates from current % to new % over 600ms with easeOutCubic</div>
+    </div>
+  </div>
+
+  <div class="spec-row">
+    <div class="spec-icon-box">
+      <span class="material-icons">swap_horiz</span>
+    </div>
+    <div class="spec-text">
+      <div class="spec-name">Screen Transitions</div>
+      <div class="spec-desc">Screens slide in from right (push) / slide right (pop), 250ms ease</div>
+    </div>
+  </div>
+
+  <div class="spec-row">
+    <div class="spec-icon-box">
+      <span class="material-icons">auto_awesome</span>
+    </div>
+    <div class="spec-text">
+      <div class="spec-name">Confetti Burst</div>
+      <div class="spec-desc">48 squares scatter from check-in button, fade out over 800ms</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
