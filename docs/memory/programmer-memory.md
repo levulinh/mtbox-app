@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 20 — implemented MTB-15 home screen with live data)
+2026-04-04 (run 21 — implemented MTB-16 streak indicators on campaign cards)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -71,6 +71,11 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Home card action row**: `Row` with `Expanded(_CheckInBtn or _ConfirmedRow)` + fixed-width `GestureDetector` detail chevron (40×40 brutalistBox). Different from Campaigns tab which uses full-width check-in and a separate edit icon.
 - **`Colors.black.withAlpha(77)`** — use `withAlpha(int)` instead of deprecated `withOpacity(double)` for opacity in Flutter 3.x; `77 ≈ 0.3 * 255`.
 
+## Patterns Established (continued)
+- **Streak badge (MTB-16)**: use `Stack` + `Positioned(top: 10, right: 56)` to overlay the badge top-right of a campaign card. The `right: 56` offsets past the 32px edit icon + 14px card padding to avoid overlap. The name text inside `Expanded` gets `padding: EdgeInsets.only(right: 82)` when `campaign.hasStreak` to prevent text running under the badge.
+- **`isStreakBroken` getter on Campaign**: checks if the day before the current streak run was a miss — `idx = dayHistory.length - currentStreak - 1; return idx >= 0 && !dayHistory[idx]`. False for empty history or unbroken-from-start streaks.
+- **`streakDisplayCount`**: returns `max(1, currentStreak)` (never 0) — broken badge shows "1 DAY" to signal a fresh start.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -83,3 +88,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/7 | MTB-13 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/8 | MTB-14 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/9 | MTB-15 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/10 | MTB-16 | In Review |
