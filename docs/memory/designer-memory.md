@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-04 (run 46)
 2026-04-04 (run 45)
 
 ## Color Palette
@@ -120,3 +121,5 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 43 | (none) | No active "In Design" issues found | Idle run |
 | 2026-04-04 run 44 | (none) | No active "In Design" issues found | Idle run |
 | 2026-04-04 run 45 | MTB-16 | Streak indicators on campaign cards — two-state badge (active=blue, broken=white), fire icon, top-right of card | Awaiting Design Approval |
+
+| 2026-04-04 run 46 | MTB-17 | Activity history feed with real data — date-grouped feed on Home tab, check_circle/radio icons, Done/Missed/Pending badges, real-time sync notice bar | Awaiting Design Approval |
