@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 10 — no new issues in progress; all 4 PRs still Done; MTB-5 still In Design/archived)
+2026-04-04 (run 11 — no issues in progress; MTB-11 through MTB-15 are In Design awaiting mockups; MTB-10 is a CTO directive also In Design)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
