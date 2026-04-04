@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 375px; height: 812px; font-family: -apple-system, 'SF Pro Display', sans-serif; background: #FAFAFA; overflow: hidden; }
+
+    /* Status bar */
+    .status-bar {
+      height: 44px; background: #1E50FF;
+      display: flex; align-items: center; padding: 0 16px;
+      color: white; font-size: 12px; font-weight: 700;
+      justify-content: space-between;
+      border-bottom: 2px solid #000;
+    }
+    .status-icons { display: flex; align-items: center; gap: 2px; }
+    .status-icons .material-icons { font-size: 14px; }
+
+    /* App bar */
+    .app-bar {
+      height: 56px; background: #1E50FF;
+      display: flex; align-items: center; padding: 0 16px;
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #000;
+    }
+    .app-bar-title { font-size: 18px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Content */
+    .content { padding: 14px 14px 0 14px; height: calc(812px - 44px - 56px - 60px); overflow-y: auto; }
+
+    /* Section header */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #555;
+      padding-left: 8px; border-left: 3px solid #1E50FF;
+    }
+    .section-count {
+      font-size: 10px; font-weight: 900; text-transform: uppercase;
+      color: #1E50FF; letter-spacing: 0.5px;
+    }
+
+    /* Campaign card */
+    .campaign-card {
+      background: #FFFFFF;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      padding: 12px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    /* Streak badge — top-right corner of card */
+    .streak-badge {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: #1E50FF;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      padding: 4px 8px;
+      display: flex; align-items: center; gap: 3px;
+      color: white;
+    }
+    .streak-badge .material-icons { font-size: 14px; color: white; }
+    .streak-badge .streak-num { font-size: 13px; font-weight: 900; color: white; }
+    .streak-badge .streak-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.85); }
+
+    /* Streak badge — broken streak variant */
+    .streak-badge.broken {
+      background: #FFFFFF;
+    }
+    .streak-badge.broken .material-icons { color: #555; }
+    .streak-badge.broken .streak-num { color: #000; }
+    .streak-badge.broken .streak-label { color: #555; }
+
+    .card-name {
+      font-size: 15px; font-weight: 700; color: #000;
+      margin-bottom: 2px;
+      padding-right: 80px; /* space for streak badge */
+    }
+    .card-goal {
+      font-size: 11px; font-weight: 600; color: #555;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-block;
+      font-size: 9px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 6px;
+      border: 2px solid #1E50FF;
+      color: #1E50FF;
+      margin-bottom: 8px;
+    }
+    .status-badge.done { border-color: #000; color: #000; }
+
+    /* Progress row */
+    .progress-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .progress-day-label { font-size: 11px; font-weight: 700; color: #000; }
+    .progress-pct { font-size: 11px; font-weight: 900; color: #1E50FF; }
+
+    /* Progress bar */
+    .progress-track {
+      width: 100%; height: 10px;
+      border: 2px solid #000;
+      background: #FAFAFA;
+      margin-bottom: 6px;
+    }
+    .progress-fill { height: 100%; background: #1E50FF; }
+
+    /* Day tick strip */
+    .tick-strip { display: flex; gap: 2px; }
+    .tick {
+      flex: 1; height: 6px;
+      border: 1px solid #000;
+    }
+    .tick.done { background: #1E50FF; }
+    .tick.missed { background: #FFFFFF; }
+    .tick.future { background: #E8E8E8; border-color: #CCC; }
+    .tick.today { background: #FFFFFF; border: 2px solid #000; }
+
+    /* Completed section */
+    .section-gap { margin-top: 14px; }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60px; background: #FFFFFF;
+      border-top: 2px solid #000;
+      display: flex;
+    }
+    .nav-tab {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2px;
+      border-right: 2px solid #000;
+      cursor: pointer;
+    }
+    .nav-tab:last-child { border-right: none; }
+    .nav-tab.active { background: #1E50FF; }
+    .nav-tab .material-icons { font-size: 22px; color: #555; }
+    .nav-tab.active .material-icons { color: #FFFFFF; }
+    .nav-label { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #555; letter-spacing: 0.5px; }
+    .nav-tab.active .nav-label { color: #FFFFFF; }
+  </style>
+</head>
+<body>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App bar -->
+  <div class="app-bar">
+    <span class="app-bar-title">Campaigns</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Active section -->
+    <div class="section-header">
+      <span class="section-label">Active</span>
+      <span class="section-count">3 campaigns</span>
+    </div>
+
+    <!-- Card 1: High streak -->
+    <div class="campaign-card">
+      <div class="streak-badge">
+        <span class="material-icons">local_fire_department</span>
+        <span class="streak-num">12</span>
+        <span class="streak-label">day streak</span>
+      </div>
+      <div class="card-name">Morning Run</div>
+      <div class="card-goal">Goal: 30 days</div>
+      <div class="status-badge">Active</div>
+      <div class="progress-row">
+        <span class="progress-day-label">Day 12 of 30</span>
+        <span class="progress-pct">40%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:40%"></div></div>
+      <div class="tick-strip">
+        <!-- 12 done, 1 today, 17 future = 30 -->
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick today"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+      </div>
+    </div>
+
+    <!-- Card 2: Broken streak (missed yesterday) -->
+    <div class="campaign-card">
+      <div class="streak-badge broken">
+        <span class="material-icons">local_fire_department</span>
+        <span class="streak-num">1</span>
+        <span class="streak-label">day streak</span>
+      </div>
+      <div class="card-name">Read Every Day</div>
+      <div class="card-goal">Goal: 21 days</div>
+      <div class="status-badge">Active</div>
+      <div class="progress-row">
+        <span class="progress-day-label">Day 8 of 21</span>
+        <span class="progress-pct">38%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:38%"></div></div>
+      <div class="tick-strip">
+        <!-- 6 done, 1 missed, 1 today, 13 future -->
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick missed"></div>
+        <div class="tick today"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div>
+      </div>
+    </div>
+
+    <!-- Card 3: Mid streak -->
+    <div class="campaign-card">
+      <div class="streak-badge">
+        <span class="material-icons">local_fire_department</span>
+        <span class="streak-num">5</span>
+        <span class="streak-label">day streak</span>
+      </div>
+      <div class="card-name">Cold Shower</div>
+      <div class="card-goal">Goal: 14 days</div>
+      <div class="status-badge">Active</div>
+      <div class="progress-row">
+        <span class="progress-day-label">Day 5 of 14</span>
+        <span class="progress-pct">36%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:36%"></div></div>
+      <div class="tick-strip">
+        <!-- 5 done, 1 today, 8 future -->
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick today"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab">
+      <span class="material-icons">home</span>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-tab active">
+      <span class="material-icons">flag</span>
+      <span class="nav-label">Campaigns</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      <span class="nav-label">Profile</span>
+    </div>
+  </div>
+
+</body>
+</html>
