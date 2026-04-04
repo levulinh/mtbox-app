@@ -313,7 +313,7 @@ class _CompletionRateCard extends StatelessWidget {
                   height: 10,
                   decoration: BoxDecoration(
                     color: kBackground,
-                    border: Border.all(color: kBlack, width: 2),
+                    border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
                   ),
                   child: FractionallySizedBox(
                     alignment: Alignment.centerLeft,
@@ -388,7 +388,7 @@ class _BreakdownRow extends StatelessWidget {
             height: 12,
             decoration: BoxDecoration(
               color: dotColor,
-              border: Border.all(color: kBlack, width: 2),
+              border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
             ),
           ),
           const SizedBox(width: 10),
@@ -407,7 +407,7 @@ class _BreakdownRow extends StatelessWidget {
             height: 8,
             decoration: BoxDecoration(
               color: kBackground,
-              border: Border.all(color: kBlack, width: 2),
+              border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
             ),
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,

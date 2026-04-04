@@ -132,10 +132,10 @@ class _StreakBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: broken ? kWhite : kBlue,
-        border: Border.all(color: kBlack, width: kBorderWidth),
+        border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
         boxShadow: const [
           BoxShadow(
-            color: kBlack,
+            color: kSoftShadowColor,
             offset: Offset(kShadowOffset, kShadowOffset),
             blurRadius: 0,
           ),
@@ -183,7 +183,7 @@ class _ProgressBar extends StatelessWidget {
       decoration: const BoxDecoration(
         color: kBackground,
         border: Border.fromBorderSide(
-          BorderSide(color: kBlack, width: kBorderWidth),
+          BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
         ),
       ),
       child: TweenAnimationBuilder<double>(
@@ -302,11 +302,11 @@ class _CheckInButtonState extends State<_CheckInButton>
           decoration: const BoxDecoration(
             color: kBlue,
             border: Border.fromBorderSide(
-              BorderSide(color: kBlack, width: kBorderWidth),
+              BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
             ),
             boxShadow: [
               BoxShadow(
-                color: kBlack,
+                color: kSoftShadowColor,
                 offset: Offset(kShadowOffset, kShadowOffset),
                 blurRadius: 0,
               ),
@@ -342,7 +342,7 @@ class _ConfirmedState extends StatelessWidget {
       decoration: const BoxDecoration(
         color: kWhite,
         border: Border.fromBorderSide(
-          BorderSide(color: kBlack, width: kBorderWidth),
+          BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
         ),
       ),
       child: const Row(

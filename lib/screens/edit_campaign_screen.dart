@@ -202,7 +202,7 @@ class _ValidationBanner extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFFFF0EE),
-        border: Border.all(color: _kErrorRed, width: kBorderWidth),
+        border: Border.all(color: _kErrorRed, width: kSoftBorderWidth),
         boxShadow: const [
           BoxShadow(
             color: _kErrorRed,
@@ -263,12 +263,12 @@ class _NameField extends StatelessWidget {
           decoration: BoxDecoration(
             color: kWhite,
             border: Border.all(
-              color: hasError ? _kErrorRed : kBlack,
-              width: kBorderWidth,
+              color: hasError ? _kErrorRed : kSoftBorderColor,
+              width: kSoftBorderWidth,
             ),
             boxShadow: [
               BoxShadow(
-                color: hasError ? _kErrorRed : kBlack,
+                color: hasError ? _kErrorRed : kSoftShadowColor,
                 offset: const Offset(kShadowOffset, kShadowOffset),
                 blurRadius: 0,
               ),
@@ -348,12 +348,12 @@ class _GoalField extends StatelessWidget {
               decoration: BoxDecoration(
                 color: kWhite,
                 border: Border.all(
-                  color: hasError ? _kErrorRed : kBlack,
-                  width: kBorderWidth,
+                  color: hasError ? _kErrorRed : kSoftBorderColor,
+                  width: kSoftBorderWidth,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: hasError ? _kErrorRed : kBlack,
+                    color: hasError ? _kErrorRed : kSoftShadowColor,
                     offset: const Offset(kShadowOffset, kShadowOffset),
                     blurRadius: 0,
                   ),
@@ -381,14 +381,14 @@ class _GoalField extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: Color(0xFFF0F0F0),
                 border: Border(
-                  top: BorderSide(color: kBlack, width: kBorderWidth),
-                  right: BorderSide(color: kBlack, width: kBorderWidth),
-                  bottom: BorderSide(color: kBlack, width: kBorderWidth),
+                  top: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+                  right: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+                  bottom: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
                   left: BorderSide.none,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: kBlack,
+                    color: kSoftShadowColor,
                     offset: Offset(kShadowOffset, kShadowOffset),
                     blurRadius: 0,
                   ),
@@ -475,11 +475,11 @@ class _ActionButtons extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: kBlue,
                 border: Border.fromBorderSide(
-                  BorderSide(color: kBlack, width: kBorderWidth),
+                  BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: kBlack,
+                    color: kSoftShadowColor,
                     offset: Offset(kShadowOffset, kShadowOffset),
                     blurRadius: 0,
                   ),
@@ -556,7 +556,7 @@ class _DeleteButton extends StatelessWidget {
         height: 50,
         decoration: BoxDecoration(
           color: kWhite,
-          border: Border.all(color: _kDeleteRed, width: kBorderWidth),
+          border: Border.all(color: _kDeleteRed, width: kSoftBorderWidth),
           boxShadow: const [
             BoxShadow(
               color: _kDeleteRed,
@@ -606,10 +606,10 @@ class _DeleteDialog extends StatelessWidget {
         width: 311,
         decoration: const BoxDecoration(
           color: kWhite,
-          border: Border.fromBorderSide(BorderSide(color: kBlack, width: 2)),
+          border: Border.fromBorderSide(BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth)),
           boxShadow: [
             BoxShadow(
-              color: kBlack,
+              color: kSoftShadowColor,
               offset: Offset(4, 4),
               blurRadius: 0,
             ),
@@ -624,7 +624,7 @@ class _DeleteDialog extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: _kDeleteRed,
                 border: Border(
-                  bottom: BorderSide(color: kBlack, width: 2),
+                  bottom: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
                 ),
               ),
               child: const Row(
@@ -681,7 +681,7 @@ class _DeleteDialog extends StatelessWidget {
             ),
             Container(
               decoration: const BoxDecoration(
-                border: Border(top: BorderSide(color: kBlack, width: 2)),
+                border: Border(top: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth)),
               ),
               child: Row(
                 children: [
@@ -693,7 +693,7 @@ class _DeleteDialog extends StatelessWidget {
                         decoration: const BoxDecoration(
                           color: kWhite,
                           border: Border(
-                            right: BorderSide(color: kBlack, width: 2),
+                            right: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
                           ),
                         ),
                         alignment: Alignment.center,
