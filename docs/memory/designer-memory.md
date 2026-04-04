@@ -4,7 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
-2026-04-04 (run 44)
+2026-04-04 (run 45)
 
 ## Color Palette
 Established on first mockup run (2026-04-04). All screens must use these values exactly.
@@ -59,6 +59,7 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 33: Edit & delete (MTB-13) — same pushed form layout as MTB-8; pre-filled inputs; Cancel+Save button pair; dashed divider before danger zone; delete button is red border/shadow (never blue); confirmation dialog: red header + warning icon + "Keep It" / "Delete" footer
 - 2026-04-04 run 33: Campaign completion (MTB-14) — full-screen blue takeover, no app bar/bottom nav; brutalist confetti = rows of 14px squares with varying fill/opacity; 100×100 white trophy block (emoji_events icon, 3px border, 4px shadow); "GOAL ACHIEVED!" headline; semi-transparent stat blocks; white "Back to Campaigns" CTA + "View Full History" text link
 - 2026-04-04 run 33: Home with live data (MTB-15) — green "Live Data" dot + label in app bar top-right; "Today summary" card at top (3-stat mini grid: Active, Done Today, Best Streak); per-card dual action row: CHECK IN button + detail chevron; "Done Today" badge (green fill, black border) replaces "Active" badge on checked-in campaigns
+- 2026-04-04 run 45: Streak indicator (MTB-16) — top-right badge on campaign cards; two states: active streak = blue fill + white text + local_fire_department icon; broken streak (missed a day) = white fill + black border + grey icon; badge shows "N DAY STREAK"; resets to 1 after a miss (not 0)
 
 ## Feedback Received
 - 2026-04-04: CEO on MTB-6 v1: "I want the design to be less bold, but still brutalism. Remove the emojis and use font icons. The campaign list should have a better way to show the progress (with UI elements). Also, give me the designs of the two other tabs too."
@@ -118,3 +119,4 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 42 | (none) | No active "In Design" issues found | Idle run |
 | 2026-04-04 run 43 | (none) | No active "In Design" issues found | Idle run |
 | 2026-04-04 run 44 | (none) | No active "In Design" issues found | Idle run |
+| 2026-04-04 run 45 | MTB-16 | Streak indicators on campaign cards — two-state badge (active=blue, broken=white), fire icon, top-right of card | Awaiting Design Approval |
