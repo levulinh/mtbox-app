@@ -25,7 +25,7 @@ Widget buildApp() {
     overrides: [
       campaignsProvider.overrideWith(() => _FixedCampaignsNotifier()),
     ],
-    child: const MTBoxApp(),
+    child: const MTBoxApp(initialLocation: '/'),
   );
 }
 

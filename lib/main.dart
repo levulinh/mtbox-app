@@ -11,18 +11,24 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(CampaignAdapter());
   await Hive.openBox<Campaign>('campaigns');
-  runApp(const ProviderScope(child: MTBoxApp()));
+  await Hive.openBox('settings');
+  final onboardingDone =
+      Hive.box('settings').get('onboardingDone', defaultValue: false) as bool;
+  final initialLocation = onboardingDone ? '/' : '/onboarding';
+  runApp(ProviderScope(child: MTBoxApp(initialLocation: initialLocation)));
 }
 
 class MTBoxApp extends StatelessWidget {
-  const MTBoxApp({super.key});
+  final String initialLocation;
+
+  const MTBoxApp({super.key, required this.initialLocation});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'MTBox Campaign Tracker',
       theme: kBrutalistTheme,
-      routerConfig: router,
+      routerConfig: createRouter(initialLocation),
       debugShowCheckedModeBanner: false,
     );
   }

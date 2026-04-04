@@ -7,12 +7,13 @@ import 'screens/home_screen.dart';
 import 'screens/campaigns_screen.dart';
 import 'screens/create_campaign_screen.dart';
 import 'screens/edit_campaign_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/stats_screen.dart';
 import 'theme.dart';
 
-final router = GoRouter(
-  initialLocation: '/',
+GoRouter createRouter(String initialLocation) => GoRouter(
+  initialLocation: initialLocation,
   routes: [
     ShellRoute(
       builder: (context, state, child) => _AppShell(child: child),
@@ -73,6 +74,11 @@ final router = GoRouter(
       builder: (context, state) => CampaignCompletionScreen(
         campaignId: state.pathParameters['id']!,
       ),
+    ),
+    GoRoute(
+      path: '/onboarding',
+      name: 'onboarding',
+      builder: (context, state) => const OnboardingScreen(),
     ),
   ],
 );
