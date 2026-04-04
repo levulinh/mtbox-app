@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-04 (run 48)
 2026-04-04 (run 47)
 2026-04-04 (run 46)
 2026-04-04 (run 45)
@@ -63,6 +64,7 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 33: Home with live data (MTB-15) — green "Live Data" dot + label in app bar top-right; "Today summary" card at top (3-stat mini grid: Active, Done Today, Best Streak); per-card dual action row: CHECK IN button + detail chevron; "Done Today" badge (green fill, black border) replaces "Active" badge on checked-in campaigns
 - 2026-04-04 run 45: Streak indicator (MTB-16) — top-right badge on campaign cards; two states: active streak = blue fill + white text + local_fire_department icon; broken streak (missed a day) = white fill + black border + grey icon; badge shows "N DAY STREAK"; resets to 1 after a miss (not 0)
 - 2026-04-04 run 47: Stats dashboard (MTB-18) — pushed screen (back arrow, no bottom nav); 3 stat cards stacked vertically (Total Campaigns=bar_chart, Longest Streak=local_fire_department, Completion Rate=percent); each card: blue icon block (48x48) + large blue value + uppercase label + grey description; Completion Rate card includes inline progress bar; "Campaign Breakdown" section: Completed/Active/Abandoned rows with proportional bars + counts; entry point is Profile tab → Stats row
+- 2026-04-04 run 48: Campaign archive (MTB-19) — pushed screen (back arrow, no bottom nav); summary banner at top (trophy icon + completed count in blue); archive cards: name + COMPLETED black badge, day-tick strip (black=done, white=missed), 3-cell meta row (Goal Days / Completed / Best Streak with blue icons), date range + "View Details →" chevron linking to campaign detail (MTB-12)
 
 ## Feedback Received
 - 2026-04-04: CEO on MTB-6 v1: "I want the design to be less bold, but still brutalism. Remove the emojis and use font icons. The campaign list should have a better way to show the progress (with UI elements). Also, give me the designs of the two other tabs too."
@@ -126,3 +128,4 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 
 | 2026-04-04 run 46 | MTB-17 | Activity history feed with real data — date-grouped feed on Home tab, check_circle/radio icons, Done/Missed/Pending badges, real-time sync notice bar | Awaiting Design Approval |
 | 2026-04-04 run 47 | MTB-18 | Stats dashboard — 3 stat cards (Total Campaigns, Longest Streak, Completion Rate), breakdown section, pushed screen from Profile | Awaiting Design Approval |
+| 2026-04-04 run 48 | MTB-19 | Campaign archive — pushed screen; summary banner (trophy + total count); archive cards with COMPLETED badge, progress bar, day-tick strip, 3-cell meta row (Goal/Completed/Best Streak), date range + View Details link | Awaiting Design Approval |
