@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'screens/campaign_archive_screen.dart';
 import 'screens/campaign_completion_screen.dart';
 import 'screens/campaign_detail_screen.dart';
 import 'screens/home_screen.dart';
@@ -40,6 +41,11 @@ final router = GoRouter(
               const NoTransitionPage(child: ProfileScreen()),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/archive',
+      name: 'campaign-archive',
+      builder: (context, state) => const CampaignArchiveScreen(),
     ),
     GoRoute(
       path: '/stats',

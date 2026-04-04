@@ -80,9 +80,7 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
                     ],
                     if (completed.isNotEmpty) ...[
                       if (active.isNotEmpty) const SizedBox(height: 8),
-                      _SectionHeader(
-                          label: 'COMPLETED', count: completed.length),
-                      ...completed.map((c) => CampaignCard(campaign: c)),
+                      _ArchiveBanner(),
                     ],
                   ]),
                 ),
@@ -165,6 +163,48 @@ class _SectionHeader extends StatelessWidget {
           fontWeight: FontWeight.w700,
           color: Color(0xFF555555),
           letterSpacing: 1.0,
+        ),
+      ),
+    );
+  }
+}
+
+class _ArchiveBanner extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push('/archive'),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: brutalistBox(),
+        child: Row(
+          children: const [
+            Icon(Icons.emoji_events, size: 20, color: kBlue),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'VIEW COMPLETED CAMPAIGNS',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: kBlack,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+            Text(
+              'ARCHIVE',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: kBlue,
+                letterSpacing: 0.5,
+              ),
+            ),
+            SizedBox(width: 2),
+            Icon(Icons.chevron_right, size: 16, color: kBlue),
+          ],
         ),
       ),
     );

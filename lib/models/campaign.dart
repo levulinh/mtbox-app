@@ -43,6 +43,20 @@ class Campaign {
     return streak;
   }
 
+  int get bestStreak {
+    var best = 0;
+    var current = 0;
+    for (final day in dayHistory) {
+      if (day) {
+        current++;
+        if (current > best) best = current;
+      } else {
+        current = 0;
+      }
+    }
+    return best;
+  }
+
   bool get hasStreak => dayHistory.isNotEmpty;
 
   /// True when the current streak was preceded by a missed day (streak was broken).
