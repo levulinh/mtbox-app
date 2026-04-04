@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 12 — no issues in progress; MTB-11 through MTB-15 and MTB-10 are now in "Awaiting Design Approval" — Designer has created mockups, waiting for CEO approval before moving to In Progress)
+2026-04-04 (run 13 — no issues in progress; MTB-11 through MTB-15 and MTB-10 remain in "Awaiting Design Approval" — Designer has created mockups, still waiting for CEO approval before moving to In Progress)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
