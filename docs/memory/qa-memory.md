@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 19: no issues in review — queue empty)
+2026-04-04 (session 26: MTB-11 daily check-in flow — 137/137 passed, PR #5 merged, Done)
 
 ## Known Flaky Tests
 (none yet)
@@ -24,8 +24,12 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - In widget tests for `CreateCampaignScreen`, `find.byType(TextField).first` = name field, `find.byType(TextField).last` = goal field.
 - Widget tests that boot `MTBoxApp` must use `buildApp()` with `campaignsProvider.overrideWith(() => _FixedCampaignsNotifier())` — never `const ProviderScope(child: MTBoxApp())` now that `CampaignsNotifier.build()` reads from Hive.
 - `_MutableCampaignsNotifier` (for widget tests that call `add()`): override `build()` to return `[]` and `add()` to do `state = [...state, campaign]`. Avoids Hive, settles cleanly.
+- For widget tests involving `checkIn()`, implement `_MutableCampaignsNotifier` with `checkIn()` override that mutates `state` in-memory (no Hive). This lets toast + card-state-transition tests work cleanly with `pumpAndSettle()`.
+- After `checkIn()`, `check_circle` icon appears in BOTH the toast bar AND the "CHECKED IN TODAY" card state — use `findsWidgets` not `findsOneWidget` when asserting on it at the screen level.
+- `Hive.isAdapterRegistered(0)` guard is needed when multiple Hive test groups share the same isolate/process (e.g., unit checkin tests + adapter compat tests both register `CampaignAdapter` typeId 0).
 
 ## Issues Tested
 2026-04-04 | MTB-6 | test/unit/app_shell_test.dart, test/widget/app_shell_test.dart, integration_test/app_shell_test.dart | 37/37 unit+widget passed; E2E skipped (emulator boot failure)
 2026-04-04 | MTB-8 | test/unit/campaign_creation_test.dart, test/widget/campaign_creation_test.dart, integration_test/campaign_creation_test.dart | 89/89 unit+widget passed; E2E skipped (no device); also fixed test/widget/campaign_list_test.dart broken by NotifierProvider refactor
 2026-04-04 | MTB-7 | test/unit/campaign_persistence_test.dart, test/widget/campaign_persistence_test.dart, integration_test/campaign_persistence_test.dart | 99/99 unit+widget passed; E2E skipped (no device); also updated all 4 existing test files for Hive compatibility
+2026-04-04 | MTB-11 | test/unit/campaign_checkin_test.dart, test/widget/campaign_checkin_test.dart, integration_test/campaign_checkin_test.dart | 137/137 unit+widget passed; E2E skipped (no device)
