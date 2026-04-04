@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 21 — implemented MTB-16 streak indicators on campaign cards)
+2026-04-04 (run 22 — implemented MTB-17 activity history feed with real data)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -75,6 +75,11 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Streak badge (MTB-16)**: use `Stack` + `Positioned(top: 10, right: 56)` to overlay the badge top-right of a campaign card. The `right: 56` offsets past the 32px edit icon + 14px card padding to avoid overlap. The name text inside `Expanded` gets `padding: EdgeInsets.only(right: 82)` when `campaign.hasStreak` to prevent text running under the badge.
 - **`isStreakBroken` getter on Campaign**: checks if the day before the current streak run was a miss — `idx = dayHistory.length - currentStreak - 1; return idx >= 0 && !dayHistory[idx]`. False for empty history or unbroken-from-start streaks.
 - **`streakDisplayCount`**: returns `max(1, currentStreak)` (never 0) — broken badge shows "1 DAY" to signal a fresh start.
+- **`activityFeedProvider` real data (MTB-17)**: now watches `campaignsProvider` and derives entries from `dayHistory`. Anchor: `lastCheckInDate` parsed as `DateTime` for the last element; if missing, estimate from today. Each `dayHistory[i]` gets date `anchor - (history.length - 1 - i) days`. Active campaigns with no check-in today get a "Pending" entry dated today. Sort most-recent-first.
+- **`ActivityEntry` optional fields**: `dayNumber`, `totalDays`, `isPending` all default to `0`/`false` for backward compat with existing tests that construct `ActivityEntry` with only the 3 required fields.
+- **Home screen feed grouping**: use Dart 3 record tuples `(String, List<ActivityEntry>)` to carry `(dateLabel, entries)` groups built from the sorted feed. Use `DateTime(y,m,d)` equality (not `==` on full DateTime) to detect day boundaries.
+- **Home screen greeting**: AppBar uses `RichText` inside `FlexibleSpaceBar` with `TextSpan` children; full text "HEY DREW" must match `find.text('HEY DREW', findRichText: true)` in widget tests.
+- **"RECENT ACTIVITY" section header**: the home screen feed section must be labelled "RECENT ACTIVITY" (this is what the QA widget test `find.text('RECENT ACTIVITY')` checks for).
 
 ## PRs Opened
 | Date | PR URL | Issue | Status |
@@ -89,3 +94,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/8 | MTB-14 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/9 | MTB-15 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/10 | MTB-16 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/11 | MTB-17 | In Review |
