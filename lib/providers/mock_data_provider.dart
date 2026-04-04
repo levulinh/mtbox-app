@@ -5,42 +5,34 @@ import '../models/activity_entry.dart';
 
 const _kCampaignsBox = 'campaigns';
 
-final _seedCampaigns = [
+// Fixed IDs for sample campaigns so they can be deleted on dismiss.
+const _kSampleReadDailyId = 'sample-read-daily';
+const _kSampleExerciseId = 'sample-exercise';
+
+final _sampleCampaigns = [
   Campaign(
-    id: '1',
-    name: 'Morning Run',
-    goal: 'Run every day for 30 days',
+    id: _kSampleReadDailyId,
+    name: 'Read Daily',
+    goal: 'Read Daily',
     totalDays: 30,
-    currentDay: 18,
+    currentDay: 10,
     isActive: true,
-    dayHistory: List.generate(18, (i) => i % 5 != 3),
+    // 3 missed, then 7 done → streak = 7
+    dayHistory: [false, false, false, true, true, true, true, true, true, true],
+    colorHex: '4C6EAD',
+    iconName: 'menu_book',
   ),
   Campaign(
-    id: '2',
-    name: 'Daily Reading',
-    goal: 'Read 20 pages per day for 21 days',
-    totalDays: 21,
-    currentDay: 21,
-    isActive: false,
-    dayHistory: List.generate(21, (i) => i % 7 != 6),
-  ),
-  Campaign(
-    id: '3',
-    name: 'No Sugar',
-    goal: 'Avoid sugar for 14 days',
-    totalDays: 14,
-    currentDay: 7,
-    isActive: true,
-    dayHistory: List.generate(7, (_) => true),
-  ),
-  Campaign(
-    id: '4',
-    name: 'Meditation',
-    goal: 'Meditate 10 min daily for 30 days',
-    totalDays: 30,
+    id: _kSampleExerciseId,
+    name: 'Exercise 5x/Week',
+    goal: 'Exercise 5x/Week',
+    totalDays: 20,
     currentDay: 5,
     isActive: true,
-    dayHistory: List.generate(5, (i) => i != 2),
+    // 2 missed, then 3 done → streak = 3
+    dayHistory: [false, false, true, true, true],
+    colorHex: 'B5735A',
+    iconName: 'fitness_center',
   ),
 ];
 
@@ -49,11 +41,21 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
   List<Campaign> build() {
     final box = Hive.box<Campaign>(_kCampaignsBox);
     if (box.isEmpty) {
-      for (final c in _seedCampaigns) {
+      for (final c in _sampleCampaigns) {
         box.put(c.id, c);
       }
+      Hive.box('settings').put('hasSampleData', true);
     }
     return box.values.toList();
+  }
+
+  /// Deletes the 2 sample campaigns and clears the sample-data flag.
+  void dismissSamples() {
+    final box = Hive.box<Campaign>(_kCampaignsBox);
+    box.delete(_kSampleReadDailyId);
+    box.delete(_kSampleExerciseId);
+    Hive.box('settings').put('hasSampleData', false);
+    state = box.values.toList();
   }
 
   void add(Campaign campaign) {
@@ -161,6 +163,22 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
 final campaignsProvider =
     NotifierProvider<CampaignsNotifier, List<Campaign>>(
         CampaignsNotifier.new);
+
+/// True while sample campaigns are present (first-run state).
+class SampleDataNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    return Hive.box('settings').get('hasSampleData', defaultValue: false)
+        as bool;
+  }
+
+  void dismiss() {
+    state = false;
+  }
+}
+
+final hasSampleDataProvider =
+    NotifierProvider<SampleDataNotifier, bool>(SampleDataNotifier.new);
 
 final activityFeedProvider = Provider<List<ActivityEntry>>((ref) {
   final campaigns = ref.watch(campaignsProvider);
