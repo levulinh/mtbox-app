@@ -4,7 +4,7 @@
 Track issues processed, routing decisions made, and patterns noticed across all runs.
 
 ## Last Updated
-2026-04-05 (run 54)
+2026-04-05 (run 56)
 
 ## Issues Processed
 (format: YYYY-MM-DD | issue-id | title | action taken)
@@ -99,3 +99,9 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-05 | Run 53. Direct CEO mention on MTB-28: "3-5 still feels like many to me" — revised acceptance criteria from 5 down to 3 focused behavioral criteria. No Backlog, Awaiting Design Approval, or Awaiting Decision issues found. All queues empty. Nothing to route this run.
 2026-04-05 | Run 54. No Backlog, Awaiting Decision, or new issues. MTB-30 (Focus session mode) in Awaiting Design Approval with Designer mockup posted, CEO reply not yet received — skipped. All queues empty. Nothing to route this run.
 2026-04-05 | Run 55. No Backlog, Awaiting Decision, or new issues. MTB-30 (Focus session mode) still in Awaiting Design Approval — Designer mockup posted 2026-04-04 at 15:31, CEO reply still pending (2nd run waiting). Skipped. All queues empty. Nothing to route this run.
+2026-04-05 | MTB-31 | Account registration and sign-in | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-05 | MTB-32 | User profile screen | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-05 | MTB-33 | Cloud sync — upload local campaign data to Supabase on sign-in | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-05 | MTB-34 | Real-time multi-device sync | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-05 | MTB-35 | Sign-out and data management | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-05 | Run 56. CEO direct mention on MTB-35 ("@levulinhkrpm please start your work"). Five new Backlog issues from Phase 5 Cloud roadmap: MTB-31 (auth), MTB-32 (profile screen), MTB-33 (cloud sync upload), MTB-34 (real-time sync), MTB-35 (sign-out/delete). All had clear intent tied to the Phase 5 Cloud phase description. Acceptance criteria written directly for all five (behavioral criteria, no implementation details). All five moved to In Design. No Awaiting Design Approval or Awaiting Decision issues. Direct mention file cleaned up. Nothing to route this run.
