@@ -22,6 +22,8 @@ class _MutableCampaignsNotifier extends CampaignsNotifier {
     required int totalDays,
     String? colorHex,
     String? iconName,
+    GoalType? goalType,
+    String? metricName,
   }) {
     state = [
       for (final c in state)
@@ -37,6 +39,8 @@ class _MutableCampaignsNotifier extends CampaignsNotifier {
             lastCheckInDate: c.lastCheckInDate,
             colorHex: colorHex ?? c.colorHex,
             iconName: iconName ?? c.iconName,
+            goalType: goalType ?? c.goalType,
+            metricName: metricName ?? c.metricName,
           )
         else
           c,

@@ -24,6 +24,9 @@ const kCampaignIconOptions = [
   ('restaurant', Icons.restaurant),
 ];
 
+/// The type of unit used to measure campaign progress.
+enum GoalType { days, hours, sessions, custom }
+
 class Campaign {
   final String id;
   final String name;
@@ -37,6 +40,8 @@ class Campaign {
   final String? reminderTime; // "HH:mm" 24h format, e.g. "09:00"
   final String colorHex; // e.g. '4C6EAD' (no #)
   final String iconName; // e.g. 'fitness_center'
+  final GoalType goalType;
+  final String metricName; // used when goalType == GoalType.custom
 
   const Campaign({
     required this.id,
@@ -51,6 +56,8 @@ class Campaign {
     this.reminderTime,
     this.colorHex = '4C6EAD',
     this.iconName = 'fitness_center',
+    this.goalType = GoalType.days,
+    this.metricName = '',
   });
 
   /// The campaign's accent color, parsed from [colorHex].
@@ -63,6 +70,36 @@ class Campaign {
       if (name == iconName) return icon;
     }
     return Icons.fitness_center;
+  }
+
+  /// Short uppercase unit label for this goal type.
+  String get unitLabel {
+    switch (goalType) {
+      case GoalType.days:
+        return 'DAYS';
+      case GoalType.hours:
+        return 'HRS';
+      case GoalType.sessions:
+        return 'SESSIONS';
+      case GoalType.custom:
+        return metricName.isNotEmpty ? metricName.toUpperCase() : 'UNITS';
+    }
+  }
+
+  /// Label for the check-in action button.
+  String get checkInLabel {
+    switch (goalType) {
+      case GoalType.days:
+        return 'CHECK IN TODAY';
+      case GoalType.hours:
+        return 'LOG HOURS';
+      case GoalType.sessions:
+        return 'LOG SESSION';
+      case GoalType.custom:
+        return metricName.isNotEmpty
+            ? 'LOG ${metricName.toUpperCase()}'
+            : 'LOG PROGRESS';
+    }
   }
 
   double get progressPercent => currentDay / totalDays;

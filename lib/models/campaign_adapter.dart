@@ -35,6 +35,14 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
       colorHex = reader.readString();
       iconName = reader.readString();
     }
+    // Backward-compatible optional fields added in MTB-29
+    GoalType goalType = GoalType.days;
+    String metricName = '';
+    if (reader.availableBytes > 0) {
+      final goalTypeIndex = reader.readInt();
+      goalType = GoalType.values[goalTypeIndex.clamp(0, GoalType.values.length - 1)];
+      metricName = reader.readString();
+    }
     return Campaign(
       id: id,
       name: name,
@@ -48,6 +56,8 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
       reminderTime: reminderTime,
       colorHex: colorHex,
       iconName: iconName,
+      goalType: goalType,
+      metricName: metricName,
     );
   }
 
@@ -70,5 +80,8 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
     // Backward-compatible optional fields added in MTB-26
     writer.writeString(obj.colorHex);
     writer.writeString(obj.iconName);
+    // Optional fields added in MTB-29
+    writer.writeInt(obj.goalType.index);
+    writer.writeString(obj.metricName);
   }
 }
