@@ -1,17 +1,43 @@
-# mtbox_app
+# MTBox — Campaign Tracker
 
-A new Flutter project.
+A Flutter mobile app for creating, tracking, and completing personal habit and goal campaigns (e.g., "exercise 30 days", "read 10 books").
+
+## Tech Stack
+
+- **Flutter** (v3.41.4)
+- **Dart**
+- **Riverpod** — state management
+- **Hive** — local storage
+- **go_router** — navigation
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```bash
+export PATH="/Volumes/ex-ssd/flutter/bin:$PATH"
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Running Tests
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```bash
+export PATH="/Volumes/ex-ssd/flutter/bin:$PATH"
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Unit + widget tests (no device needed)
+flutter test test/
+
+# E2E integration tests (requires physical Android device via USB)
+flutter devices  # verify device is detected
+flutter test integration_test/ -d android
+```
+
+## Project Structure
+
+```
+lib/                  # Flutter app source code
+mockups/              # HTML mockups per issue (mockups/<issue-id>/index.html + mockup.png)
+test/                 # Unit and widget tests
+integration_test/     # E2E tests
+docs/AGENTS.md        # Shared conventions for all agents
+docs/memory/          # Per-agent persistent memory
+```
