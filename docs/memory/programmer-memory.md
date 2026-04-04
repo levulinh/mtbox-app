@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 23 — implemented MTB-18 stats dashboard)
+2026-04-04 (run 24 — implemented MTB-19 campaign archive)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -82,6 +82,11 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **"RECENT ACTIVITY" section header**: the home screen feed section must be labelled "RECENT ACTIVITY" (this is what the QA widget test `find.text('RECENT ACTIVITY')` checks for).
 - **Stats dashboard (MTB-18)**: pushed screen at `/stats` (top-level GoRoute, no bottom nav). Stats computed inline from `campaignsProvider` — no separate provider needed. Longest streak = all-time best (max run in `dayHistory`), not current trailing streak. Abandoned = `!isActive && currentDay < totalDays`; Completed = `!isActive && currentDay >= totalDays`. Entry point: Profile tab → "Stats Dashboard" tappable row (`context.push('/stats')`).
 
+- **Campaign archive screen (MTB-19)**: pushed screen at `/archive` (top-level GoRoute, no bottom nav). Entry point: "VIEW COMPLETED CAMPAIGNS" tappable banner in Campaigns tab — only shown when `completed.isNotEmpty`. Archive cards show: COMPLETED badge (black fill, no border), day-tick strip (black=done, white=missed, no border radius), 3-cell meta row, footer with date range + "View Details →" link to `/campaigns/:id`.
+- **`bestStreak` getter on Campaign**: max consecutive run of `true` in `dayHistory` — different from `currentStreak` (trailing) and the `_computeStreak()` in provider (also trailing). Pure computed getter, no Hive impact.
+- **Date range from `lastCheckInDate`**: end date = parsed `lastCheckInDate`; start = end − (totalDays − 1) days. Falls back to "Completed" if `lastCheckInDate` is null. Formatted as "Mon D, YYYY – Mon D, YYYY".
+- **Archive entry point pattern**: rather than a nav tab, a tappable banner row inside the Campaigns tab `SliverList` (shown conditionally) routes to the archive. Keeps the nav tab count at 3.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -97,3 +102,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/10 | MTB-16 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/11 | MTB-17 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/12 | MTB-18 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/13 | MTB-19 | In Review |
