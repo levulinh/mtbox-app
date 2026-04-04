@@ -63,6 +63,7 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | Thirty-eighth run. No Backlog, Awaiting Design Approval, or Awaiting Decision issues. All queues empty. Nothing to route this run.
 2026-04-04 | Thirty-ninth run. Six new Backlog issues: MTB-10 (MVP meta-directive in CTO Directives project), MTB-11 (daily check-in), MTB-12 (campaign detail screen), MTB-13 (edit & delete), MTB-14 (campaign completion flow), MTB-15 (home screen live data). All had clear intent, accepted criteria written directly. No Awaiting Design Approval or Awaiting Decision issues. All six moved to In Design.
 2026-04-04 | Fortieth run. No Backlog, Awaiting Design Approval, or Awaiting Decision issues. All queues empty. Nothing to route this run.
+2026-04-04 | Forty-first run. No Backlog or Awaiting Decision issues. Five issues in Awaiting Design Approval: MTB-11 (daily check-in), MTB-12 (campaign detail screen), MTB-13 (edit & delete), MTB-14 (campaign completion flow), MTB-15 (home screen live data). Designer has posted mockups on all five, but no CEO reply yet on any. All skipped — waiting for CEO review.
 2026-04-04 | MTB-10 | Finish the MVP for Campaign tracker app | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | MTB-11 | Daily check-in flow | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | MTB-12 | Campaign detail screen | Posted acceptance criteria comment, moved Backlog → In Design
