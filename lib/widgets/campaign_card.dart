@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../models/campaign.dart';
 import '../theme.dart';
 
@@ -12,7 +13,9 @@ class CampaignCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final pct = (campaign.progressPercent * 100).round();
 
-    return Container(
+    return GestureDetector(
+      onTap: () => context.push('/campaigns/${campaign.id}'),
+      child: Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: brutalistBox(),
@@ -94,6 +97,7 @@ class CampaignCard extends StatelessWidget {
           ],
         ],
       ),
+    ),
     );
   }
 }
