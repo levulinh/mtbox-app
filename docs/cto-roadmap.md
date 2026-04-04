@@ -34,8 +34,8 @@ _Last updated: 2026-04-04_
 
 ## Phase 4: Depth — Richer goal tracking and focus mode
 <!-- CEO steering (MTB-10 mention 2026-04-04): onboarding data too overwhelming; add goal types beyond days; add focus session mode -->
-- [ ] Refined onboarding with realistic lightweight mock data
-- [ ] Flexible goal types (days, hours, sessions, or custom metric)
+- [x] Refined onboarding with realistic lightweight mock data
+- [x] Flexible goal types (days, hours, sessions, or custom metric)
 - [ ] Focus session mode (distraction-free timer with auto-record to campaign)
 
 ## Icebox (future ideas, not scheduled)
