@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-05 (run 62)
 2026-04-05 (run 61)
 2026-04-05 (run 60)
 2026-04-05 (run 59)
@@ -148,3 +149,4 @@ Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, con
 | 2026-04-05 run 59 | MTB-28 | Refined onboarding with lightweight mock data — 3-panel composite: (1) Home with 2 sample campaigns + "SAMPLE DATA" app-bar pill + welcome info card + "Dismiss Samples" text-link; (2) dismiss confirmation dialog over dimmed home; (3) post-dismissal empty state with flag icon + "Create First Campaign" CTA. Reduced from PM's 3–5 to just 2 campaigns per CEO feedback. | Awaiting Design Approval |
 | 2026-04-05 run 60 | MTB-29 | Flexible goal types — 3-panel composite: (1) Create Campaign form with SESSIONS selected in 4-cell segmented control (Days/Hours/Sessions/Custom); (2) CUSTOM selected showing extra Metric Name text input + editable unit pill; (3) Campaign list with 3 cards showing different goal types (Sessions, Custom Pages, Hours) with per-type chip badge and adapted check-in button labels | Awaiting Design Approval |
 | 2026-04-05 run 61 | MTB-30 | Focus session mode — 3-panel composite: (1) Campaign Detail with "Start Focus Session" CTA + sub-label; (2) Focus Mode running: dark full-screen, 76px timer, progress bar, editable target pill, "End Session Early" ghost button, notifications-off hint; (3) Session Complete: task_alt icon block, "SESSION COMPLETE!" headline, bolt auto-log notice card, 3-stat row, before→after progress comparison | Awaiting Design Approval |
+| 2026-04-05 run 62 | MTB-5 | Trashed issue — commentCreate still returns "Entity not found" (4th attempt across runs 56–58, 62); skipped; no unhandled issues in "In Design" | Idle run |
