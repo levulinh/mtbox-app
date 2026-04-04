@@ -161,7 +161,7 @@ class _SectionHeader extends StatelessWidget {
         style: const TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF555555),
+          color: kTextSecondary,
           letterSpacing: 1.0,
         ),
       ),
@@ -251,7 +251,7 @@ class _EmptyState extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                     height: 1.5,
                   ),
                 ),
