@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../models/campaign.dart';
 import '../providers/mock_data_provider.dart';
 import '../theme.dart';
+import '../widgets/appearance_pickers.dart';
 
 const _kErrorRed = Color(0xFFCC2200);
 
@@ -20,6 +21,8 @@ class _CreateCampaignScreenState extends ConsumerState<CreateCampaignScreen> {
   final _nameController = TextEditingController();
   final _goalController = TextEditingController();
   bool _submitted = false;
+  String _selectedColor = kCampaignColorOptions[0];
+  String _selectedIcon = kCampaignIconOptions[0].$1;
 
   String? get _nameError {
     if (!_submitted) return null;
@@ -57,6 +60,8 @@ class _CreateCampaignScreenState extends ConsumerState<CreateCampaignScreen> {
       currentDay: 0,
       isActive: true,
       dayHistory: const [],
+      colorHex: _selectedColor,
+      iconName: _selectedIcon,
     );
     ref.read(campaignsProvider.notifier).add(campaign);
     context.pop();
@@ -120,6 +125,15 @@ class _CreateCampaignScreenState extends ConsumerState<CreateCampaignScreen> {
                 onChanged: (_) {
                   if (_submitted) setState(() {});
                 },
+              ),
+              const SizedBox(height: 20),
+              _SectionLabel(),
+              const SizedBox(height: 12),
+              AppearancePickers(
+                selectedColor: _selectedColor,
+                selectedIcon: _selectedIcon,
+                onColorSelected: (hex) => setState(() => _selectedColor = hex),
+                onIconSelected: (name) => setState(() => _selectedIcon = name),
               ),
               const SizedBox(height: 20),
               const _Divider(),
@@ -411,6 +425,27 @@ class _GoalField extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(left: BorderSide(color: kBlue, width: 3)),
+      ),
+      padding: const EdgeInsets.only(left: 8),
+      child: const Text(
+        'APPEARANCE',
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: kTextSecondary,
+          letterSpacing: 1.0,
+        ),
+      ),
     );
   }
 }

@@ -16,7 +16,13 @@ class _MutableCampaignsNotifier extends CampaignsNotifier {
   List<Campaign> build() => List.of(_initial);
 
   @override
-  void update(String campaignId, {required String name, required int totalDays}) {
+  void update(
+    String campaignId, {
+    required String name,
+    required int totalDays,
+    String? colorHex,
+    String? iconName,
+  }) {
     state = [
       for (final c in state)
         if (c.id == campaignId)
@@ -29,6 +35,8 @@ class _MutableCampaignsNotifier extends CampaignsNotifier {
             isActive: c.isActive,
             dayHistory: c.dayHistory,
             lastCheckInDate: c.lastCheckInDate,
+            colorHex: colorHex ?? c.colorHex,
+            iconName: iconName ?? c.iconName,
           )
         else
           c,

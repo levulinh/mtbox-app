@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../models/campaign.dart';
 import '../providers/mock_data_provider.dart';
 import '../theme.dart';
+import '../widgets/appearance_pickers.dart';
 
 const _kErrorRed = Color(0xFFCC2200);
 const _kDeleteRed = Color(0xFFE53935);
@@ -22,6 +24,8 @@ class _EditCampaignScreenState extends ConsumerState<EditCampaignScreen> {
   late final TextEditingController _goalController;
   bool _submitted = false;
   bool _initialized = false;
+  String _selectedColor = kCampaignColorOptions[0];
+  String _selectedIcon = kCampaignIconOptions[0].$1;
 
   String? get _nameError {
     if (!_submitted) return null;
@@ -61,6 +65,8 @@ class _EditCampaignScreenState extends ConsumerState<EditCampaignScreen> {
           widget.campaignId,
           name: name,
           totalDays: goalDays,
+          colorHex: _selectedColor,
+          iconName: _selectedIcon,
         );
     context.pop();
   }
@@ -94,6 +100,8 @@ class _EditCampaignScreenState extends ConsumerState<EditCampaignScreen> {
     if (!_initialized) {
       _nameController.text = campaign.name;
       _goalController.text = campaign.totalDays.toString();
+      _selectedColor = campaign.colorHex;
+      _selectedIcon = campaign.iconName;
       _initialized = true;
     }
 
@@ -153,6 +161,15 @@ class _EditCampaignScreenState extends ConsumerState<EditCampaignScreen> {
                 onChanged: (_) {
                   if (_submitted) setState(() {});
                 },
+              ),
+              const SizedBox(height: 20),
+              _SectionLabel(text: 'APPEARANCE'),
+              const SizedBox(height: 12),
+              AppearancePickers(
+                selectedColor: _selectedColor,
+                selectedIcon: _selectedIcon,
+                onColorSelected: (hex) => setState(() => _selectedColor = hex),
+                onIconSelected: (name) => setState(() => _selectedIcon = name),
               ),
               const SizedBox(height: 20),
               _ActionButtons(
