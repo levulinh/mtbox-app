@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375">
+  <title>MTB-28 — Refined Onboarding with Lightweight Mock Data</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 375px;
+      background: #F7F3EF;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      color: #1A1A1A;
+    }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .divider {
+      border-top: 2px dashed #5A5A5A;
+      margin: 24px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+    }
+    .divider-label {
+      background: #F7F3EF;
+      border: 1px solid #5A5A5A;
+      font: 700 10px -apple-system, sans-serif;
+      padding: 4px 8px;
+      text-transform: uppercase;
+      color: #6B6B6B;
+      white-space: nowrap;
+    }
+
+    /* ── PHONE SHELL ── */
+    .phone {
+      width: 375px;
+      height: 812px;
+      overflow: hidden;
+      background: #F7F3EF;
+      position: relative;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      height: 44px;
+      background: #4C6EAD;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-icons .material-icons { font-size: 14px; }
+
+    /* ── APP BAR ── */
+    .app-bar {
+      height: 56px;
+      background: #4C6EAD;
+      border-bottom: 2px solid #2C2C2C;
+      box-shadow: 0 2px 0 #2C2C2C;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      justify-content: space-between;
+    }
+    .app-bar-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .sample-pill {
+      background: #B5735A;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      letter-spacing: 0.5px;
+      border: 1.5px solid #2C2C2C;
+    }
+
+    /* ── CONTENT AREA ── */
+    .content {
+      flex: 1;
+      padding: 12px 16px;
+      overflow: hidden;
+      background: #F7F3EF;
+    }
+
+    /* ── WELCOME INFO CARD ── */
+    .welcome-card {
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      border-left: 3px solid #4C6EAD;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+    .welcome-card p {
+      font-size: 12px;
+      font-weight: 500;
+      color: #1A1A1A;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+    .dismiss-link {
+      color: #B5735A;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+      text-align: right;
+      cursor: pointer;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #6B6B6B;
+      letter-spacing: 1px;
+      border-left: 3px solid #4C6EAD;
+      padding-left: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* ── CAMPAIGN CARD ── */
+    .campaign-card {
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-accent {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+    }
+    .card-inner {
+      padding: 10px 10px 10px 16px;
+    }
+
+    /* card header row */
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .card-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .campaign-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid #5A5A5A;
+      flex-shrink: 0;
+    }
+    .campaign-icon .material-icons { font-size: 20px; color: #fff; }
+
+    .card-title-group {}
+    .card-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1A1A1A;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      line-height: 1.2;
+    }
+    .card-meta {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6B6B6B;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* streak badge */
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 3px 6px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 1px 1px 0 rgba(44,44,44,0.45);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .streak-badge.active {
+      background: #4C6EAD;
+      color: #fff;
+    }
+    .streak-badge .material-icons { font-size: 11px; }
+
+    /* progress row */
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .progress-bar-wrap {
+      flex: 1;
+      height: 10px;
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      position: relative;
+    }
+    .progress-bar-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+    }
+    .progress-pct {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1A1A1A;
+      white-space: nowrap;
+    }
+
+    /* tick strip */
+    .tick-strip {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .tick {
+      width: 10px;
+      height: 10px;
+      border: 1.5px solid #5A5A5A;
+      flex-shrink: 0;
+    }
+    .tick.done { background: #4C6EAD; border-color: #4C6EAD; }
+    .tick.missed { background: #FFFDF9; border-color: #5A5A5A; }
+    .tick.future { background: #E8E2DA; border-color: #C8C2BA; }
+    .tick.done-terra { background: #B5735A; border-color: #B5735A; }
+
+    /* card actions */
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-checkin {
+      flex: 1;
+      height: 32px;
+      background: #4C6EAD;
+      color: #fff;
+      border: 1.5px solid #2C2C2C;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .btn-checkin .material-icons { font-size: 14px; }
+    .btn-detail {
+      width: 32px;
+      height: 32px;
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-detail .material-icons { font-size: 16px; color: #1A1A1A; }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 60px;
+      background: #FFFDF9;
+      border-top: 2px solid #2C2C2C;
+      display: flex;
+    }
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: #6B6B6B;
+    }
+    .nav-tab + .nav-tab {
+      border-left: 1.5px solid #5A5A5A;
+    }
+    .nav-tab.active {
+      background: #4C6EAD;
+      color: #fff;
+    }
+    .nav-tab .material-icons { font-size: 20px; }
+
+    /* ── FAB ── */
+    .fab {
+      position: absolute;
+      bottom: 76px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      background: #4C6EAD;
+      border: 2px solid #2C2C2C;
+      box-shadow: 2px 2px 0 #2C2C2C;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .fab .material-icons { font-size: 24px; color: #fff; }
+
+    /* ── PANEL 2: MODAL OVERLAY ── */
+    .modal-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(247,243,239,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .modal-card {
+      width: 300px;
+      background: #FFFDF9;
+      border: 1.5px solid #2C2C2C;
+      box-shadow: 3px 3px 0 #2C2C2C;
+      padding: 20px;
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #1A1A1A;
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+    }
+    .modal-body {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6B6B6B;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-keep {
+      flex: 1;
+      height: 36px;
+      background: #FFFDF9;
+      border: 1.5px solid #2C2C2C;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: #1A1A1A;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-fresh {
+      flex: 1;
+      height: 36px;
+      background: #4C6EAD;
+      border: 1.5px solid #2C2C2C;
+      box-shadow: 2px 2px 0 #2C2C2C;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* behind-modal dimmed screen */
+    .dimmed { opacity: 0.4; pointer-events: none; }
+
+    /* ── PANEL 3: EMPTY STATE ── */
+    .empty-state {
+      border: 1.5px dashed #5A5A5A;
+      background: #FFFDF9;
+      padding: 32px 20px;
+      text-align: center;
+      margin: 16px 0;
+    }
+    .empty-state .material-icons {
+      font-size: 48px;
+      color: #4C6EAD;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .empty-headline {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #1A1A1A;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+    .empty-sub {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6B6B6B;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .btn-create {
+      width: 100%;
+      height: 40px;
+      background: #4C6EAD;
+      border: 1.5px solid #2C2C2C;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-create .material-icons { font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     PANEL 1 — FIRST-RUN HOME (SAMPLE DATA)
+     ════════════════════════════════════════ -->
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar -->
+  <div class="app-bar">
+    <span class="app-bar-title">Home</span>
+    <span class="sample-pill">Sample Data</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content" style="height: calc(812px - 44px - 56px - 60px); overflow: hidden;">
+    <!-- Welcome card -->
+    <div class="welcome-card">
+      <p>You're all set! Explore these sample campaigns or dismiss them to start fresh.</p>
+      <span class="dismiss-link">Dismiss Samples →</span>
+    </div>
+
+    <!-- Section header -->
+    <div class="section-header">Active Campaigns · 2</div>
+
+    <!-- Campaign Card 1: Read Daily -->
+    <div class="campaign-card">
+      <div class="card-accent" style="background:#4C6EAD;"></div>
+      <div class="card-inner">
+        <div class="card-header">
+          <div class="card-left">
+            <div class="campaign-icon" style="background:#4C6EAD;">
+              <span class="material-icons">menu_book</span>
+            </div>
+            <div class="card-title-group">
+              <div class="card-name">Read Daily</div>
+              <div class="card-meta">Day 10 of 30</div>
+            </div>
+          </div>
+          <div class="streak-badge active">
+            <span class="material-icons">whatshot</span>
+            7 Day Streak
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-row">
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width:33%;background:#4C6EAD;"></div>
+          </div>
+          <span class="progress-pct">33%</span>
+        </div>
+
+        <!-- Tick strip -->
+        <div class="tick-strip">
+          <!-- 7 done (blue) -->
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div>
+          <!-- 3 missed (white) -->
+          <div class="tick missed"></div><div class="tick missed"></div><div class="tick missed"></div>
+          <!-- 20 future (light grey) -->
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card-actions">
+          <div class="btn-checkin">
+            <span class="material-icons">add_task</span>
+            Check In
+          </div>
+          <div class="btn-detail">
+            <span class="material-icons">chevron_right</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign Card 2: Exercise 5×/Week -->
+    <div class="campaign-card">
+      <div class="card-accent" style="background:#B5735A;"></div>
+      <div class="card-inner">
+        <div class="card-header">
+          <div class="card-left">
+            <div class="campaign-icon" style="background:#B5735A;">
+              <span class="material-icons">fitness_center</span>
+            </div>
+            <div class="card-title-group">
+              <div class="card-name">Exercise 5×/Week</div>
+              <div class="card-meta">Day 5 of 20</div>
+            </div>
+          </div>
+          <div class="streak-badge active">
+            <span class="material-icons">whatshot</span>
+            3 Day Streak
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-row">
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width:25%;background:#B5735A;"></div>
+          </div>
+          <span class="progress-pct">25%</span>
+        </div>
+
+        <!-- Tick strip -->
+        <div class="tick-strip">
+          <!-- 5 done (terracotta) -->
+          <div class="tick done-terra"></div><div class="tick done-terra"></div><div class="tick done-terra"></div>
+          <div class="tick done-terra"></div><div class="tick done-terra"></div>
+          <!-- 0 missed, 15 future -->
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card-actions">
+          <div class="btn-checkin" style="background:#B5735A;">
+            <span class="material-icons">add_task</span>
+            Check In
+          </div>
+          <div class="btn-detail">
+            <span class="material-icons">chevron_right</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      Home
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">flag</span>
+      Campaigns
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      Profile
+    </div>
+  </div>
+</div>
+
+<!-- ANNOTATION DIVIDER 1 -->
+<div class="divider">
+  <span class="divider-label">Panel 2: Dismiss Confirmation</span>
+</div>
+
+<!-- ════════════════════════════════════════
+     PANEL 2 — DISMISS CONFIRMATION DIALOG
+     ════════════════════════════════════════ -->
+<div class="phone">
+  <!-- Dimmed background: same as panel 1 but muted -->
+  <div class="dimmed" style="position:absolute;inset:0;z-index:1;">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+    <!-- App Bar -->
+    <div class="app-bar">
+      <span class="app-bar-title">Home</span>
+      <span class="sample-pill">Sample Data</span>
+    </div>
+    <!-- Content -->
+    <div class="content" style="height:calc(812px - 44px - 56px - 60px);overflow:hidden;">
+      <div class="welcome-card">
+        <p>You're all set! Explore these sample campaigns or dismiss them to start fresh.</p>
+        <span class="dismiss-link">Dismiss Samples →</span>
+      </div>
+      <div class="section-header">Active Campaigns · 2</div>
+      <!-- Card 1 condensed -->
+      <div class="campaign-card">
+        <div class="card-accent" style="background:#4C6EAD;"></div>
+        <div class="card-inner">
+          <div class="card-header">
+            <div class="card-left">
+              <div class="campaign-icon" style="background:#4C6EAD;"><span class="material-icons">menu_book</span></div>
+              <div class="card-title-group">
+                <div class="card-name">Read Daily</div>
+                <div class="card-meta">Day 10 of 30</div>
+              </div>
+            </div>
+            <div class="streak-badge active"><span class="material-icons">whatshot</span>7 Day Streak</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:33%;background:#4C6EAD;"></div></div>
+            <span class="progress-pct">33%</span>
+          </div>
+          <div class="tick-strip">
+            <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+            <div class="tick missed"></div><div class="tick missed"></div><div class="tick missed"></div>
+            <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          </div>
+          <div class="card-actions">
+            <div class="btn-checkin"><span class="material-icons">add_task</span>Check In</div>
+            <div class="btn-detail"><span class="material-icons">chevron_right</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2 condensed -->
+      <div class="campaign-card">
+        <div class="card-accent" style="background:#B5735A;"></div>
+        <div class="card-inner">
+          <div class="card-header">
+            <div class="card-left">
+              <div class="campaign-icon" style="background:#B5735A;"><span class="material-icons">fitness_center</span></div>
+              <div class="card-title-group">
+                <div class="card-name">Exercise 5×/Week</div>
+                <div class="card-meta">Day 5 of 20</div>
+              </div>
+            </div>
+            <div class="streak-badge active"><span class="material-icons">whatshot</span>3 Day Streak</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:25%;background:#B5735A;"></div></div>
+            <span class="progress-pct">25%</span>
+          </div>
+          <div class="tick-strip">
+            <div class="tick done-terra"></div><div class="tick done-terra"></div><div class="tick done-terra"></div><div class="tick done-terra"></div><div class="tick done-terra"></div>
+            <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          </div>
+          <div class="card-actions">
+            <div class="btn-checkin" style="background:#B5735A;"><span class="material-icons">add_task</span>Check In</div>
+            <div class="btn-detail"><span class="material-icons">chevron_right</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-tab active"><span class="material-icons">home</span>Home</div>
+      <div class="nav-tab"><span class="material-icons">flag</span>Campaigns</div>
+      <div class="nav-tab"><span class="material-icons">person</span>Profile</div>
+    </div>
+  </div>
+
+  <!-- Modal overlay -->
+  <div class="modal-bg">
+    <div class="modal-card">
+      <div class="modal-title">Remove Sample Data?</div>
+      <div class="modal-body">This will clear the 2 sample campaigns. You'll start with a clean slate.</div>
+      <div class="modal-actions">
+        <div class="btn-keep">Keep Samples</div>
+        <div class="btn-fresh">Start Fresh</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANNOTATION DIVIDER 2 -->
+<div class="divider">
+  <span class="divider-label">Panel 3: Empty State After Dismissal</span>
+</div>
+
+<!-- ════════════════════════════════════════
+     PANEL 3 — CLEAN EMPTY STATE
+     ════════════════════════════════════════ -->
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar — no sample pill -->
+  <div class="app-bar">
+    <span class="app-bar-title">Home</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content" style="height:calc(812px - 44px - 56px - 60px);overflow:hidden;display:flex;align-items:center;justify-content:center;">
+    <div style="width:100%;">
+      <div class="empty-state">
+        <span class="material-icons">flag</span>
+        <div class="empty-headline">Your Campaigns</div>
+        <div class="empty-sub">No campaigns yet. Create your first one to start tracking!</div>
+        <div class="btn-create">
+          <span class="material-icons">add</span>
+          Create First Campaign
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <div class="fab">
+    <span class="material-icons">add</span>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      Home
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">flag</span>
+      Campaigns
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      Profile
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
