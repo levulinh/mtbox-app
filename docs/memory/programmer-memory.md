@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 22 — implemented MTB-17 activity history feed with real data)
+2026-04-04 (run 23 — implemented MTB-18 stats dashboard)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -80,6 +80,7 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Home screen feed grouping**: use Dart 3 record tuples `(String, List<ActivityEntry>)` to carry `(dateLabel, entries)` groups built from the sorted feed. Use `DateTime(y,m,d)` equality (not `==` on full DateTime) to detect day boundaries.
 - **Home screen greeting**: AppBar uses `RichText` inside `FlexibleSpaceBar` with `TextSpan` children; full text "HEY DREW" must match `find.text('HEY DREW', findRichText: true)` in widget tests.
 - **"RECENT ACTIVITY" section header**: the home screen feed section must be labelled "RECENT ACTIVITY" (this is what the QA widget test `find.text('RECENT ACTIVITY')` checks for).
+- **Stats dashboard (MTB-18)**: pushed screen at `/stats` (top-level GoRoute, no bottom nav). Stats computed inline from `campaignsProvider` — no separate provider needed. Longest streak = all-time best (max run in `dayHistory`), not current trailing streak. Abandoned = `!isActive && currentDay < totalDays`; Completed = `!isActive && currentDay >= totalDays`. Entry point: Profile tab → "Stats Dashboard" tappable row (`context.push('/stats')`).
 
 ## PRs Opened
 | Date | PR URL | Issue | Status |
@@ -95,3 +96,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/9 | MTB-15 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/10 | MTB-16 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/11 | MTB-17 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/12 | MTB-18 | In Review |
