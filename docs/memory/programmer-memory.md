@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 30 — implemented MTB-26 custom campaign colors and icons)
+2026-04-04 (run 31 — implemented MTB-27 progress sharing export screenshot)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -125,6 +125,14 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Streak badge color**: stays fixed at `kBlue` regardless of campaign color — per design spec.
 - **`CampaignsNotifier.update()` extended**: now accepts optional `colorHex` and `iconName` params (nullable, default null = keep existing). Also preserves `reminderEnabled`/`reminderTime` fields (fix: these were lost before). All other mutations (checkIn, setReminder) explicitly carry forward colorHex/iconName.
 
+- **MTB-27 share progress screen**: `ShareProgressScreen` at `/campaigns/:id/share` (top-level GoRoute, no bottom nav). Entry point: `_ShareProgressButton` widget on campaign detail screen (between progress section and campaign days).
+- **`screenshot` package (v3.0.0)**: wrap target widget in `Screenshot(controller: _controller, child: ...)`. Capture with `await controller.capture(pixelRatio: 3.0)` → `Uint8List?`.
+- **`gal` package (v2.3.2)**: `await Gal.putImageBytes(bytes, name: 'filename')` to save to device gallery (no extension in name).
+- **`share_plus` package (v12.0.2)**: write bytes to temp file via `path_provider` `getTemporaryDirectory()`, then `Share.shareXFiles([XFile(path, mimeType: 'image/png')])`.
+- **Share card design**: 20px padding white container with 2px kBlack border + 4px offset shadow. Brand strip (bolt icon + MTBOX label + terracotta "Campaign Tracker" tag), 22px/900w campaign name, 54px big percentage + count block, 14px progress bar (2px kBlack border), `Wrap`-based tick strip (4px spacing), footer with kBlue streak badge + date. Uses kBlue for all progress elements (fixed brand color, not campaign color).
+- **`Wrap` for tick strip in share card**: use `Wrap(spacing: 4, runSpacing: 4)` so ticks reflow naturally at any width without overflow.
+- **`path_provider` package**: required for `getTemporaryDirectory()` when saving file for share_plus.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -147,3 +155,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/17 | MTB-24 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/18 | MTB-25 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/19 | MTB-26 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/20 | MTB-27 | In Review |
