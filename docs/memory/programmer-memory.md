@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 32 — implemented MTB-28 refined onboarding with sample data dismiss)
+2026-04-05 (run 33 — implemented MTB-29 flexible goal types)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -136,6 +136,14 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **MTB-28 sample data pattern**: Sample campaigns use fixed IDs (`sample-read-daily`, `sample-exercise`) so they can be deleted by ID on dismiss. `hasSampleDataProvider` is a `NotifierProvider<SampleDataNotifier, bool>` reading from `Hive.box('settings')` key `hasSampleData`. `CampaignsNotifier.build()` sets `hasSampleData = true` when seeding. `CampaignsNotifier.dismissSamples()` deletes sample IDs and writes `false` to Hive. Home screen watches `hasSampleDataProvider` and conditionally renders the sample pill + welcome card.
 - **Integration tests that use old seed data** (`Morning Run`, `No Sugar`) will need QA updates whenever seed data changes — this is expected.
 
+- **MTB-29 flexible goal types**: `GoalType` enum (`days`, `hours`, `sessions`, `custom`) added to `campaign.dart`. New fields: `goalType` (default `GoalType.days`) and `metricName` (String, default `''`). Computed getters: `unitLabel` (e.g. `'DAYS'`, `'HRS'`, `'SESSIONS'`, uppercased metricName) and `checkInLabel` (`'CHECK IN TODAY'`, `'LOG HOURS'`, `'LOG SESSION'`, `'LOG PAGES'`).
+- **`GoalTypeSelector` widget** (`lib/widgets/goal_type_selector.dart`): 4-cell brutalist segmented control (calendar_today / schedule / repeat / tune icons). Active cell fills kBlue; cells separated by `kSoftBorderColor` left borders. Outer container has `kSoftBorderColor` border + shadow.
+- **`_GoalSection` pattern in Create/Edit screens**: replaces the old `_GoalField`. Contains `GoalTypeSelector` + amount input with dynamic unit pill + conditional Metric Name input (blue focused border, shown only when `goalType == GoalType.custom`). `_metricController` + `_metricError` validation added to both screens.
+- **Hive backward-compat for MTB-29**: `goalType` stored as int (enum index via `writeInt(obj.goalType.index)`), `metricName` as string. Both read inside `if (reader.availableBytes > 0)` block. On read, clamp goalType index: `GoalType.values[index.clamp(0, GoalType.values.length - 1)]`.
+- **All notifier mutations carry forward goalType + metricName**: `checkIn()`, `update()` (now accepts optional `goalType?` and `metricName?`), `setReminder()` all explicitly copy these fields.
+- **Campaign card goal-type chip**: `_GoalTypeChip` widget — small grey `(icon + label)` chip in bottom-left of the name column. Uses Dart 3 switch expression with record destructuring `(IconData, String)`.
+- **`_CheckInButton` now takes `label` param**: pass `campaign.checkInLabel` from `CampaignCard` to make the button label dynamic.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -160,3 +168,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/19 | MTB-26 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/20 | MTB-27 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/21 | MTB-28 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/22 | MTB-29 | In Review |
