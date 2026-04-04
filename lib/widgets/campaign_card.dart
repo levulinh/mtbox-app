@@ -16,99 +16,156 @@ class CampaignCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push('/campaigns/${campaign.id}'),
       child: Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
-      decoration: brutalistBox(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  campaign.name,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: kBlack,
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: brutalistBox(),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: campaign.hasStreak
+                              ? const EdgeInsets.only(right: 82)
+                              : EdgeInsets.zero,
+                          child: Text(
+                            campaign.name,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: kBlack,
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            context.push('/campaigns/${campaign.id}/edit'),
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: brutalistBox(),
+                          alignment: Alignment.center,
+                          child: const Icon(Icons.edit, size: 16, color: kBlack),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: campaign.isActive
-                    ? brutalistBox(color: kBlue, filled: true)
-                    : brutalistBox(),
-                child: Text(
-                  campaign.isActive ? 'ACTIVE' : 'DONE',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    color: campaign.isActive ? kWhite : kBlack,
-                    letterSpacing: 0.8,
+                  const SizedBox(height: 6),
+                  Text(
+                    campaign.goal,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Text(
+                        'DAY ${campaign.currentDay} OF ${campaign.totalDays}',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '$pct%',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: campaign.isActive ? kBlue : kBlack,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  _ProgressBar(
+                    percent: campaign.progressPercent,
+                    isActive: campaign.isActive,
+                  ),
+                  const SizedBox(height: 10),
+                  _DayTickStrip(
+                    totalDays: campaign.totalDays,
+                    dayHistory: campaign.dayHistory,
+                    showTodayTick: campaign.isActive && !campaign.checkedInToday,
+                  ),
+                  if (campaign.isActive) ...[
+                    const SizedBox(height: 12),
+                    campaign.checkedInToday
+                        ? _ConfirmedState()
+                        : _CheckInButton(onTap: onCheckIn),
+                  ],
+                ],
               ),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: () => context.push('/campaigns/${campaign.id}/edit'),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: brutalistBox(),
-                  alignment: Alignment.center,
-                  child: const Icon(Icons.edit, size: 16, color: kBlack),
-                ),
+            ),
+            if (campaign.hasStreak)
+              Positioned(
+                top: 10,
+                right: 56,
+                child: _StreakBadge(campaign: campaign),
               ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            campaign.goal,
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Text(
-                'DAY ${campaign.currentDay} OF ${campaign.totalDays}',
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                '$pct%',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: campaign.isActive ? kBlue : kBlack,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          _ProgressBar(
-              percent: campaign.progressPercent, isActive: campaign.isActive),
-          const SizedBox(height: 10),
-          _DayTickStrip(
-            totalDays: campaign.totalDays,
-            dayHistory: campaign.dayHistory,
-            showTodayTick:
-                campaign.isActive && !campaign.checkedInToday,
-          ),
-          if (campaign.isActive) ...[
-            const SizedBox(height: 12),
-            campaign.checkedInToday
-                ? _ConfirmedState()
-                : _CheckInButton(onTap: onCheckIn),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StreakBadge extends StatelessWidget {
+  final Campaign campaign;
+
+  const _StreakBadge({required this.campaign});
+
+  @override
+  Widget build(BuildContext context) {
+    final broken = campaign.isStreakBroken;
+    final count = campaign.streakDisplayCount;
+    final iconColor = broken ? const Color(0xFF555555) : kWhite;
+    final textColor = broken ? kBlack : kWhite;
+    final labelColor = broken ? const Color(0xFF555555) : kWhite.withAlpha(217);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: broken ? kWhite : kBlue,
+        border: Border.all(color: kBlack, width: kBorderWidth),
+        boxShadow: const [
+          BoxShadow(
+            color: kBlack,
+            offset: Offset(kShadowOffset, kShadowOffset),
+            blurRadius: 0,
+          ),
         ],
       ),
-    ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.local_fire_department, size: 14, color: iconColor),
+          const SizedBox(width: 3),
+          Text(
+            '$count',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+              color: textColor,
+            ),
+          ),
+          const SizedBox(width: 2),
+          Text(
+            'DAY',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+              color: labelColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
