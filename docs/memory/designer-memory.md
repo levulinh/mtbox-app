@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-04 (run 53)
 2026-04-04 (run 52)
 2026-04-04 (run 51)
 2026-04-04 (run 50)
@@ -78,6 +79,17 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 50: Onboarding flow (MTB-21) — 3-screen composite (fullPage screenshot); dashed annotation dividers between screens; Screen 1: blue hero block (icon + app name + tagline), bold headline, GET STARTED CTA + SKIP text link; Screen 2: two icon-feature rows (blue icon box 56x56 + title + desc), example campaign card, page progress dots; Screen 3: pre-filled form with active/focused field (blue border), goal days + DAYS unit pill, Create & Start CTA, black toast note; progress dots = brutalist squares (not circles) tracking flow position
 - 2026-04-04 run 51: Notification reminders (MTB-22) — composite showing two states (reminder OFF / ON) in one full-page scroll; reminder section sits below progress inside campaign detail (pushed screen); toggle row: bell icon + label + caption + brutalist toggle (grey=off, blue=on); time picker row only active when ON (alarm icon + "Remind me at" + time value + chevron); info bar (blue fill, flush at card bottom) confirms active reminder; notification preview at bottom of page: blue app icon square + app name + time + title (menu_book icon) + body naming campaign + CHECK IN / DISMISS chips
 - 2026-04-04 run 52: Palette refresh (MTB-23) — style guide composite with full Home screen using new muted palette; 8-swatch style guide panel below annotation divider; before/after comparison badge showing #1E50FF -> #4C6EAD transition
+- 2026-04-04 run 53: Shadow/border refinement (MTB-24) — before/after comparison panel + Home screen; content surfaces use 1.5px border (#5A5A5A) + rgba(44,44,44,0.45) shadow; structural chrome (app bar border, nav top-border) stays at 2px #2C2C2C; shadow offset unchanged at 2px 2px to preserve brutalist geometry
+
+## Shadow & Border Refinement Spec (MTB-24)
+Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, content surfaces softened.
+- **Content surfaces** (cards, buttons, badges, ticks, progress bars, stat cells):
+  - Border: `1.5px solid #5A5A5A`
+  - Shadow: `2px 2px 0 rgba(44,44,44,0.45)`
+- **Structural chrome** (app bar bottom-border, bottom-nav top-border):
+  - Border: unchanged `2px solid #2C2C2C`
+  - Bottom-nav vertical dividers: `1.5px solid #5A5A5A`
+- Shadow offset (2px 2px) intentionally unchanged — only opacity drops
 
 ## Feedback Received
 - 2026-04-04: CEO on MTB-6 v1: "I want the design to be less bold, but still brutalism. Remove the emojis and use font icons. The campaign list should have a better way to show the progress (with UI elements). Also, give me the designs of the two other tabs too."
@@ -111,3 +123,4 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 50 | MTB-5 | Archived issue — updated mockup to current design system but no comment posted (issue is archived in Linear, cannot comment) | Skipped |
 | 2026-04-04 run 51 | MTB-22 | Notification reminders — two-state composite (toggle OFF/ON), time picker row, info confirmation bar, notification preview card | Awaiting Design Approval |
 | 2026-04-04 run 52 | MTB-23 | Palette refresh style guide — Home screen with new muted palette + 8-swatch style guide + before/after comparison | Awaiting Design Approval |
+| 2026-04-04 run 53 | MTB-24 | Shadow & border refinement — before/after comparison panel + Home screen with 1.5px/rgba values; criteria checklist | Awaiting Design Approval |
