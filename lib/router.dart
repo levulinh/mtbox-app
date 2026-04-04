@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'screens/campaign_detail_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/campaigns_screen.dart';
 import 'screens/create_campaign_screen.dart';
@@ -37,6 +38,14 @@ final router = GoRouter(
               const NoTransitionPage(child: ProfileScreen()),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/campaigns/:id',
+      name: 'campaign-detail',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return CampaignDetailScreen(campaignId: id);
+      },
     ),
     GoRoute(
       path: '/campaigns/:id/edit',

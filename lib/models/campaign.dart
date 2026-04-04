@@ -21,6 +21,8 @@ class Campaign {
 
   double get progressPercent => currentDay / totalDays;
 
+  int get completedDays => dayHistory.where((d) => d).length;
+
   bool get checkedInToday {
     if (lastCheckInDate == null) return false;
     final now = DateTime.now();

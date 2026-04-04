@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 17 — implemented MTB-12 campaign detail screen)
+2026-04-04 (run 18 — implemented MTB-13 edit & delete campaign)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -56,6 +56,11 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **7-column day grid**: use `GridView.builder` with `crossAxisCount: 7`, `shrinkWrap: true`, `NeverScrollableScrollPhysics` inside a `SliverList` item. Each cell colored: blue=done, white/grey=missed, `Color(0xFFF0F0F0)`=future, today gets `kBlack` border at width 2.
 - **Activity list date labels**: compute relative dates from `dayHistory` index using `DateTime.now().subtract(Duration(days: campaign.currentDay - dayNumber))` — no `startDate` field needed on the model.
 - **GestureDetector on CampaignCard**: wrap the outer `Container` in a `GestureDetector(onTap: () => context.push('/campaigns/${campaign.id}'))` to navigate to detail. Import `go_router` in `campaign_card.dart`.
+- **Edit route pattern**: edit screens live at `/campaigns/:id/edit` as a top-level GoRoute (outside ShellRoute) — same as the detail route pattern. `CampaignCard` has an edit icon button that uses `context.push('/campaigns/${campaign.id}/edit')`.
+- **Edit screen pre-fill**: use `bool _initialized` flag in `ConsumerStatefulWidget` to populate `TextEditingController`s on first build when the campaign is available — avoids double-init and works with Riverpod reactive builds.
+- **Delete confirmation dialog**: use `showDialog` with a custom `Dialog` widget (not `AlertDialog`). Build the dialog entirely with `Container` + `Column` to match brutalist border/shadow style. Use `Navigator.of(dialogContext).pop()` inside the dialog, then call `context.go('/campaigns')` after deletion.
+- **`CampaignsNotifier.update()`**: takes `name` and `totalDays`, creates a full Campaign copy (immutable), puts it back in Hive by id, sets state. Also updates `goal` field to match `name` (they are kept in sync).
+- **`CampaignsNotifier.delete()`**: calls `box.delete(campaignId)` then sets `state = box.values.toList()`.
 
 ## PRs Opened
 | Date | PR URL | Issue | Status |
@@ -66,3 +71,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/4 | MTB-7 | Done |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/5 | MTB-11 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/6 | MTB-12 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/7 | MTB-13 | In Review |
