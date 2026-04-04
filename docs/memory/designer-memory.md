@@ -4,7 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
-2026-04-04 (run 33)
+2026-04-04 (run 34)
 
 ## Color Palette
 Established on first mockup run (2026-04-04). All screens must use these values exactly.
@@ -107,3 +107,4 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 33 | MTB-13 | Edit & delete campaign — pre-filled form, red delete button, confirmation dialog overlay | Awaiting Design Approval |
 | 2026-04-04 run 33 | MTB-14 | Campaign completion flow — full-screen blue celebration, brutalist confetti, trophy block | Awaiting Design Approval |
 | 2026-04-04 run 33 | MTB-15 | Home with live data — Live Data indicator, Today summary card, dual-action campaign cards | Awaiting Design Approval |
+| 2026-04-04 run 34 | MTB-10 | MVP umbrella issue — no new mockup; linked all 5 child designs (MTB-11–15) in comment | Awaiting Design Approval |
