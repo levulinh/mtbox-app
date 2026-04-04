@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 15 — no issues in progress; MTB-11 through MTB-15 and MTB-10 remain in "Awaiting Design Approval" — Designer has created mockups, still waiting for CEO approval before moving to In Progress)
+2026-04-04 (run 16 — implemented MTB-11 daily check-in flow)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -25,6 +25,8 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Hive TypeAdapter**: use a manual `TypeAdapter<T>` (not build_runner codegen) — write fields sequentially in `write()`, read in the same order in `read()`. `typeId` must be unique across all registered adapters (Campaign = 0).
 - **Hive box key strategy**: use the model's own `id` field as the Hive key (`box.put(model.id, model)`) so campaigns can be looked up or updated by id later.
 - **Seed data on first launch**: if `box.isEmpty` in the notifier's `build()`, seed with mock data so existing integration tests (which expect `Morning Run`, `No Sugar` etc.) continue to pass.
+- **Hive backward-compatible optional fields**: when adding a new field to a Hive model, check `reader.availableBytes > 0` before reading it so old persisted data still deserializes correctly. Write a bool sentinel (`hasField`) before the optional value so null is handled cleanly.
+- **`ConsumerStatefulWidget` for local ephemeral state**: screens that need transient UI state (toast message, form validation) use `ConsumerStatefulWidget` + `setState` — Riverpod handles shared state, local widget `state` handles one-off display state.
 
 ## Patterns Established
 - All screens: `Scaffold > SafeArea > CustomScrollView > SliverAppBar + SliverPadding`
@@ -37,6 +39,10 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Empty state**: dashed-border `Container` (use `Color(0xFFCCCCCC)` border, not `brutalistBox`) inside `SliverFillRemaining(hasScrollBody: false)` 
 - **Square icon-only FAB**: wrap `FloatingActionButton` in a sized `Container(decoration: brutalistBox(color: kBlue, filled: true))` with `backgroundColor: Colors.transparent, elevation: 0, shape: RoundedRectangleBorder()`
 - **`brutalistBox(filled: true)` always fills kBlue** — to fill another color, build the `BoxDecoration` manually
+- **In-list toast pattern**: to show a transient notification after a mutation, store a `String? _toastMessage` in `ConsumerStatefulWidget` state, render it as the first item in `SliverChildListDelegate` when non-null. Black background, blue left border (4px), `check_circle` icon + uppercase text matches the brutalism style.
+- **`CampaignCard` check-in button**: active campaigns show a full-width blue "CHECK IN TODAY" button (`add_task` icon); after check-in it switches to a bordered "CHECKED IN TODAY" row (`check_circle` blue icon, no shadow, inert). Controlled via `Campaign.checkedInToday` getter.
+- **Day tick gold highlight**: pass `showTodayTick: campaign.isActive && !campaign.checkedInToday` to `_DayTickStrip`; today index = `dayHistory.length`. Gold = `Color(0xFFFFD700)`.
+- **Notifier mutation pattern**: `checkIn()` reads the campaign from Hive box, creates an updated copy (immutable model), puts it back, and sets `state = box.values.toList()` to trigger UI rebuild.
 
 ## Things to Avoid
 - Don't use `setState` in screens — use Riverpod `ref.watch()` (exception: form screens use `ConsumerStatefulWidget` with `setState` only for local form validation state)
@@ -52,3 +58,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/2 | MTB-9 | Done |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/3 | MTB-8 | Done |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/4 | MTB-7 | Done |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/5 | MTB-11 | In Review |
