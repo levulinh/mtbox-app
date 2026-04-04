@@ -7,6 +7,7 @@ import 'screens/campaigns_screen.dart';
 import 'screens/create_campaign_screen.dart';
 import 'screens/edit_campaign_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/stats_screen.dart';
 import 'theme.dart';
 
 final router = GoRouter(
@@ -39,6 +40,11 @@ final router = GoRouter(
               const NoTransitionPage(child: ProfileScreen()),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/stats',
+      name: 'stats',
+      builder: (context, state) => const StatsScreen(),
     ),
     GoRoute(
       path: '/campaigns/:id',

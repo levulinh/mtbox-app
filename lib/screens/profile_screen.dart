@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/mock_data_provider.dart';
 import '../theme.dart';
 
@@ -111,6 +112,14 @@ class ProfileScreen extends ConsumerWidget {
                             icon: Icons.local_fire_department,
                             label: 'Best Streak',
                             value: '${stats['longestStreak']}d',
+                          ),
+                          const Divider(height: 1, color: kBlack, thickness: 1),
+                          GestureDetector(
+                            onTap: () => context.push('/stats'),
+                            child: const _SettingsRow(
+                              icon: Icons.bar_chart,
+                              label: 'Stats Dashboard',
+                            ),
                           ),
                         ],
                       ),
