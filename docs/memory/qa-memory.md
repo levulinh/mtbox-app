@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 32: MTB-19 — 37 tests total passed, PR merged)
+2026-04-04 (session 33: MTB-21 — 37 unit+widget tests passed, PR merged)
 
 ## Known Flaky Tests
 (none yet)
@@ -33,6 +33,7 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - For `EditCampaignScreen` widget tests that also test `update()` / `delete()`, implement `_MutableCampaignsNotifier` with all three overrides: `build()`, `update()`, `delete()` — all in-memory mutations.
 
 ## Issues Tested
+2026-04-04 | MTB-21 | test/unit/onboarding_test.dart, test/widget/onboarding_test.dart, integration_test/onboarding_test.dart | 37/37 unit+widget passed; E2E ready but not run (no device); tested 3-screen onboarding flow, form validation, navigation, new user detection
 2026-04-04 | MTB-6 | test/unit/app_shell_test.dart, test/widget/app_shell_test.dart, integration_test/app_shell_test.dart | 37/37 unit+widget passed; E2E skipped (emulator boot failure)
 2026-04-04 | MTB-8 | test/unit/campaign_creation_test.dart, test/widget/campaign_creation_test.dart, integration_test/campaign_creation_test.dart | 89/89 unit+widget passed; E2E skipped (no device); also fixed test/widget/campaign_list_test.dart broken by NotifierProvider refactor
 2026-04-04 | MTB-7 | test/unit/campaign_persistence_test.dart, test/widget/campaign_persistence_test.dart, integration_test/campaign_persistence_test.dart | 99/99 unit+widget passed; E2E skipped (no device); also updated all 4 existing test files for Hive compatibility
