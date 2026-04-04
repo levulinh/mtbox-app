@@ -9,6 +9,7 @@ import 'screens/create_campaign_screen.dart';
 import 'screens/edit_campaign_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/focus_session_screen.dart';
 import 'screens/share_progress_screen.dart';
 import 'screens/stats_screen.dart';
 import 'theme.dart';
@@ -80,6 +81,13 @@ GoRouter createRouter(String initialLocation) => GoRouter(
       path: '/campaigns/:id/share',
       name: 'share-progress',
       builder: (context, state) => ShareProgressScreen(
+        campaignId: state.pathParameters['id']!,
+      ),
+    ),
+    GoRoute(
+      path: '/campaigns/:id/focus',
+      name: 'focus-session',
+      builder: (context, state) => FocusSessionScreen(
         campaignId: state.pathParameters['id']!,
       ),
     ),
