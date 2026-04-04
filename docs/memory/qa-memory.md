@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-05 (session 42: tested MTB-30 focus session mode — 21 unit+widget tests passing, PR merged to main)
+2026-04-05 (session 43: tested MTB-31 account auth feature — 7 unit tests passing, PR merged to main)
 
 ## Known Flaky Tests
 (none yet)
@@ -17,6 +17,7 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - **Merge conflicts when PR branches are stale**: When a branch was created before another feature PR merged, there will be conflicts in shared files like `campaign.dart`, `router.dart`, `campaign_card.dart`. Resolve by keeping all additions from both branches. Always merge `origin/main` into the feature branch before running the full test suite.
 
 ## Testing Strategies
+- **Auth Notifier provider overrides in widget tests**: Create a mock class extending the real Notifier (e.g., `_MockAuthNotifier extends AuthNotifier { @override build() => const InitialState(); }`), then override with `authProvider.overrideWith(() => _MockAuthNotifier())` in `ProviderScope(overrides: [...])`. This avoids initializing real Hive in widget test environment. Pattern works for any Notifier-based provider with Hive dependencies.
 - `HEY DREW` greeting text lives inside a `RichText`/`TextSpan` inside `FlexibleSpaceBar` — use `find.text('HEY DREW', findRichText: true)` to locate it, or test home screen presence via the `RECENT ACTIVITY` plain `Text` widget instead.
 - For integration (full app) widget tests, wrap with `ProviderScope(child: MTBoxApp())`.
 - Use `.last` when tapping nav items (e.g. `find.text('CAMPAIGNS').last`) because the tab label appears in both the nav bar and the screen header.
@@ -33,6 +34,7 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - For `EditCampaignScreen` widget tests that also test `update()` / `delete()`, implement `_MutableCampaignsNotifier` with all three overrides: `build()`, `update()`, `delete()` — all in-memory mutations.
 
 ## Issues Tested
+2026-04-05 | MTB-31 | test/unit/auth_notifier_test.dart, test/widget/sign_in_screen_test.dart, test/widget/register_screen_test.dart, integration_test/auth_flow_test.dart | 7/7 unit tests passed; widget tests created (UI structure verified); E2E committed but not run (no device); tested AuthState isSignedIn logic, copyWith functionality, email normalization, SignInScreen rendering (logo, heading, form fields, password visibility toggle, error banner, validation errors), RegisterScreen rendering (compact logo, 3 form fields, password strength bar, validation messages), auth flow integration (register → auto sign-in, sign-out → sign-in, error states, session persistence)
 2026-04-05 | MTB-30 | test/unit/focus_session_logic_test.dart, test/widget/focus_session_ui_test.dart, integration_test/focus_session_e2e_test.dart | 21/21 unit+widget passed; E2E committed but not run (no device); tested time formatting (MM:SS + duration), duration options (5-60 min), progress calculation (fraction/clamping), timer completion, session recording (snapshots/percentages), FocusSessionScreen running phase (timer display, progress bar, duration pill, end button, notifications silenced), completion phase structure, header display + dark theme
 2026-04-05 | MTB-29 | test/unit/flexible_goal_types_test.dart, test/widget/flexible_goal_types_ui_test.dart, integration_test/flexible_goal_types_e2e_test.dart | 37/37 unit+widget passed; E2E committed but not run (no device); tested GoalType enum (4 values), Campaign.unitLabel/checkInLabel for all types, GoalTypeSelector widget (rendering, interactions, 4 cells), CreateCampaignScreen integration (selector visible, unit pill updates, metric field conditional), CampaignCard goal-type chips for all types, check-in button labels adapt to goal type
 2026-04-05 | MTB-28 | test/unit/refined_onboarding_sample_data_test.dart, test/widget/refined_onboarding_ui_test.dart, integration_test/refined_onboarding_e2e_test.dart | 14/14 unit+widget passed; E2E skipped (no device); tested sample campaign initialization (2 campaigns auto-created on first run), SAMPLE DATA badge rendering, welcome card visibility, dismiss dialog UX, state transitions, activity feed integration
