@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 375px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      background: #E8E2DA;
+      overflow-x: hidden;
+    }
+    .annotation-divider {
+      background: #E8E2DA; padding: 12px 16px;
+      border-top: 1.5px dashed #5A5A5A; border-bottom: 1.5px dashed #5A5A5A;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .annotation-label {
+      font-size: 10px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 1.5px; color: #6B6B6B; white-space: nowrap;
+    }
+    .annotation-line { flex: 1; height: 1px; background: #5A5A5A; opacity: 0.4; }
+    .screen { background: #F7F3EF; }
+    .status-bar {
+      height: 44px; background: #4C6EAD;
+      display: flex; align-items: center; padding: 0 16px; justify-content: space-between;
+    }
+    .status-bar .time { font-size: 12px; font-weight: 700; color: #fff; }
+    .status-bar .icons { display: flex; gap: 4px; color: #fff; }
+    .status-bar .icons .material-icons { font-size: 14px; }
+    .app-bar {
+      height: 56px; background: #4C6EAD;
+      display: flex; align-items: center; padding: 0 16px; gap: 12px;
+      border-bottom: 2px solid #2C2C2C; box-shadow: 0 2px 0 #2C2C2C;
+    }
+    .app-bar .material-icons { color: #fff; font-size: 22px; }
+    .app-bar-title { font-size: 18px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
+    .detail-content { padding: 16px; }
+    .section-header {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #6B6B6B; padding-left: 8px;
+      border-left: 3px solid #4C6EAD; margin-bottom: 10px;
+    }
+    .stat-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .stat-cell {
+      flex: 1; border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45); background: #FFFDF9;
+      padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .stat-cell .material-icons { font-size: 20px; color: #4C6EAD; }
+    .stat-value { font-size: 18px; font-weight: 900; color: #4C6EAD; }
+    .stat-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #6B6B6B; }
+    .progress-card {
+      border: 1.5px solid #5A5A5A; box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      background: #FFFDF9; padding: 12px; margin-bottom: 12px;
+    }
+    .progress-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .progress-text { font-size: 12px; font-weight: 700; color: #1A1A1A; text-transform: uppercase; letter-spacing: 0.5px; }
+    .progress-pct { font-size: 16px; font-weight: 900; color: #4C6EAD; }
+    .progress-bar-wrap { height: 10px; border: 1.5px solid #5A5A5A; background: #E8E2DA; margin-bottom: 8px; }
+    .progress-bar-fill { height: 100%; background: #4C6EAD; }
+    .tick-strip { display: flex; gap: 3px; flex-wrap: wrap; }
+    .tick { width: 14px; height: 14px; border: 1.5px solid #5A5A5A; }
+    .tick.done { background: #4C6EAD; border-color: #4C6EAD; }
+    .tick.future { background: #E8E2DA; border-color: #C8C2BA; }
+    .focus-cta {
+      border: 2px solid #2C2C2C; box-shadow: 2px 2px 0 #2C2C2C;
+      background: #4C6EAD; color: #fff; padding: 14px 16px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 8px; cursor: pointer;
+    }
+    .focus-cta .material-icons { font-size: 20px; }
+    .focus-cta-sub {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: #6B6B6B; text-align: center;
+    }
+    .focus-screen {
+      background: #1A1A1A; width: 375px; min-height: 812px; display: flex; flex-direction: column;
+    }
+    .focus-status-bar {
+      height: 44px; background: #1A1A1A;
+      display: flex; align-items: center; padding: 0 16px; justify-content: space-between;
+    }
+    .focus-status-bar .time { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.45); }
+    .focus-status-bar .icons { display: flex; gap: 4px; color: rgba(255,255,255,0.45); }
+    .focus-status-bar .icons .material-icons { font-size: 14px; }
+    .focus-header {
+      padding: 20px 24px 0; display: flex; align-items: center; justify-content: space-between;
+    }
+    .focus-mode-tag {
+      background: #4C6EAD; color: #fff; font-size: 9px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 1.5px; padding: 5px 10px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .focus-mode-tag .material-icons { font-size: 12px; }
+    .focus-campaign-name {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: rgba(255,255,255,0.4);
+    }
+    .focus-timer-block {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 0 24px;
+    }
+    .timer-label {
+      font-size: 10px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 2px; color: rgba(255,255,255,0.35); margin-bottom: 10px;
+    }
+    .timer-display {
+      font-size: 76px; font-weight: 900; color: #fff;
+      letter-spacing: -3px; line-height: 1; margin-bottom: 4px;
+    }
+    .timer-sub {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: rgba(255,255,255,0.3); margin-bottom: 32px;
+    }
+    .session-progress-wrap { width: 100%; margin-bottom: 8px; }
+    .session-progress-labels { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .session-progress-labels span {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: rgba(255,255,255,0.35);
+    }
+    .session-progress-bar {
+      height: 8px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05);
+    }
+    .session-progress-fill { height: 100%; background: #4C6EAD; }
+    .session-target-row {
+      display: flex; align-items: center; gap: 6px; margin-top: 10px; margin-bottom: 40px;
+    }
+    .session-target-row .material-icons { font-size: 14px; color: rgba(255,255,255,0.3); }
+    .session-target-text {
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.3);
+      text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .session-target-pill {
+      border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.55); padding: 3px 9px; font-size: 11px; font-weight: 700;
+      font-family: inherit; display: flex; align-items: center; gap: 4px;
+    }
+    .session-target-pill .material-icons { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .focus-actions { padding: 0 24px 52px; display: flex; flex-direction: column; gap: 10px; }
+    .focus-end-btn {
+      border: 1.5px solid rgba(255,255,255,0.22); box-shadow: 2px 2px 0 rgba(255,255,255,0.07);
+      background: transparent; color: rgba(255,255,255,0.65); padding: 14px;
+      font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .focus-end-btn .material-icons { font-size: 18px; }
+    .focus-hint {
+      font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.2);
+      text-align: center; text-transform: uppercase; letter-spacing: 0.8px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .focus-hint .material-icons { font-size: 12px; }
+    .complete-screen {
+      background: #1A1A1A; width: 375px; min-height: 812px; display: flex; flex-direction: column;
+    }
+    .complete-status-bar {
+      height: 44px; background: #1A1A1A;
+      display: flex; align-items: center; padding: 0 16px; justify-content: space-between;
+    }
+    .complete-status-bar .time { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.45); }
+    .complete-status-bar .icons { display: flex; gap: 4px; color: rgba(255,255,255,0.45); }
+    .complete-status-bar .icons .material-icons { font-size: 14px; }
+    .complete-body {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .complete-icon-block {
+      width: 80px; height: 80px; border: 2px solid #4C6EAD;
+      box-shadow: 3px 3px 0 #4C6EAD; background: rgba(76,110,173,0.12);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .complete-icon-block .material-icons { font-size: 44px; color: #4C6EAD; }
+    .complete-headline {
+      font-size: 24px; font-weight: 900; color: #fff;
+      text-transform: uppercase; letter-spacing: -0.5px; text-align: center; margin-bottom: 4px;
+    }
+    .complete-sub {
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.35);
+      text-transform: uppercase; letter-spacing: 1px; text-align: center; margin-bottom: 24px;
+    }
+    .auto-log-notice {
+      background: rgba(76,110,173,0.18); border: 1.5px solid #4C6EAD;
+      padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+      width: 100%; margin-bottom: 20px;
+    }
+    .auto-log-notice .material-icons { font-size: 18px; color: #4C6EAD; flex-shrink: 0; }
+    .auto-log-text {
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.65);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .session-stats-row { display: flex; gap: 8px; width: 100%; margin-bottom: 16px; }
+    .session-stat-cell {
+      flex: 1; border: 1.5px solid rgba(255,255,255,0.12);
+      box-shadow: 2px 2px 0 rgba(255,255,255,0.04); background: rgba(255,255,255,0.04);
+      padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .session-stat-cell .material-icons { font-size: 18px; color: #4C6EAD; }
+    .session-stat-value { font-size: 18px; font-weight: 900; color: #fff; }
+    .session-stat-label {
+      font-size: 9px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 0.8px; color: rgba(255,255,255,0.35); text-align: center;
+    }
+    .campaign-progress-update {
+      width: 100%; border: 1.5px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04); padding: 12px; margin-bottom: 24px;
+    }
+    .campaign-progress-update-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: rgba(255,255,255,0.35);
+      margin-bottom: 8px; padding-left: 8px; border-left: 2px solid #4C6EAD;
+    }
+    .campaign-name-small {
+      font-size: 13px; font-weight: 900; color: #fff;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+    }
+    .progress-update-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .old-pct { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.35); }
+    .arrow-icon { font-size: 14px; color: rgba(255,255,255,0.25); }
+    .new-pct { font-size: 18px; font-weight: 900; color: #4C6EAD; }
+    .progress-bar-compare {
+      height: 8px; border: 1.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05); position: relative; overflow: hidden;
+    }
+    .progress-bar-old { position: absolute; left: 0; top: 0; height: 100%; background: rgba(76,110,173,0.35); }
+    .progress-bar-new { position: absolute; left: 0; top: 0; height: 100%; background: #4C6EAD; }
+    .complete-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    .back-btn {
+      border: 2px solid #4C6EAD; box-shadow: 2px 2px 0 #4C6EAD;
+      background: #4C6EAD; color: #fff; padding: 14px;
+      font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .back-btn .material-icons { font-size: 18px; }
+    .start-another-btn {
+      border: 1.5px solid rgba(255,255,255,0.2); background: transparent;
+      color: rgba(255,255,255,0.55); padding: 12px;
+      font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .start-another-btn .material-icons { font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<!-- PANEL 1: Entry Point on Campaign Detail -->
+<div class="screen">
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="app-bar">
+    <span class="material-icons">arrow_back</span>
+    <span class="app-bar-title">Read Daily</span>
+  </div>
+  <div class="detail-content">
+    <div class="section-header" style="margin-bottom:10px;">Progress</div>
+    <div class="progress-card">
+      <div class="progress-label">
+        <span class="progress-text">Day 18 of 30</span>
+        <span class="progress-pct">60%</span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:60%;"></div></div>
+      <div class="tick-strip">
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-cell">
+        <span class="material-icons">whatshot</span>
+        <span class="stat-value">7</span><span class="stat-label">Streak</span>
+      </div>
+      <div class="stat-cell">
+        <span class="material-icons">check_circle</span>
+        <span class="stat-value">18</span><span class="stat-label">Done</span>
+      </div>
+      <div class="stat-cell">
+        <span class="material-icons">flag</span>
+        <span class="stat-value">30</span><span class="stat-label">Goal</span>
+      </div>
+    </div>
+    <div class="section-header" style="margin-top:4px; margin-bottom:10px;">Focus Session</div>
+    <div class="focus-cta">
+      <span class="material-icons">timer</span>
+      Start Focus Session
+    </div>
+    <div class="focus-cta-sub" style="margin-bottom:16px;">Distraction-free timer · Auto-records to campaign</div>
+  </div>
+</div>
+
+<div class="annotation-divider">
+  <div class="annotation-line"></div>
+  <span class="annotation-label">Focus Mode — Running</span>
+  <div class="annotation-line"></div>
+</div>
+
+<!-- PANEL 2: Focus Mode Running -->
+<div class="focus-screen">
+  <div class="focus-status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="focus-header">
+    <div class="focus-mode-tag"><span class="material-icons">timer</span>Focus Mode</div>
+    <div class="focus-campaign-name">Read Daily</div>
+  </div>
+  <div class="focus-timer-block">
+    <div class="timer-label">Elapsed Time</div>
+    <div class="timer-display">14:32</div>
+    <div class="timer-sub">of 30:00 target</div>
+    <div class="session-progress-wrap">
+      <div class="session-progress-labels">
+        <span>0:00</span><span>48% complete</span><span>30:00</span>
+      </div>
+      <div class="session-progress-bar">
+        <div class="session-progress-fill" style="width:48%;"></div>
+      </div>
+    </div>
+    <div class="session-target-row">
+      <span class="material-icons">schedule</span>
+      <span class="session-target-text">Target:</span>
+      <div class="session-target-pill">30 min <span class="material-icons">edit</span></div>
+    </div>
+  </div>
+  <div class="focus-actions">
+    <div class="focus-end-btn">
+      <span class="material-icons">stop_circle</span>End Session Early
+    </div>
+    <div class="focus-hint">
+      <span class="material-icons">notifications_off</span>
+      Notifications silenced · No distractions
+    </div>
+  </div>
+</div>
+
+<div class="annotation-divider">
+  <div class="annotation-line"></div>
+  <span class="annotation-label">Focus Mode — Session Complete + Auto-Log</span>
+  <div class="annotation-line"></div>
+</div>
+
+<!-- PANEL 3: Session Completed -->
+<div class="complete-screen">
+  <div class="complete-status-bar">
+    <span class="time">10:11</span>
+    <div class="icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="complete-body">
+    <div class="complete-icon-block">
+      <span class="material-icons">task_alt</span>
+    </div>
+    <div class="complete-headline">Session Complete!</div>
+    <div class="complete-sub">30:00 · Read Daily</div>
+    <div class="auto-log-notice">
+      <span class="material-icons">bolt</span>
+      <div class="auto-log-text">Session auto-logged to your campaign</div>
+    </div>
+    <div class="session-stats-row">
+      <div class="session-stat-cell">
+        <span class="material-icons">timer</span>
+        <span class="session-stat-value">30:00</span>
+        <span class="session-stat-label">Duration</span>
+      </div>
+      <div class="session-stat-cell">
+        <span class="material-icons">whatshot</span>
+        <span class="session-stat-value">8</span>
+        <span class="session-stat-label">Streak</span>
+      </div>
+      <div class="session-stat-cell">
+        <span class="material-icons">emoji_events</span>
+        <span class="session-stat-value">19</span>
+        <span class="session-stat-label">Days Done</span>
+      </div>
+    </div>
+    <div class="campaign-progress-update">
+      <div class="campaign-progress-update-label">Campaign Updated</div>
+      <div class="campaign-name-small">Read Daily</div>
+      <div class="progress-update-row">
+        <span class="old-pct">60%</span>
+        <span class="material-icons arrow-icon">arrow_forward</span>
+        <span class="new-pct">63%</span>
+      </div>
+      <div class="progress-bar-compare">
+        <div class="progress-bar-old" style="width:60%;"></div>
+        <div class="progress-bar-new" style="width:63%;"></div>
+      </div>
+    </div>
+    <div class="complete-actions">
+      <div class="back-btn">
+        <span class="material-icons">arrow_back</span>Back to Campaign
+      </div>
+      <div class="start-another-btn">
+        <span class="material-icons">replay</span>Start Another Session
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
