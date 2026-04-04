@@ -7,14 +7,28 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
 
   @override
   Campaign read(BinaryReader reader) {
+    final id = reader.readString();
+    final name = reader.readString();
+    final goal = reader.readString();
+    final totalDays = reader.readInt();
+    final currentDay = reader.readInt();
+    final isActive = reader.readBool();
+    final dayHistory = reader.readList().cast<bool>();
+    // Backward-compatible optional field added in MTB-11
+    String? lastCheckInDate;
+    if (reader.availableBytes > 0) {
+      final hasDate = reader.readBool();
+      if (hasDate) lastCheckInDate = reader.readString();
+    }
     return Campaign(
-      id: reader.readString(),
-      name: reader.readString(),
-      goal: reader.readString(),
-      totalDays: reader.readInt(),
-      currentDay: reader.readInt(),
-      isActive: reader.readBool(),
-      dayHistory: reader.readList().cast<bool>(),
+      id: id,
+      name: name,
+      goal: goal,
+      totalDays: totalDays,
+      currentDay: currentDay,
+      isActive: isActive,
+      dayHistory: dayHistory,
+      lastCheckInDate: lastCheckInDate,
     );
   }
 
@@ -27,5 +41,8 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
     writer.writeInt(obj.currentDay);
     writer.writeBool(obj.isActive);
     writer.writeList(obj.dayHistory);
+    // Backward-compatible optional field added in MTB-11
+    writer.writeBool(obj.lastCheckInDate != null);
+    if (obj.lastCheckInDate != null) writer.writeString(obj.lastCheckInDate!);
   }
 }
