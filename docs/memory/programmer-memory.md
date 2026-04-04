@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 34 — implemented MTB-30 focus session mode)
+2026-04-05 (run 35 — implemented MTB-31 account registration and sign-in)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -148,6 +148,12 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Focus session CTA on detail screen**: "START FOCUS SESSION" button uses `brutalistBox()`-style border/shadow on `kBackground` fill (not blue) to visually distinguish it from the blue "SHARE MY PROGRESS" button above it. Only shown when `campaign.isActive && !campaign.checkedInToday`.
 - **Duration picker dialog**: `showDialog` with custom `Dialog(backgroundColor: _kDarkCard)` + manual `Container` — matches dark theme. Options list (5/10/15/20/25/30/45/60 min). Selected option fills `kBlue`.
 
+- **MTB-31 local auth pattern**: `UserAccount` model (typeId=1) with `email` + `password` stored in `Hive.box<UserAccount>('users')` keyed by normalized email. `AuthNotifier extends Notifier<AuthState>` with `signIn()`/`register()`/`clearError()` — stores `currentUser` email in `Hive.box('settings')`. Startup logic in `main()`: no `currentUser` → `/sign-in`, has user but no onboarding → `/onboarding`, fully onboarded → `/`.
+- **Auth error state pattern**: `AuthState` carries `AuthError? error` (enum: `invalidCredentials`, `emailAlreadyInUse`). On error, Sign In button turns red + label → "TRY AGAIN"; error banner + red-bordered fields shown. `clearError()` called before each new submission and on field `onChanged`.
+- **Shared auth widgets** (`lib/widgets/auth_widgets.dart`): `AuthField`, `AuthFieldLabel`, `AuthErrorBanner`, `AuthOrDivider`, `AuthSecurityNote`, `authFieldError()`. Use these for any future auth-related screens. `kAuthRed = Color(0xFFC0392B)` exported from this file.
+- **Password strength bar**: 4-segment `Row` of `Container(height:3)` tiles. Score computed from: length≥6, has uppercase, has digit, has special char. Colors: 1=red, 2=orange, 3=green, 4=kBlue.
+- **Auth routes outside ShellRoute**: `/sign-in` and `/register` are top-level GoRoutes (no bottom nav). `/register` pushed via `context.push()` from sign-in screen; "Sign In Instead" uses `context.pop()`.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -174,3 +180,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/21 | MTB-28 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/22 | MTB-29 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/23 | MTB-30 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/24 | MTB-31 | In Review |
