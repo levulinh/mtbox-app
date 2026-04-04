@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 27: MTB-12 campaign detail — 41/41 passed, PR #6 merged, Done; MTB-13 edit & delete — 183/183 passed, PR #7 merged, Done)
+2026-04-04 (session 28: MTB-14 campaign completion — 17/17 passed, PR #8 merged, Done)
 
 ## Known Flaky Tests
 (none yet)
@@ -39,3 +39,4 @@ Track known flaky tests, recurring issues, testing strategies that work.
 2026-04-04 | MTB-11 | test/unit/campaign_checkin_test.dart, test/widget/campaign_checkin_test.dart, integration_test/campaign_checkin_test.dart | 137/137 unit+widget passed; E2E skipped (no device)
 2026-04-04 | MTB-12 | test/unit/campaign_detail_test.dart, test/widget/campaign_detail_test.dart, integration_test/campaign_detail_test.dart | 41/41 unit+widget passed; E2E skipped (no device); resolved merge conflict in campaign.dart (completedDays + checkedInToday coexist)
 2026-04-04 | MTB-13 | test/unit/campaign_edit_test.dart, test/widget/campaign_edit_test.dart, integration_test/campaign_edit_test.dart | 183/183 full suite passed; E2E skipped (no device); resolved merge conflicts in router.dart (campaign-detail + edit-campaign routes coexist)
+2026-04-04 | MTB-14 | test/unit/campaign_completion_test.dart, test/widget/campaign_completion_test.dart, integration_test/campaign_completion_test.dart | 17/17 unit+widget passed; E2E skipped (no device)
