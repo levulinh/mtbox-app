@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 2 — no new issues in progress; all 4 PRs confirmed Done)
+2026-04-04 (run 3 — no new issues in progress; all 4 PRs confirmed Done)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
