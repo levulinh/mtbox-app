@@ -1,6 +1,6 @@
 # Campaign Tracker — CTO Roadmap
 
-_Last updated: 2026-04-04_
+_Last updated: 2026-04-05_
 
 ## Tech Stack
 - Platform: Flutter (v3.41.4) + Dart — already established, cross-platform mobile
@@ -36,7 +36,7 @@ _Last updated: 2026-04-04_
 <!-- CEO steering (MTB-10 mention 2026-04-04): onboarding data too overwhelming; add goal types beyond days; add focus session mode -->
 - [x] Refined onboarding with realistic lightweight mock data
 - [x] Flexible goal types (days, hours, sessions, or custom metric)
-- [ ] Focus session mode (distraction-free timer with auto-record to campaign)
+- [x] Focus session mode (distraction-free timer with auto-record to campaign)
 
 ## Icebox (future ideas, not scheduled)
 - [ ] Cloud sync across devices
