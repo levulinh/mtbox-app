@@ -2,33 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mtbox_app/models/campaign.dart';
 import 'package:mtbox_app/screens/create_campaign_screen.dart';
 import 'package:mtbox_app/providers/mock_data_provider.dart';
+
+// In-memory notifier that avoids Hive — widget tests verify UI behaviour, not persistence.
+class _MutableCampaignsNotifier extends CampaignsNotifier {
+  @override
+  List<Campaign> build() => [];
+
+  @override
+  void add(Campaign campaign) {
+    state = [...state, campaign];
+  }
+}
+
+GoRouter _makeRouter() => GoRouter(
+      initialLocation: '/home/create',
+      routes: [
+        GoRoute(
+          path: '/home',
+          builder: (_, __) => const Scaffold(body: Text('CAMPAIGNS')),
+          routes: [
+            GoRoute(
+              path: 'create',
+              builder: (_, __) => const CreateCampaignScreen(),
+            ),
+          ],
+        ),
+      ],
+    );
 
 /// Wraps CreateCampaignScreen in the minimal router context it needs.
 /// The /home route acts as the parent so context.pop() has somewhere to land.
 Widget buildScreen() {
-  final router = GoRouter(
-    initialLocation: '/home/create',
-    routes: [
-      GoRoute(
-        path: '/home',
-        builder: (_, __) => const Scaffold(body: Text('CAMPAIGNS')),
-        routes: [
-          GoRoute(
-            path: 'create',
-            builder: (_, __) => const CreateCampaignScreen(),
-          ),
-        ],
-      ),
-    ],
-  );
   return ProviderScope(
-    child: MaterialApp.router(routerConfig: router),
+    overrides: [
+      campaignsProvider.overrideWith(() => _MutableCampaignsNotifier()),
+    ],
+    child: MaterialApp.router(routerConfig: _makeRouter()),
   );
 }
 
 void main() {
+
   // ─── Static rendering ────────────────────────────────────────────────────────
 
   group('CreateCampaignScreen — initial render', () {
@@ -191,6 +208,9 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            campaignsProvider.overrideWith(() => _MutableCampaignsNotifier()),
+          ],
           child: Builder(builder: (context) {
             container = ProviderScope.containerOf(context);
             return MaterialApp.router(routerConfig: router);
@@ -235,6 +255,9 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            campaignsProvider.overrideWith(() => _MutableCampaignsNotifier()),
+          ],
           child: Builder(builder: (context) {
             container = ProviderScope.containerOf(context);
             return MaterialApp.router(routerConfig: router);
@@ -281,6 +304,9 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            campaignsProvider.overrideWith(() => _MutableCampaignsNotifier()),
+          ],
           child: Builder(builder: (context) {
             container = ProviderScope.containerOf(context);
             return MaterialApp.router(routerConfig: router);

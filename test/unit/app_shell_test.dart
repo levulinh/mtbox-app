@@ -1,10 +1,36 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mtbox_app/models/campaign.dart';
+import 'package:mtbox_app/models/campaign_adapter.dart';
 import 'package:mtbox_app/models/activity_entry.dart';
 import 'package:mtbox_app/providers/mock_data_provider.dart';
 
 void main() {
+  late Directory tempDir;
+
+  setUpAll(() async {
+    tempDir = await Directory.systemTemp.createTemp('hive_app_shell_unit_test');
+    Hive.init(tempDir.path);
+    Hive.registerAdapter(CampaignAdapter());
+  });
+
+  setUp(() async {
+    await Hive.openBox<Campaign>('campaigns');
+  });
+
+  tearDown(() async {
+    final box = Hive.box<Campaign>('campaigns');
+    await box.clear();
+    await box.close();
+  });
+
+  tearDownAll(() async {
+    await Hive.close();
+    await tempDir.delete(recursive: true);
+  });
+
   group('Campaign.progressPercent', () {
     test('returns correct fraction mid-way', () {
       final c = Campaign(

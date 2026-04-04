@@ -4,9 +4,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mtbox_app/main.dart';
 import 'package:mtbox_app/models/campaign.dart';
 import 'package:mtbox_app/models/activity_entry.dart';
+import 'package:mtbox_app/providers/mock_data_provider.dart';
 import 'package:mtbox_app/widgets/campaign_card.dart';
 import 'package:mtbox_app/widgets/stat_card.dart';
 import 'package:mtbox_app/widgets/activity_item.dart';
+
+// Override that bypasses Hive so MTBoxApp boots cleanly in widget tests.
+class _FixedCampaignsNotifier extends CampaignsNotifier {
+  @override
+  List<Campaign> build() => const [
+        Campaign(id: '1', name: 'Morning Run', goal: 'Run 30 days', totalDays: 30, currentDay: 18, isActive: true, dayHistory: []),
+        Campaign(id: '2', name: 'Daily Reading', goal: 'Read 21 days', totalDays: 21, currentDay: 21, isActive: false, dayHistory: []),
+        Campaign(id: '3', name: 'No Sugar', goal: 'Avoid 14 days', totalDays: 14, currentDay: 7, isActive: true, dayHistory: []),
+        Campaign(id: '4', name: 'Meditation', goal: 'Meditate 30 days', totalDays: 30, currentDay: 5, isActive: true, dayHistory: []),
+      ];
+}
+
+Widget buildApp() {
+  return ProviderScope(
+    overrides: [
+      campaignsProvider.overrideWith(() => _FixedCampaignsNotifier()),
+    ],
+    child: const MTBoxApp(),
+  );
+}
 
 void main() {
   group('CampaignCard', () {
@@ -188,7 +209,7 @@ void main() {
 
   group('App shell navigation', () {
     testWidgets('home tab shows greeting and stats', (tester) async {
-      await tester.pumpWidget(const ProviderScope(child: MTBoxApp()));
+      await tester.pumpWidget(buildApp());
       await tester.pumpAndSettle();
 
       // HEY DREW is in a RichText inside FlexibleSpaceBar — use findRichText: true
@@ -197,7 +218,7 @@ void main() {
     });
 
     testWidgets('bottom nav has HOME, CAMPAIGNS, PROFILE tabs', (tester) async {
-      await tester.pumpWidget(const ProviderScope(child: MTBoxApp()));
+      await tester.pumpWidget(buildApp());
       await tester.pumpAndSettle();
 
       expect(find.text('HOME'), findsOneWidget);
@@ -206,7 +227,7 @@ void main() {
     });
 
     testWidgets('tapping CAMPAIGNS tab shows campaigns screen', (tester) async {
-      await tester.pumpWidget(const ProviderScope(child: MTBoxApp()));
+      await tester.pumpWidget(buildApp());
       await tester.pumpAndSettle();
 
       // Tap the CAMPAIGNS nav item (in the bottom nav bar)
@@ -218,7 +239,7 @@ void main() {
     });
 
     testWidgets('tapping PROFILE tab shows profile screen', (tester) async {
-      await tester.pumpWidget(const ProviderScope(child: MTBoxApp()));
+      await tester.pumpWidget(buildApp());
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('PROFILE').last);
@@ -229,7 +250,7 @@ void main() {
     });
 
     testWidgets('tapping HOME tab returns to home screen', (tester) async {
-      await tester.pumpWidget(const ProviderScope(child: MTBoxApp()));
+      await tester.pumpWidget(buildApp());
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('CAMPAIGNS').last);

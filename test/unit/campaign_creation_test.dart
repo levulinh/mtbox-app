@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:test/test.dart';
 import 'package:mtbox_app/models/campaign.dart';
+import 'package:mtbox_app/models/campaign_adapter.dart';
 import 'package:mtbox_app/providers/mock_data_provider.dart';
 
 Campaign makeNewCampaign({String id = 'new', String name = 'New Campaign', int totalDays = 30}) {
@@ -16,6 +19,29 @@ Campaign makeNewCampaign({String id = 'new', String name = 'New Campaign', int t
 }
 
 void main() {
+  late Directory tempDir;
+
+  setUpAll(() async {
+    tempDir = await Directory.systemTemp.createTemp('hive_creation_test');
+    Hive.init(tempDir.path);
+    Hive.registerAdapter(CampaignAdapter());
+  });
+
+  setUp(() async {
+    await Hive.openBox<Campaign>('campaigns');
+  });
+
+  tearDown(() async {
+    final box = Hive.box<Campaign>('campaigns');
+    await box.clear();
+    await box.close();
+  });
+
+  tearDownAll(() async {
+    await Hive.close();
+    await tempDir.delete(recursive: true);
+  });
+
   group('CampaignsNotifier', () {
     late ProviderContainer container;
 
