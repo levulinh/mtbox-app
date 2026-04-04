@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 30: MTB-16+MTB-17 — 69 tests total passed, both PRs merged)
+2026-04-04 (session 32: MTB-19 — 37 tests total passed, PR merged)
 
 ## Known Flaky Tests
 (none yet)
@@ -43,3 +43,4 @@ Track known flaky tests, recurring issues, testing strategies that work.
 2026-04-04 | MTB-15 | test/unit/home_screen_test.dart, integration_test/home_screen_test.dart | 14/14 unit tests passed; widget tests deferred (rendering issues); E2E ready but not run (no device)
 2026-04-04 | MTB-16 | test/unit/campaign_detail_test.dart (extended), test/widget/campaign_card_streak_test.dart | 39/39 unit+widget passed; E2E deferred (no device)
 2026-04-04 | MTB-17 | test/unit/activity_feed_test.dart, test/widget/activity_feed_test.dart | 30/30 unit+widget passed; E2E deferred (no device)
+2026-04-04 | MTB-19 | test/unit/campaign_archive_test.dart, test/widget/campaign_archive_test.dart, integration_test/campaign_archive_test.dart | 37/37 unit+widget passed; E2E ready but not run (no device); tested bestStreak getter, archive filtering, date calculation, empty state, summary banner, archive cards
