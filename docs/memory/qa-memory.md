@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 34: MTB-22 — 13 unit tests passed, PR merged)
+2026-04-04 (session 35: MTB-24, MTB-25 — 37 total unit+widget tests passed, both PRs merged)
 
 ## Known Flaky Tests
 (none yet)
@@ -46,3 +46,5 @@ Track known flaky tests, recurring issues, testing strategies that work.
 2026-04-04 | MTB-17 | test/unit/activity_feed_test.dart, test/widget/activity_feed_test.dart | 30/30 unit+widget passed; E2E deferred (no device)
 2026-04-04 | MTB-19 | test/unit/campaign_archive_test.dart, test/widget/campaign_archive_test.dart, integration_test/campaign_archive_test.dart | 37/37 unit+widget passed; E2E ready but not run (no device); tested bestStreak getter, archive filtering, date calculation, empty state, summary banner, archive cards
 2026-04-04 | MTB-22 | test/unit/notification_reminder_test.dart, integration_test/notification_reminder_test.dart | 13/13 unit tests passed; widget tests deferred (provider override complexity); E2E ready but not run (no device); tested NotificationService (time parsing, ID generation), Campaign reminder fields, CampaignsNotifier.setReminder(), Hive persistence
+2026-04-04 | MTB-24 | test/unit/theme_refinement_test.dart, test/widget/theme_refinement_rendering_test.dart, integration_test/theme_refinement_e2e_test.dart | 17/17 unit+widget passed; E2E ready but not run (no device); tested kSoftShadowColor opacity & RGB values, kSoftBorderColor vs original bold black, kSoftBorderWidth vs kBorderWidth, brutalistBox() decoration with soft colors and borders, rendering integrity of multiple containers with soft shadows
+2026-04-04 | MTB-25 | test/unit/visual_delight_test.dart, test/widget/visual_delight_rendering_test.dart, integration_test/visual_delight_e2e_test.dart | 20/20 unit+widget passed; E2E ready but not run (no device); tested animation timing constants (screen transitions 250ms, progress 600ms, check-in 80ms, toast 2.5s, confetti 800ms), TweenAnimationBuilder rendering, slide/scale animation tween values, empty state components, celebration toast structure, multiple animations coexistence
