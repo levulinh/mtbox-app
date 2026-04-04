@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-05 (session 41: tested MTB-28 refined onboarding — 14 unit+widget tests passing, PR merged to main)
+2026-04-05 (session 42: tested MTB-30 focus session mode — 21 unit+widget tests passing, PR merged to main)
 
 ## Known Flaky Tests
 (none yet)
@@ -33,6 +33,7 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - For `EditCampaignScreen` widget tests that also test `update()` / `delete()`, implement `_MutableCampaignsNotifier` with all three overrides: `build()`, `update()`, `delete()` — all in-memory mutations.
 
 ## Issues Tested
+2026-04-05 | MTB-30 | test/unit/focus_session_logic_test.dart, test/widget/focus_session_ui_test.dart, integration_test/focus_session_e2e_test.dart | 21/21 unit+widget passed; E2E committed but not run (no device); tested time formatting (MM:SS + duration), duration options (5-60 min), progress calculation (fraction/clamping), timer completion, session recording (snapshots/percentages), FocusSessionScreen running phase (timer display, progress bar, duration pill, end button, notifications silenced), completion phase structure, header display + dark theme
 2026-04-05 | MTB-29 | test/unit/flexible_goal_types_test.dart, test/widget/flexible_goal_types_ui_test.dart, integration_test/flexible_goal_types_e2e_test.dart | 37/37 unit+widget passed; E2E committed but not run (no device); tested GoalType enum (4 values), Campaign.unitLabel/checkInLabel for all types, GoalTypeSelector widget (rendering, interactions, 4 cells), CreateCampaignScreen integration (selector visible, unit pill updates, metric field conditional), CampaignCard goal-type chips for all types, check-in button labels adapt to goal type
 2026-04-05 | MTB-28 | test/unit/refined_onboarding_sample_data_test.dart, test/widget/refined_onboarding_ui_test.dart, integration_test/refined_onboarding_e2e_test.dart | 14/14 unit+widget passed; E2E skipped (no device); tested sample campaign initialization (2 campaigns auto-created on first run), SAMPLE DATA badge rendering, welcome card visibility, dismiss dialog UX, state transitions, activity feed integration
 2026-04-04 | MTB-27 | test/widget/share_progress_test.dart, integration_test/share_progress_test.dart | 12/12 widget tests passed; E2E ready but not run (no device); tested ShareProgressScreen structure, campaign data rendering, progress card display, action buttons, MTBox branding, error handling
