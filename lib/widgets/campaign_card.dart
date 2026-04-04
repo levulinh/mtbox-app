@@ -50,6 +50,17 @@ class CampaignCard extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () => context.push('/campaigns/${campaign.id}/edit'),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: brutalistBox(),
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.edit, size: 16, color: kBlack),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 6),
