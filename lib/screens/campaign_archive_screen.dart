@@ -74,7 +74,7 @@ class CampaignArchiveScreen extends ConsumerWidget {
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF555555),
+                          color: kTextSecondary,
                           letterSpacing: 1.0,
                         ),
                       ),
@@ -123,7 +123,7 @@ class _SummaryBanner extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF555555),
+                  color: kTextSecondary,
                   letterSpacing: 1.0,
                 ),
               ),
@@ -214,7 +214,7 @@ class _ArchiveCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF555555),
+                  color: kTextSecondary,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -223,7 +223,7 @@ class _ArchiveCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF555555),
+                  color: kTextSecondary,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -292,7 +292,7 @@ class _ArchiveCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF555555),
+                    color: kTextSecondary,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -392,7 +392,7 @@ class _MetaCell extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF555555),
+                color: kTextSecondary,
                 letterSpacing: 0.5,
               ),
             ),
@@ -436,7 +436,7 @@ class _EmptyArchive extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF555555),
+              color: kTextSecondary,
               height: 1.5,
             ),
           ),
