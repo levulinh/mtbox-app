@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 8 — no new issues in progress; all 4 PRs still Done; MTB-5 still In Design/archived)
+2026-04-04 (run 9 — no new issues in progress; all 4 PRs still Done; MTB-5 still In Design/archived)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
