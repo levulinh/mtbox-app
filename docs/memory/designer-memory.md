@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-04 (run 54)
 2026-04-04 (run 53)
 2026-04-04 (run 52)
 2026-04-04 (run 51)
@@ -80,6 +81,7 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 51: Notification reminders (MTB-22) — composite showing two states (reminder OFF / ON) in one full-page scroll; reminder section sits below progress inside campaign detail (pushed screen); toggle row: bell icon + label + caption + brutalist toggle (grey=off, blue=on); time picker row only active when ON (alarm icon + "Remind me at" + time value + chevron); info bar (blue fill, flush at card bottom) confirms active reminder; notification preview at bottom of page: blue app icon square + app name + time + title (menu_book icon) + body naming campaign + CHECK IN / DISMISS chips
 - 2026-04-04 run 52: Palette refresh (MTB-23) — style guide composite with full Home screen using new muted palette; 8-swatch style guide panel below annotation divider; before/after comparison badge showing #1E50FF -> #4C6EAD transition
 - 2026-04-04 run 53: Shadow/border refinement (MTB-24) — before/after comparison panel + Home screen; content surfaces use 1.5px border (#5A5A5A) + rgba(44,44,44,0.45) shadow; structural chrome (app bar border, nav top-border) stays at 2px #2C2C2C; shadow offset unchanged at 2px 2px to preserve brutalist geometry
+- 2026-04-04 run 54: Visual delight (MTB-25) — celebration banner pattern: blue fill + check_circle icon + sub-copy; confetti = 3 rows of 15 rotated 8px squares in palette colors; streak badge = bold 2px #2C2C2C border (heavier than content surfaces to signal importance); empty states use 2px dashed #5A5A5A box (not solid) to feel lighter/inviting; annotation dividers separate panels; micro-interaction spec table uses 32x32 blue icon box + name + description rows
 
 ## Shadow & Border Refinement Spec (MTB-24)
 Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, content surfaces softened.
@@ -124,3 +126,4 @@ Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, con
 | 2026-04-04 run 51 | MTB-22 | Notification reminders — two-state composite (toggle OFF/ON), time picker row, info confirmation bar, notification preview card | Awaiting Design Approval |
 | 2026-04-04 run 52 | MTB-23 | Palette refresh style guide — Home screen with new muted palette + 8-swatch style guide + before/after comparison | Awaiting Design Approval |
 | 2026-04-04 run 53 | MTB-24 | Shadow & border refinement — before/after comparison panel + Home screen with 1.5px/rgba values; criteria checklist | Awaiting Design Approval |
+| 2026-04-04 run 54 | MTB-25 | Visual delight polish — 4-panel composite: check-in celebration (banner+confetti+streak pulse), empty campaigns screen (dashed box+CTA), empty activity feed (history icon+text link), micro-interaction spec table (5 annotated rows) | Awaiting Design Approval |
