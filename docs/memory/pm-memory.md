@@ -88,4 +88,7 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-04 | MTB-23 | UI color palette refresh (softer brutalism) | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | MTB-24 | Shadow and border style refinement | Posted acceptance criteria comment, moved Backlog → In Design
 2026-04-04 | MTB-25 | Visual delight polish (micro-interactions, empty states) | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | MTB-26 | Custom campaign colors and icons | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | MTB-27 | Progress sharing (export screenshot) | Posted acceptance criteria comment, moved Backlog → In Design
+2026-04-04 | Fifty-second run. Two new Backlog issues: MTB-26 (custom colors/icons), MTB-27 (progress sharing). Both Phase 3 Polish features with clear intent. Acceptance criteria written directly for both. All moved to In Design. No Awaiting Design Approval or Awaiting Decision issues.
 2026-04-04 | Fifty-first run. Five new Backlog issues (Phase 3 Polish): MTB-21 (onboarding), MTB-22 (daily reminders), MTB-23 (color palette), MTB-24 (shadows), MTB-25 (micro-interactions). All had clear intent tied to CEO directive MTB-20 ("more muted colors, less bold shadows, more friendly feel while keeping brutalism"). Acceptance criteria written directly for all five. All moved to In Design. No Awaiting Design Approval or Awaiting Decision issues.
