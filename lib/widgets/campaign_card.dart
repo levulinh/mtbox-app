@@ -12,6 +12,7 @@ class CampaignCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pct = (campaign.progressPercent * 100).round();
+    final color = campaign.campaignColor;
 
     return GestureDetector(
       onTap: () => context.push('/campaigns/${campaign.id}'),
@@ -20,87 +21,131 @@ class CampaignCard extends StatelessWidget {
         decoration: brutalistBox(),
         child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: campaign.hasStreak
-                              ? const EdgeInsets.only(right: 82)
-                              : EdgeInsets.zero,
-                          child: Text(
-                            campaign.name,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: kBlack,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // 4px accent stripe in campaign color
+                Container(width: 4, color: color),
+                // Card body
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 12, 12, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: campaign.hasStreak
+                                    ? const EdgeInsets.only(right: 82)
+                                    : EdgeInsets.zero,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // 40×40 icon box in campaign color
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      color: color,
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        campaign.iconData,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            campaign.name,
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w800,
+                                              color: kBlack,
+                                              letterSpacing: 0.3,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            'DAY ${campaign.currentDay} OF ${campaign.totalDays}',
+                                            style: const TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w600,
+                                              color: kTextSecondary,
+                                              letterSpacing: 0.3,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () =>
+                                  context.push('/campaigns/${campaign.id}/edit'),
+                              child: Container(
+                                width: 32,
+                                height: 32,
+                                decoration: brutalistBox(),
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.edit,
+                                    size: 16, color: kBlack),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () =>
-                            context.push('/campaigns/${campaign.id}/edit'),
-                        child: Container(
-                          width: 32,
-                          height: 32,
-                          decoration: brutalistBox(),
-                          alignment: Alignment.center,
-                          child: const Icon(Icons.edit, size: 16, color: kBlack),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _ProgressBar(
+                                percent: campaign.progressPercent,
+                                isActive: campaign.isActive,
+                                color: color,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SizedBox(
+                              width: 28,
+                              child: Text(
+                                '$pct%',
+                                textAlign: TextAlign.right,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: kTextSecondary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    campaign.goal,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Text(
-                        'DAY ${campaign.currentDay} OF ${campaign.totalDays}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.8,
+                        const SizedBox(height: 6),
+                        _DayTickStrip(
+                          totalDays: campaign.totalDays,
+                          dayHistory: campaign.dayHistory,
+                          showTodayTick:
+                              campaign.isActive && !campaign.checkedInToday,
+                          color: color,
                         ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        '$pct%',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: campaign.isActive ? kBlue : kBlack,
-                        ),
-                      ),
-                    ],
+                        if (campaign.isActive) ...[
+                          const SizedBox(height: 12),
+                          campaign.checkedInToday
+                              ? _ConfirmedState()
+                              : _CheckInButton(onTap: onCheckIn),
+                        ],
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 6),
-                  _ProgressBar(
-                    percent: campaign.progressPercent,
-                    isActive: campaign.isActive,
-                  ),
-                  const SizedBox(height: 10),
-                  _DayTickStrip(
-                    totalDays: campaign.totalDays,
-                    dayHistory: campaign.dayHistory,
-                    showTodayTick: campaign.isActive && !campaign.checkedInToday,
-                  ),
-                  if (campaign.isActive) ...[
-                    const SizedBox(height: 12),
-                    campaign.checkedInToday
-                        ? _ConfirmedState()
-                        : _CheckInButton(onTap: onCheckIn),
-                  ],
-                ],
-              ),
+                ),
+              ],
             ),
             if (campaign.hasStreak)
               Positioned(
@@ -173,15 +218,20 @@ class _StreakBadge extends StatelessWidget {
 class _ProgressBar extends StatelessWidget {
   final double percent;
   final bool isActive;
+  final Color color;
 
-  const _ProgressBar({required this.percent, required this.isActive});
+  const _ProgressBar({
+    required this.percent,
+    required this.isActive,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 16,
+      height: 10,
       decoration: const BoxDecoration(
-        color: kBackground,
+        color: Color(0xFFE8E2DA),
         border: Border.fromBorderSide(
           BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
         ),
@@ -189,7 +239,7 @@ class _ProgressBar extends StatelessWidget {
       child: FractionallySizedBox(
         widthFactor: percent.clamp(0.0, 1.0),
         alignment: Alignment.centerLeft,
-        child: Container(color: isActive ? kBlue : kBlack),
+        child: Container(color: isActive ? color : kBlack),
       ),
     );
   }
@@ -198,13 +248,14 @@ class _ProgressBar extends StatelessWidget {
 class _DayTickStrip extends StatelessWidget {
   final int totalDays;
   final List<bool> dayHistory;
-  // When true, the tick at index dayHistory.length is highlighted gold
   final bool showTodayTick;
+  final Color color;
 
   const _DayTickStrip({
     required this.totalDays,
     required this.dayHistory,
     required this.showTodayTick,
+    required this.color,
   });
 
   @override
@@ -224,14 +275,14 @@ class _DayTickStrip extends StatelessWidget {
           tickColor = const Color(0xFFFFD700);
           borderColor = kBlack;
         } else if (done) {
-          tickColor = kBlue;
-          borderColor = kBlack;
+          tickColor = color;
+          borderColor = kSoftBorderColor;
         } else if (future) {
-          tickColor = const Color(0xFFE8E8E8);
+          tickColor = const Color(0xFFE8E2DA);
           borderColor = Colors.grey.shade300;
         } else {
           tickColor = kWhite;
-          borderColor = kBlack;
+          borderColor = kSoftBorderColor;
         }
 
         return Expanded(

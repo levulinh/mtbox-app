@@ -28,6 +28,13 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
       final hasReminderTime = reader.readBool();
       if (hasReminderTime) reminderTime = reader.readString();
     }
+    // Backward-compatible optional fields added in MTB-26
+    String colorHex = '4C6EAD';
+    String iconName = 'fitness_center';
+    if (reader.availableBytes > 0) {
+      colorHex = reader.readString();
+      iconName = reader.readString();
+    }
     return Campaign(
       id: id,
       name: name,
@@ -39,6 +46,8 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
       lastCheckInDate: lastCheckInDate,
       reminderEnabled: reminderEnabled,
       reminderTime: reminderTime,
+      colorHex: colorHex,
+      iconName: iconName,
     );
   }
 
@@ -58,5 +67,8 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
     writer.writeBool(obj.reminderEnabled);
     writer.writeBool(obj.reminderTime != null);
     if (obj.reminderTime != null) writer.writeString(obj.reminderTime!);
+    // Backward-compatible optional fields added in MTB-26
+    writer.writeString(obj.colorHex);
+    writer.writeString(obj.iconName);
   }
 }

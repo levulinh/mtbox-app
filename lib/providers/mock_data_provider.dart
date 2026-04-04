@@ -83,13 +83,21 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
       isActive: !isCompleted,
       dayHistory: [...campaign.dayHistory, true],
       lastCheckInDate: dateStr,
+      colorHex: campaign.colorHex,
+      iconName: campaign.iconName,
     );
     box.put(campaignId, updated);
     state = box.values.toList();
     return isCompleted;
   }
 
-  void update(String campaignId, {required String name, required int totalDays}) {
+  void update(
+    String campaignId, {
+    required String name,
+    required int totalDays,
+    String? colorHex,
+    String? iconName,
+  }) {
     final box = Hive.box<Campaign>(_kCampaignsBox);
     final campaign = box.get(campaignId);
     if (campaign == null) return;
@@ -102,6 +110,10 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
       isActive: campaign.isActive,
       dayHistory: campaign.dayHistory,
       lastCheckInDate: campaign.lastCheckInDate,
+      reminderEnabled: campaign.reminderEnabled,
+      reminderTime: campaign.reminderTime,
+      colorHex: colorHex ?? campaign.colorHex,
+      iconName: iconName ?? campaign.iconName,
     );
     box.put(campaignId, updated);
     state = box.values.toList();
@@ -128,6 +140,8 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
       lastCheckInDate: campaign.lastCheckInDate,
       reminderEnabled: enabled,
       reminderTime: time ?? campaign.reminderTime,
+      colorHex: campaign.colorHex,
+      iconName: campaign.iconName,
     );
     box.put(campaignId, updated);
     state = box.values.toList();
