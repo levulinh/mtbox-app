@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 26: MTB-11 daily check-in flow — 137/137 passed, PR #5 merged, Done)
+2026-04-04 (session 27: MTB-12 campaign detail — 41/41 passed, PR #6 merged, Done; MTB-13 edit & delete — 183/183 passed, PR #7 merged, Done)
 
 ## Known Flaky Tests
 (none yet)
@@ -14,22 +14,28 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - Android emulator (MTBox_QA AVD) fails to boot headlessly within 300s — gfxstream/GPU init hangs. E2E tests should be skipped with a note when this happens; the test files are still committed and ready for manual runs.
 - **Hive + widget tests**: Using real Hive in widget tests causes `pumpAndSettle()` to hang indefinitely. Root cause: `box.put()` Futures keep scheduling async disk-flush microtasks, preventing the test scheduler from settling. Fix: use `_FixedCampaignsNotifier` / `_MutableCampaignsNotifier` provider overrides in widget tests — never initialize real Hive there.
 - **Hive + unit tests**: Fine to use real Hive in unit tests. Pattern: `Hive.init(tempDir.path)` in `setUpAll`, `registerAdapter` once, `openBox` in `setUp`, `box.clear() + box.close()` in `tearDown`.
+- **Merge conflicts when PR branches are stale**: When a branch was created before another feature PR merged, there will be conflicts in shared files like `campaign.dart`, `router.dart`, `campaign_card.dart`. Resolve by keeping all additions from both branches. Always merge `origin/main` into the feature branch before running the full test suite.
 
 ## Testing Strategies
 - `HEY DREW` greeting text lives inside a `RichText`/`TextSpan` inside `FlexibleSpaceBar` — use `find.text('HEY DREW', findRichText: true)` to locate it, or test home screen presence via the `RECENT ACTIVITY` plain `Text` widget instead.
 - For integration (full app) widget tests, wrap with `ProviderScope(child: MTBoxApp())`.
 - Use `.last` when tapping nav items (e.g. `find.text('CAMPAIGNS').last`) because the tab label appears in both the nav bar and the screen header.
 - `NotifierProvider` (Riverpod 3.x) does NOT support `overrideWithValue`. Override by creating a subclass with a custom `build()` and calling `campaignsProvider.overrideWith(() => _FixedNotifier(data))`.
-- Screens using `context.pop()` from go_router require a GoRouter ancestor in widget tests. Set up a parent route so pop has somewhere to land: `GoRoute(path: '/home', routes: [GoRoute(path: 'create', ...)])` and use `MaterialApp.router`.
-- In widget tests for `CreateCampaignScreen`, `find.byType(TextField).first` = name field, `find.byType(TextField).last` = goal field.
+- Screens using `context.pop()` from go_router require a GoRouter ancestor in widget tests. Set up a parent route so pop has somewhere to land. For edit screen: `GoRoute(path: '/campaigns', routes: [GoRoute(path: ':id/edit', ...)])`. Use `MaterialApp.router`.
+- In widget tests for `CreateCampaignScreen` and `EditCampaignScreen`, `find.byType(TextField).first` = name field, `find.byType(TextField).last` = goal field.
 - Widget tests that boot `MTBoxApp` must use `buildApp()` with `campaignsProvider.overrideWith(() => _FixedCampaignsNotifier())` — never `const ProviderScope(child: MTBoxApp())` now that `CampaignsNotifier.build()` reads from Hive.
 - `_MutableCampaignsNotifier` (for widget tests that call `add()`): override `build()` to return `[]` and `add()` to do `state = [...state, campaign]`. Avoids Hive, settles cleanly.
 - For widget tests involving `checkIn()`, implement `_MutableCampaignsNotifier` with `checkIn()` override that mutates `state` in-memory (no Hive). This lets toast + card-state-transition tests work cleanly with `pumpAndSettle()`.
 - After `checkIn()`, `check_circle` icon appears in BOTH the toast bar AND the "CHECKED IN TODAY" card state — use `findsWidgets` not `findsOneWidget` when asserting on it at the screen level.
 - `Hive.isAdapterRegistered(0)` guard is needed when multiple Hive test groups share the same isolate/process (e.g., unit checkin tests + adapter compat tests both register `CampaignAdapter` typeId 0).
+- **Detail screen: stat values vs day grid numbers**: When asserting stat card values (streak, completedDays, totalDays) that also appear as day numbers in the day grid (1–N), use `findsWidgets` not `findsOneWidget` — both the stat card and the grid cell will match.
+- **Off-screen items in scrollable widget tests**: The activity list and other content below the fold is not rendered in the default 800×600 test viewport. Use `find.text('...', skipOffstage: false)` and `find.byIcon(..., skipOffstage: false)` to assert on items that may be scrolled below the visible area.
+- For `EditCampaignScreen` widget tests that also test `update()` / `delete()`, implement `_MutableCampaignsNotifier` with all three overrides: `build()`, `update()`, `delete()` — all in-memory mutations.
 
 ## Issues Tested
 2026-04-04 | MTB-6 | test/unit/app_shell_test.dart, test/widget/app_shell_test.dart, integration_test/app_shell_test.dart | 37/37 unit+widget passed; E2E skipped (emulator boot failure)
 2026-04-04 | MTB-8 | test/unit/campaign_creation_test.dart, test/widget/campaign_creation_test.dart, integration_test/campaign_creation_test.dart | 89/89 unit+widget passed; E2E skipped (no device); also fixed test/widget/campaign_list_test.dart broken by NotifierProvider refactor
 2026-04-04 | MTB-7 | test/unit/campaign_persistence_test.dart, test/widget/campaign_persistence_test.dart, integration_test/campaign_persistence_test.dart | 99/99 unit+widget passed; E2E skipped (no device); also updated all 4 existing test files for Hive compatibility
 2026-04-04 | MTB-11 | test/unit/campaign_checkin_test.dart, test/widget/campaign_checkin_test.dart, integration_test/campaign_checkin_test.dart | 137/137 unit+widget passed; E2E skipped (no device)
+2026-04-04 | MTB-12 | test/unit/campaign_detail_test.dart, test/widget/campaign_detail_test.dart, integration_test/campaign_detail_test.dart | 41/41 unit+widget passed; E2E skipped (no device); resolved merge conflict in campaign.dart (completedDays + checkedInToday coexist)
+2026-04-04 | MTB-13 | test/unit/campaign_edit_test.dart, test/widget/campaign_edit_test.dart, integration_test/campaign_edit_test.dart | 183/183 full suite passed; E2E skipped (no device); resolved merge conflicts in router.dart (campaign-detail + edit-campaign routes coexist)
