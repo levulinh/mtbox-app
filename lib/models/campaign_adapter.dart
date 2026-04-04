@@ -20,6 +20,14 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
       final hasDate = reader.readBool();
       if (hasDate) lastCheckInDate = reader.readString();
     }
+    // Backward-compatible optional fields added in MTB-22
+    bool reminderEnabled = false;
+    String? reminderTime;
+    if (reader.availableBytes > 0) {
+      reminderEnabled = reader.readBool();
+      final hasReminderTime = reader.readBool();
+      if (hasReminderTime) reminderTime = reader.readString();
+    }
     return Campaign(
       id: id,
       name: name,
@@ -29,6 +37,8 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
       isActive: isActive,
       dayHistory: dayHistory,
       lastCheckInDate: lastCheckInDate,
+      reminderEnabled: reminderEnabled,
+      reminderTime: reminderTime,
     );
   }
 
@@ -44,5 +54,9 @@ class CampaignAdapter extends TypeAdapter<Campaign> {
     // Backward-compatible optional field added in MTB-11
     writer.writeBool(obj.lastCheckInDate != null);
     if (obj.lastCheckInDate != null) writer.writeString(obj.lastCheckInDate!);
+    // Backward-compatible optional fields added in MTB-22
+    writer.writeBool(obj.reminderEnabled);
+    writer.writeBool(obj.reminderTime != null);
+    if (obj.reminderTime != null) writer.writeString(obj.reminderTime!);
   }
 }

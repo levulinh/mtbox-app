@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/campaign.dart';
 import 'models/campaign_adapter.dart';
 import 'router.dart';
+import 'services/notification_service.dart';
 import 'theme.dart';
 
 Future<void> main() async {
@@ -12,23 +14,40 @@ Future<void> main() async {
   Hive.registerAdapter(CampaignAdapter());
   await Hive.openBox<Campaign>('campaigns');
   await Hive.openBox('settings');
+  await NotificationService.initialize();
   final onboardingDone =
       Hive.box('settings').get('onboardingDone', defaultValue: false) as bool;
   final initialLocation = onboardingDone ? '/' : '/onboarding';
   runApp(ProviderScope(child: MTBoxApp(initialLocation: initialLocation)));
 }
 
-class MTBoxApp extends StatelessWidget {
+class MTBoxApp extends StatefulWidget {
   final String initialLocation;
 
-  const MTBoxApp({super.key, required this.initialLocation});
+  const MTBoxApp({super.key, this.initialLocation = '/'});
+
+  @override
+  State<MTBoxApp> createState() => _MTBoxAppState();
+}
+
+class _MTBoxAppState extends State<MTBoxApp> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _router = createRouter(widget.initialLocation);
+    NotificationService.onNotificationTap = (campaignId) {
+      _router.push('/campaigns/$campaignId');
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'MTBox Campaign Tracker',
       theme: kBrutalistTheme,
-      routerConfig: createRouter(initialLocation),
+      routerConfig: _router,
       debugShowCheckedModeBanner: false,
     );
   }
