@@ -18,4 +18,18 @@ class Campaign {
   });
 
   double get progressPercent => currentDay / totalDays;
+
+  int get completedDays => dayHistory.where((d) => d).length;
+
+  int get currentStreak {
+    var streak = 0;
+    for (final day in dayHistory.reversed) {
+      if (day) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
 }
