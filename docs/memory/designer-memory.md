@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-04 (run 58)
 2026-04-04 (run 57)
 2026-04-04 (run 56)
 2026-04-04 (run 55)
@@ -86,6 +87,7 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 53: Shadow/border refinement (MTB-24) — before/after comparison panel + Home screen; content surfaces use 1.5px border (#5A5A5A) + rgba(44,44,44,0.45) shadow; structural chrome (app bar border, nav top-border) stays at 2px #2C2C2C; shadow offset unchanged at 2px 2px to preserve brutalist geometry
 - 2026-04-04 run 54: Visual delight (MTB-25) — celebration banner pattern: blue fill + check_circle icon + sub-copy; confetti = 3 rows of 15 rotated 8px squares in palette colors; streak badge = bold 2px #2C2C2C border (heavier than content surfaces to signal importance); empty states use 2px dashed #5A5A5A box (not solid) to feel lighter/inviting; annotation dividers separate panels; micro-interaction spec table uses 32x32 blue icon box + name + description rows
 - 2026-04-04 run 57: Custom colors & icons (MTB-26) — campaign color picker: 8 swatches (2×4 grid, 44×44px) with selected state = white checkmark icon + 2px #2C2C2C border; icon picker: 8-cell grid (44×44px) with selected = #4C6EAD fill + white icon; campaign cards: 4px left accent stripe in campaign color + 40×40 icon box in campaign color + progress bar fill in campaign color + tick strip done-ticks in campaign color; streak badge stays #4C6EAD blue always (visual hierarchy); icon "local_fire_department" not available — use "whatshot" instead
+- 2026-04-04 run 58: Progress sharing (MTB-27) — entry point is a full-width "Share My Progress" button (blue, 2px #2C2C2C border/shadow) on campaign detail screen, between progress card and recent activity; share preview screen shows shareable card (campaign name uppercase 22px/900w, giant % number 54px, count block "22/30 Days Complete", 14px progress bar, tick strip, streak badge, MTBox branding strip with terracotta "Campaign Tracker" tag); two action buttons below: "Save to Gallery" (white) + "Share Now" (blue); share-via section: 4-app icon grid + filename copy row
 
 ## Shadow & Border Refinement Spec (MTB-24)
 Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, content surfaces softened.
@@ -135,3 +137,5 @@ Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, con
 | 2026-04-04 run 56 | MTB-5 | Archived/trashed issue — refreshed mockup to latest design system (MTB-24/25 refinements: 1.5px borders, rgba shadows, dashed empty state); no comment posted (issue still trashed in Linear, commentCreate returns 404) | Skipped |
 | 2026-04-04 run 57 | MTB-5 | Issue appeared in "In Design" in Linear (possibly unarchived) but commentCreate still returns "Entity not found" — skipped again; mockup already current | Skipped |
 | 2026-04-04 run 57 | MTB-26 | Custom campaign colors and icons — 2-panel composite: Edit Campaign form with color/icon pickers + Campaigns home with 3 colorized cards | Awaiting Design Approval |
+| 2026-04-04 run 58 | MTB-5 | Trashed issue — commentCreate still returns "Entity not found"; skipped again | Skipped |
+| 2026-04-04 run 58 | MTB-27 | Progress sharing — two-state composite: Campaign Detail with "Share My Progress" CTA + Share Preview screen (shareable card, Save to Gallery / Share Now buttons, share-via app grid) | Awaiting Design Approval |
