@@ -121,34 +121,67 @@ final campaignsProvider =
         CampaignsNotifier.new);
 
 final activityFeedProvider = Provider<List<ActivityEntry>>((ref) {
-  final now = DateTime.now();
-  return [
-    ActivityEntry(
-      campaignName: 'Morning Run',
-      date: now.subtract(const Duration(hours: 2)),
-      completed: true,
-    ),
-    ActivityEntry(
-      campaignName: 'No Sugar',
-      date: now.subtract(const Duration(hours: 5)),
-      completed: true,
-    ),
-    ActivityEntry(
-      campaignName: 'Meditation',
-      date: now.subtract(const Duration(days: 1)),
-      completed: false,
-    ),
-    ActivityEntry(
-      campaignName: 'Daily Reading',
-      date: now.subtract(const Duration(days: 1, hours: 3)),
-      completed: true,
-    ),
-    ActivityEntry(
-      campaignName: 'Morning Run',
-      date: now.subtract(const Duration(days: 2)),
-      completed: true,
-    ),
-  ];
+  final campaigns = ref.watch(campaignsProvider);
+  final today = DateTime.now();
+  final todayDate = DateTime(today.year, today.month, today.day);
+  final List<ActivityEntry> entries = [];
+
+  for (final campaign in campaigns) {
+    if (campaign.dayHistory.isEmpty) {
+      if (campaign.isActive) {
+        entries.add(ActivityEntry(
+          campaignName: campaign.name,
+          date: todayDate,
+          completed: false,
+          dayNumber: campaign.currentDay + 1,
+          totalDays: campaign.totalDays,
+          isPending: true,
+        ));
+      }
+      continue;
+    }
+
+    // Anchor the last dayHistory element to lastCheckInDate when available,
+    // otherwise estimate from today.
+    DateTime anchor;
+    if (campaign.lastCheckInDate != null) {
+      final parts = campaign.lastCheckInDate!.split('-');
+      anchor = DateTime(
+        int.parse(parts[0]),
+        int.parse(parts[1]),
+        int.parse(parts[2]),
+      );
+    } else {
+      anchor = todayDate.subtract(
+          Duration(days: campaign.dayHistory.length - 1));
+    }
+
+    for (int i = 0; i < campaign.dayHistory.length; i++) {
+      final daysBack = campaign.dayHistory.length - 1 - i;
+      entries.add(ActivityEntry(
+        campaignName: campaign.name,
+        date: anchor.subtract(Duration(days: daysBack)),
+        completed: campaign.dayHistory[i],
+        dayNumber: i + 1,
+        totalDays: campaign.totalDays,
+      ));
+    }
+
+    // Add pending entry for active campaigns not yet checked in today.
+    if (campaign.isActive && !campaign.checkedInToday) {
+      entries.add(ActivityEntry(
+        campaignName: campaign.name,
+        date: todayDate,
+        completed: false,
+        dayNumber: campaign.currentDay + 1,
+        totalDays: campaign.totalDays,
+        isPending: true,
+      ));
+    }
+  }
+
+  entries.sort((a, b) => b.date.compareTo(a.date));
+  return entries;
 });
 
 final statsProvider = Provider<Map<String, int>>((ref) {

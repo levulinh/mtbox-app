@@ -2,10 +2,16 @@ class ActivityEntry {
   final String campaignName;
   final DateTime date;
   final bool completed;
+  final int dayNumber;
+  final int totalDays;
+  final bool isPending;
 
   const ActivityEntry({
     required this.campaignName,
     required this.date,
     required this.completed,
+    this.dayNumber = 0,
+    this.totalDays = 0,
+    this.isPending = false,
   });
 }

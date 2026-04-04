@@ -1,44 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../models/campaign.dart';
+import '../models/activity_entry.dart';
 import '../providers/mock_data_provider.dart';
 import '../theme.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends ConsumerState<HomeScreen> {
-  String? _toastMessage;
-
-  void _handleCheckIn(String campaignId) {
-    final completed =
-        ref.read(campaignsProvider.notifier).checkIn(campaignId);
-    if (completed) {
-      context.push('/campaigns/$campaignId/complete');
-      return;
-    }
-    final updated = ref
-        .read(campaignsProvider)
-        .firstWhere((c) => c.id == campaignId);
-    setState(() {
-      _toastMessage =
-          'Day ${updated.currentDay} checked in! Streak: ${updated.currentStreak} days';
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final campaigns = ref.watch(campaignsProvider);
+    final feed = ref.watch(activityFeedProvider);
+
     final active = campaigns.where((c) => c.isActive).toList();
     final doneToday = active.where((c) => c.checkedInToday).length;
     final bestStreak = campaigns.isEmpty
         ? 0
-        : campaigns.map((c) => c.currentStreak).reduce((a, b) => a > b ? a : b);
+        : campaigns
+            .map((c) => c.currentStreak)
+            .reduce((a, b) => a > b ? a : b);
+
+    final groups = _buildDateGroups(feed);
 
     return Scaffold(
       backgroundColor: kBackground,
@@ -54,14 +36,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 title: Row(
                   children: [
-                    const Expanded(
-                      child: Text(
-                        'HOME',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: kWhite,
-                          letterSpacing: 0.5,
+                    Expanded(
+                      child: RichText(
+                        text: const TextSpan(
+                          text: 'HEY ',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: kWhite,
+                            letterSpacing: 0.5,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'DREW',
+                              style: TextStyle(color: Color(0xFF4AFF91)),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -112,21 +102,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     bestStreak: bestStreak,
                   ),
                   const SizedBox(height: 16),
-                  // Active campaigns header
+                  // Real-time sync notice
+                  _RealTimeNotice(),
+                  const SizedBox(height: 16),
+                  // RECENT ACTIVITY section header
                   _SectionHeader(
-                    label: 'Active Campaigns (${active.length})',
+                    label: 'RECENT ACTIVITY (${feed.length} entries)',
                   ),
                   const SizedBox(height: 10),
-                  // Toast message
-                  if (_toastMessage != null) _CheckInToast(message: _toastMessage!),
-                  // Active campaign cards or empty state
-                  if (active.isEmpty)
-                    _EmptyActiveCampaigns()
+                  // Date-grouped feed
+                  if (feed.isEmpty)
+                    _EmptyFeed()
                   else
-                    ...active.map(
-                      (c) => _HomeCampaignCard(
-                        campaign: c,
-                        onCheckIn: () => _handleCheckIn(c.id),
+                    ...groups.map(
+                      (group) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: _FeedGroup(
+                          dateLabel: group.$1,
+                          entries: group.$2,
+                        ),
                       ),
                     ),
                 ]),
@@ -144,6 +138,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
     ];
     return 'Today — ${months[date.month - 1]} ${date.day}, ${date.year}';
+  }
+
+  /// Groups feed entries (already sorted most-recent-first) into (label, entries)
+  /// tuples, one per distinct calendar day.
+  List<(String, List<ActivityEntry>)> _buildDateGroups(
+      List<ActivityEntry> entries) {
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    final groups = <(String, List<ActivityEntry>)>[];
+    DateTime? currentDay;
+
+    for (final entry in entries) {
+      final entryDay =
+          DateTime(entry.date.year, entry.date.month, entry.date.day);
+      if (currentDay == null || entryDay != currentDay) {
+        currentDay = entryDay;
+        groups.add((_dateGroupLabel(entryDay, todayDate), [entry]));
+      } else {
+        groups.last.$2.add(entry);
+      }
+    }
+    return groups;
+  }
+
+  String _dateGroupLabel(DateTime day, DateTime today) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    ];
+    final diff = today.difference(day).inDays;
+    if (diff == 0) return 'Today — ${months[day.month - 1]} ${day.day}';
+    if (diff == 1) return 'Yesterday — ${months[day.month - 1]} ${day.day}';
+    return '${months[day.month - 1]} ${day.day}';
   }
 }
 
@@ -285,226 +312,32 @@ class _StatCell extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Home campaign card (compact, with check-in + detail chevron)
+// Real-time sync notice bar
 // ---------------------------------------------------------------------------
-class _HomeCampaignCard extends StatelessWidget {
-  final Campaign campaign;
-  final VoidCallback? onCheckIn;
-
-  const _HomeCampaignCard({required this.campaign, this.onCheckIn});
-
-  @override
-  Widget build(BuildContext context) {
-    final pct = (campaign.progressPercent * 100).round();
-    final checkedIn = campaign.checkedInToday;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
-      decoration: brutalistBox(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Title row + badge
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  campaign.name,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: kBlack,
-                  ),
-                ),
-              ),
-              // Badge: "Done Today" (green) or "Active" (blue)
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                decoration: BoxDecoration(
-                  color: checkedIn ? const Color(0xFF4AFF91) : kBlue,
-                  border: Border.all(color: kBlack, width: kBorderWidth),
-                ),
-                child: Text(
-                  checkedIn ? 'DONE TODAY' : 'ACTIVE',
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w900,
-                    color: checkedIn ? kBlack : kWhite,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          // Day progress label
-          Text(
-            'Day ${campaign.currentDay} of ${campaign.totalDays} — $pct%',
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF555555),
-              letterSpacing: 1.0,
-            ),
-          ),
-          const SizedBox(height: 6),
-          // Progress bar
-          Container(
-            height: 10,
-            decoration: const BoxDecoration(
-              color: kWhite,
-              border: Border.fromBorderSide(
-                BorderSide(color: kBlack, width: kBorderWidth),
-              ),
-            ),
-            child: FractionallySizedBox(
-              widthFactor: campaign.progressPercent.clamp(0.0, 1.0),
-              alignment: Alignment.centerLeft,
-              child: Container(color: kBlue),
-            ),
-          ),
-          const SizedBox(height: 6),
-          // Day tick strip
-          _DayTicks(
-            totalDays: campaign.totalDays,
-            dayHistory: campaign.dayHistory,
-          ),
-          const SizedBox(height: 10),
-          // Action row: check-in button + detail chevron
-          Row(
-            children: [
-              Expanded(
-                child: checkedIn
-                    ? _ConfirmedRow()
-                    : _CheckInBtn(onTap: onCheckIn),
-              ),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: () => context.push('/campaigns/${campaign.id}'),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: brutalistBox(),
-                  alignment: Alignment.center,
-                  child: const Icon(Icons.chevron_right,
-                      size: 18, color: Color(0xFF555555)),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DayTicks extends StatelessWidget {
-  final int totalDays;
-  final List<bool> dayHistory;
-
-  const _DayTicks({required this.totalDays, required this.dayHistory});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(totalDays, (i) {
-        final bool done = i < dayHistory.length && dayHistory[i];
-        final bool future = i >= dayHistory.length;
-
-        final Color tickColor = done
-            ? kBlue
-            : future
-                ? const Color(0xFFF0F0F0)
-                : kWhite;
-        final Color borderColor =
-            future ? const Color(0xFFCCCCCC) : kBlack;
-
-        return Expanded(
-          child: Container(
-            height: 10,
-            margin: const EdgeInsets.symmetric(horizontal: 1),
-            decoration: BoxDecoration(
-              color: tickColor,
-              border: Border.all(color: borderColor, width: 1),
-            ),
-          ),
-        );
-      }),
-    );
-  }
-}
-
-class _CheckInBtn extends StatelessWidget {
-  final VoidCallback? onTap;
-
-  const _CheckInBtn({this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 40,
-        decoration: const BoxDecoration(
-          color: kBlue,
-          border: Border.fromBorderSide(
-            BorderSide(color: kBlack, width: kBorderWidth),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: kBlack,
-              offset: Offset(kShadowOffset, kShadowOffset),
-              blurRadius: 0,
-            ),
-          ],
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add_task, color: kWhite, size: 16),
-            SizedBox(width: 6),
-            Text(
-              'CHECK IN',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: kWhite,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ConfirmedRow extends StatelessWidget {
+class _RealTimeNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: const BoxDecoration(
-        color: kWhite,
+        color: Color(0xFFE8EDFF),
         border: Border.fromBorderSide(
-          BorderSide(color: kBlack, width: kBorderWidth),
+          BorderSide(color: kBlue, width: kBorderWidth),
         ),
       ),
       child: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.check_circle, color: kBlue, size: 16),
+          Icon(Icons.sync, size: 14, color: kBlue),
           SizedBox(width: 6),
-          Text(
-            'CHECKED IN',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: kBlack,
-              letterSpacing: 0.5,
+          Expanded(
+            child: Text(
+              'FEED UPDATES LIVE — NEW CHECK-INS APPEAR INSTANTLY',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                color: kBlue,
+                letterSpacing: 0.5,
+              ),
             ),
           ),
         ],
@@ -514,9 +347,184 @@ class _ConfirmedRow extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Empty state when no active campaigns
+// Date group card (header + entries)
 // ---------------------------------------------------------------------------
-class _EmptyActiveCampaigns extends StatelessWidget {
+class _FeedGroup extends StatelessWidget {
+  final String dateLabel;
+  final List<ActivityEntry> entries;
+
+  const _FeedGroup({required this.dateLabel, required this.entries});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: brutalistBox(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Date group header
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            color: kBlack,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  dateLabel.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: kWhite,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                Text(
+                  '${entries.length} ${entries.length == 1 ? 'entry' : 'entries'}',
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFAAAAAA),
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Feed entries
+          ...entries.asMap().entries.map((e) {
+            final isLast = e.key == entries.length - 1;
+            return _FeedEntry(entry: e.value, showDivider: !isLast);
+          }),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Single feed entry row
+// ---------------------------------------------------------------------------
+class _FeedEntry extends StatelessWidget {
+  final ActivityEntry entry;
+  final bool showDivider;
+
+  const _FeedEntry({required this.entry, required this.showDivider});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDone = entry.completed;
+    final isPending = entry.isPending;
+
+    return Container(
+      decoration: showDivider
+          ? const BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(color: Color(0xFFE0E0E0), width: 1)),
+            )
+          : null,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      child: Row(
+        children: [
+          Icon(
+            isDone ? Icons.check_circle : Icons.radio_button_unchecked,
+            size: 20,
+            color: isDone ? kBlue : const Color(0xFFBDBDBD),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  entry.campaignName,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: kBlack,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  entry.dayNumber > 0 && entry.totalDays > 0
+                      ? (isPending
+                          ? 'Not checked in yet · Day ${entry.dayNumber} of ${entry.totalDays}'
+                          : 'Day ${entry.dayNumber} of ${entry.totalDays}')
+                      : (isPending ? 'Not checked in yet' : ''),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF555555),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          _StatusBadge(
+            isDone: isDone,
+            isPending: isPending,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  final bool isDone;
+  final bool isPending;
+
+  const _StatusBadge({required this.isDone, required this.isPending});
+
+  @override
+  Widget build(BuildContext context) {
+    final String label;
+    final Color bg;
+    final Color fg;
+    final Color border;
+
+    if (isDone) {
+      label = 'DONE';
+      bg = kBlue;
+      fg = kWhite;
+      border = kBlue;
+    } else if (isPending) {
+      label = 'PENDING';
+      bg = kWhite;
+      fg = const Color(0xFF555555);
+      border = const Color(0xFFBDBDBD);
+    } else {
+      label = 'MISSED';
+      bg = kWhite;
+      fg = const Color(0xFF555555);
+      border = const Color(0xFFBDBDBD);
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: bg,
+        border: Border.all(color: border, width: kBorderWidth),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w700,
+          color: fg,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Empty state when feed has no entries
+// ---------------------------------------------------------------------------
+class _EmptyFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -529,10 +537,10 @@ class _EmptyActiveCampaigns extends StatelessWidget {
       ),
       child: const Column(
         children: [
-          Icon(Icons.flag_outlined, size: 40, color: Color(0xFFCCCCCC)),
+          Icon(Icons.history, size: 40, color: Color(0xFFCCCCCC)),
           SizedBox(height: 8),
           Text(
-            'NO ACTIVE CAMPAIGNS',
+            'NO ACTIVITY YET',
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,
@@ -542,48 +550,9 @@ class _EmptyActiveCampaigns extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            'Go to Campaigns to start one.',
+            'Check in on a campaign to see your history here.',
+            textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12, color: Color(0xFF555555)),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Check-in toast
-// ---------------------------------------------------------------------------
-class _CheckInToast extends StatelessWidget {
-  final String message;
-
-  const _CheckInToast({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: const BoxDecoration(
-        color: kBlack,
-        border: Border(
-          left: BorderSide(color: kBlue, width: 4),
-        ),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.check_circle, color: kBlue, size: 16),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              message.toUpperCase(),
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: kWhite,
-                letterSpacing: 0.5,
-              ),
-            ),
           ),
         ],
       ),
