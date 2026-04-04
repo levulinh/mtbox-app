@@ -4,8 +4,9 @@ import '../theme.dart';
 
 class CampaignCard extends StatelessWidget {
   final Campaign campaign;
+  final VoidCallback? onCheckIn;
 
-  const CampaignCard({super.key, required this.campaign});
+  const CampaignCard({super.key, required this.campaign, this.onCheckIn});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,15 @@ class CampaignCard extends StatelessWidget {
           _DayTickStrip(
             totalDays: campaign.totalDays,
             dayHistory: campaign.dayHistory,
+            showTodayTick:
+                campaign.isActive && !campaign.checkedInToday,
           ),
+          if (campaign.isActive) ...[
+            const SizedBox(height: 12),
+            campaign.checkedInToday
+                ? _ConfirmedState()
+                : _CheckInButton(onTap: onCheckIn),
+          ],
         ],
       ),
     );
@@ -117,36 +126,129 @@ class _ProgressBar extends StatelessWidget {
 class _DayTickStrip extends StatelessWidget {
   final int totalDays;
   final List<bool> dayHistory;
+  // When true, the tick at index dayHistory.length is highlighted gold
+  final bool showTodayTick;
 
   const _DayTickStrip({
     required this.totalDays,
     required this.dayHistory,
+    required this.showTodayTick,
   });
 
   @override
   Widget build(BuildContext context) {
+    final todayIndex = showTodayTick ? dayHistory.length : -1;
+
     return Row(
       children: List.generate(totalDays, (i) {
+        final bool isToday = i == todayIndex;
         final bool done = i < dayHistory.length && dayHistory[i];
-        final bool future = i >= dayHistory.length;
+        final bool future = i > dayHistory.length ||
+            (i == dayHistory.length && !showTodayTick);
+
+        Color tickColor;
+        Color borderColor;
+        if (isToday) {
+          tickColor = const Color(0xFFFFD700);
+          borderColor = kBlack;
+        } else if (done) {
+          tickColor = kBlue;
+          borderColor = kBlack;
+        } else if (future) {
+          tickColor = const Color(0xFFE8E8E8);
+          borderColor = Colors.grey.shade300;
+        } else {
+          tickColor = kWhite;
+          borderColor = kBlack;
+        }
+
         return Expanded(
           child: Container(
             height: 8,
             margin: const EdgeInsets.symmetric(horizontal: 1),
             decoration: BoxDecoration(
-              color: future
-                  ? const Color(0xFFE8E8E8)
-                  : done
-                      ? kBlue
-                      : kWhite,
-              border: Border.all(
-                color: future ? Colors.grey.shade300 : kBlack,
-                width: 1,
-              ),
+              color: tickColor,
+              border: Border.all(color: borderColor, width: 1),
             ),
           ),
         );
       }),
+    );
+  }
+}
+
+class _CheckInButton extends StatelessWidget {
+  final VoidCallback? onTap;
+
+  const _CheckInButton({this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 44,
+        decoration: const BoxDecoration(
+          color: kBlue,
+          border: Border.fromBorderSide(
+            BorderSide(color: kBlack, width: kBorderWidth),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: kBlack,
+              offset: Offset(kShadowOffset, kShadowOffset),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add_task, color: kWhite, size: 18),
+            SizedBox(width: 8),
+            Text(
+              'CHECK IN TODAY',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: kWhite,
+                letterSpacing: 1.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ConfirmedState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 44,
+      decoration: const BoxDecoration(
+        color: kWhite,
+        border: Border.fromBorderSide(
+          BorderSide(color: kBlack, width: kBorderWidth),
+        ),
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.check_circle, color: kBlue, size: 18),
+          SizedBox(width: 8),
+          Text(
+            'CHECKED IN TODAY',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: kBlack,
+              letterSpacing: 1.0,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
