@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 27 — implemented MTB-23 color palette refresh)
+2026-04-04 (run 29 — implemented MTB-25 visual delight polish)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -106,6 +106,14 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **`_ReminderSection` widget** (ConsumerWidget, inline in `campaign_detail_screen.dart`): brutalist toggle row, opacity-0.35 time row when disabled, active `showTimePicker` time row when enabled, blue info bar at card bottom. Calls `NotificationService.scheduleDaily()` / `.cancel()` after Hive state update.
 - **`CampaignDetailScreen` → ConsumerStatefulWidget**: converted from ConsumerWidget to ConsumerStatefulWidget because _ReminderSection needs to be a child ConsumerWidget — both work fine as separate classes.
 
+- **MTB-25 screen transitions**: Use `_slidePage(key, child)` helper in `router.dart` returning `CustomTransitionPage` with 250ms right-to-left slide + easeOut for all non-tab pushed routes. Tab routes keep `NoTransitionPage`.
+- **MTB-25 animated progress bar**: `TweenAnimationBuilder<double>` wrapping `FractionallySizedBox` in `_ProgressBar` — animates 0→percent in 600ms `Curves.easeOutCubic`. Replace static fill to trigger on first build.
+- **MTB-25 button press animation**: Convert `_CheckInButton` to `StatefulWidget` with `AnimationController` (80ms) + `ScaleTransition` — `onTapDown` forward, `onTapUp`/`onTapCancel` reverse. Target scale 0.96.
+- **MTB-25 celebration toast**: Converted `_CheckInToast` to `StatefulWidget` with slide+fade-in (300ms easeOut). Add 24-square confetti strip above the message. Parent sets `Timer(2500ms)` to auto-dismiss. Also add `dispose()` + `_toastTimer?.cancel()` in the screen state.
+- **MTB-25 empty state CTA**: Campaigns empty state uses `GestureDetector` + full-width blue `Container` navigating to `/campaigns/new`. Activity feed empty state adds "GO TO CAMPAIGNS →" nav link (required importing `go_router` in `home_screen.dart`).
+
+- **MTB-24 shadow/border two-tier spec**: `kSoftBorderColor=#5A5A5A`, `kSoftBorderWidth=1.5`, `kSoftShadowColor=Color(0x732C2C2C)` (rgba(44,44,44,0.45)). `brutalistBox()` uses soft values. All content surfaces (cards, buttons, badges, progress bars, form fields) use soft values. Structural chrome (bottom nav top border, nav item separators, app bar bottom borders, onboarding page header borders) kept at `kBlack`/`kBorderWidth` (2px). Structural headers identifiable by `offset: Offset(0, 2)` downward shadow pattern.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -125,3 +133,5 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/14 | MTB-21 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/15 | MTB-22 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/16 | MTB-23 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/17 | MTB-24 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/18 | MTB-25 | In Review |
