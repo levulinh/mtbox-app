@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-05 (run 59)
 2026-04-04 (run 58)
 2026-04-04 (run 57)
 2026-04-04 (run 56)
@@ -88,6 +89,7 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 54: Visual delight (MTB-25) — celebration banner pattern: blue fill + check_circle icon + sub-copy; confetti = 3 rows of 15 rotated 8px squares in palette colors; streak badge = bold 2px #2C2C2C border (heavier than content surfaces to signal importance); empty states use 2px dashed #5A5A5A box (not solid) to feel lighter/inviting; annotation dividers separate panels; micro-interaction spec table uses 32x32 blue icon box + name + description rows
 - 2026-04-04 run 57: Custom colors & icons (MTB-26) — campaign color picker: 8 swatches (2×4 grid, 44×44px) with selected state = white checkmark icon + 2px #2C2C2C border; icon picker: 8-cell grid (44×44px) with selected = #4C6EAD fill + white icon; campaign cards: 4px left accent stripe in campaign color + 40×40 icon box in campaign color + progress bar fill in campaign color + tick strip done-ticks in campaign color; streak badge stays #4C6EAD blue always (visual hierarchy); icon "local_fire_department" not available — use "whatshot" instead
 - 2026-04-04 run 58: Progress sharing (MTB-27) — entry point is a full-width "Share My Progress" button (blue, 2px #2C2C2C border/shadow) on campaign detail screen, between progress card and recent activity; share preview screen shows shareable card (campaign name uppercase 22px/900w, giant % number 54px, count block "22/30 Days Complete", 14px progress bar, tick strip, streak badge, MTBox branding strip with terracotta "Campaign Tracker" tag); two action buttons below: "Save to Gallery" (white) + "Share Now" (blue); share-via section: 4-app icon grid + filename copy row
+- 2026-04-05 run 59: Refined onboarding (MTB-28) — "SAMPLE DATA" pill badge (terracotta, 10px 700w uppercase) in app bar top-right signals demo mode; welcome info card uses blue left-border 3px accent; "Dismiss Samples →" is a terracotta text-link (not a button) to keep it unobtrusive; reduced to 2 sample campaigns per CEO's "3-5 feels like many" comment; post-dismissal empty state uses dashed 1.5px border box pattern (consistent with MTB-25 empty state convention)
 
 ## Shadow & Border Refinement Spec (MTB-24)
 Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, content surfaces softened.
@@ -139,3 +141,4 @@ Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, con
 | 2026-04-04 run 57 | MTB-26 | Custom campaign colors and icons — 2-panel composite: Edit Campaign form with color/icon pickers + Campaigns home with 3 colorized cards | Awaiting Design Approval |
 | 2026-04-04 run 58 | MTB-5 | Trashed issue — commentCreate still returns "Entity not found"; skipped again | Skipped |
 | 2026-04-04 run 58 | MTB-27 | Progress sharing — two-state composite: Campaign Detail with "Share My Progress" CTA + Share Preview screen (shareable card, Save to Gallery / Share Now buttons, share-via app grid) | Awaiting Design Approval |
+| 2026-04-05 run 59 | MTB-28 | Refined onboarding with lightweight mock data — 3-panel composite: (1) Home with 2 sample campaigns + "SAMPLE DATA" app-bar pill + welcome info card + "Dismiss Samples" text-link; (2) dismiss confirmation dialog over dimmed home; (3) post-dismissal empty state with flag icon + "Create First Campaign" CTA. Reduced from PM's 3–5 to just 2 campaigns per CEO feedback. | Awaiting Design Approval |
