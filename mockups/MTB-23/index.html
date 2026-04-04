@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375">
+  <title>MTB-23 — Palette Refresh Mockup</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    /* ─────────────────────────────────────────────
+       NEW MUTED BRUTALIST PALETTE — MTB-23
+       ───────────────────────────────────────────── */
+    :root {
+      --primary:       #4C6EAD;   /* dusty slate blue — muted, warm */
+      --primary-dark:  #3A5590;   /* deeper for pressed states */
+      --bg:            #F7F3EF;   /* warm off-white */
+      --surface:       #FFFDF9;   /* warm card white */
+      --border:        #2C2C2C;   /* dark charcoal (not pure black) */
+      --shadow:        #2C2C2C;
+      --text-primary:  #1A1A1A;   /* warm near-black */
+      --text-secondary:#6B6B6B;   /* warm mid-grey */
+      --tick-done:     #4C6EAD;   /* done day tick fill */
+      --tick-missed:   #FFFDF9;   /* missed day — warm white */
+      --tick-future:   #E8E2DA;   /* future day — warm light grey */
+      --accent-warm:   #B5735A;   /* terracotta accent — secondary */
+      --streak-broken-bg: #FFFDF9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 375px;
+      background: var(--bg);
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      color: var(--text-primary);
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      height: 44px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      justify-content: space-between;
+    }
+    .status-bar .icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-bar .icons .material-icons {
+      font-size: 16px;
+    }
+
+    /* ── APP BAR ── */
+    .app-bar {
+      height: 56px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: #fff;
+      border-bottom: 2px solid var(--border);
+      box-shadow: 0 2px 0 var(--shadow);
+      justify-content: space-between;
+    }
+    .app-bar-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .app-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .app-bar-right .material-icons {
+      font-size: 18px;
+    }
+
+    /* ── SCREEN CONTENT ── */
+    .content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      border-left: 3px solid var(--primary);
+      padding-left: 8px;
+      margin-bottom: 2px;
+    }
+
+    /* ── TODAY SUMMARY GRID ── */
+    .stat-grid {
+      display: flex;
+      gap: 8px;
+    }
+    .stat-cell {
+      flex: 1;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      box-shadow: 2px 2px 0 var(--shadow);
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-cell .material-icons {
+      font-size: 18px;
+      color: var(--primary);
+    }
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    /* ── CAMPAIGN CARDS ── */
+    .campaign-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      box-shadow: 2px 2px 0 var(--shadow);
+      padding: 12px;
+      position: relative;
+    }
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .card-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 6px;
+      border: 2px solid var(--border);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .streak-badge.active {
+      background: var(--primary);
+      color: #fff;
+    }
+    .streak-badge.broken {
+      background: var(--streak-broken-bg);
+      color: var(--text-secondary);
+    }
+    .streak-badge .material-icons {
+      font-size: 11px;
+    }
+
+    .card-goal {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    /* progress bar */
+    .progress-wrap {
+      margin-bottom: 6px;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .progress-track {
+      height: 10px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+    }
+
+    /* day tick strip */
+    .tick-strip {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 10px;
+    }
+    .tick {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--border);
+      flex-shrink: 0;
+    }
+    .tick.done     { background: var(--tick-done); }
+    .tick.missed   { background: var(--tick-missed); }
+    .tick.future   { background: var(--tick-future); border-color: #C8C0B6; }
+
+    /* card action row */
+    .card-action-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn-checkin {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: var(--primary);
+      border: 2px solid var(--border);
+      box-shadow: 2px 2px 0 var(--shadow);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 0;
+    }
+    .btn-checkin .material-icons { font-size: 16px; }
+    .btn-detail {
+      width: 36px;
+      height: 36px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      box-shadow: 2px 2px 0 var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-detail .material-icons {
+      font-size: 18px;
+      color: var(--text-secondary);
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      height: 60px;
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      display: flex;
+    }
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      border-right: 2px solid var(--border);
+    }
+    .nav-tab:last-child { border-right: none; }
+    .nav-tab.active {
+      background: var(--primary);
+      color: #fff;
+    }
+    .nav-tab .material-icons { font-size: 20px; }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .annotation-divider {
+      width: 375px;
+      margin: 0;
+      border: none;
+      border-top: 2px dashed #B8B0A6;
+      position: relative;
+    }
+    .annotation-label {
+      background: var(--bg);
+      padding: 12px 16px 0;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #B8B0A6;
+      text-align: center;
+    }
+
+    /* ── STYLE GUIDE PANEL ── */
+    .style-guide {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      padding: 20px 16px 24px;
+    }
+    .sg-title {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      border-left: 4px solid var(--primary);
+      padding-left: 10px;
+      margin-bottom: 16px;
+    }
+    .sg-subtitle {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .swatch-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      padding: 8px;
+    }
+    .swatch-block {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+    }
+    .swatch-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .swatch-hex {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-family: 'SF Mono', 'Menlo', monospace;
+      letter-spacing: -0.3px;
+    }
+    .swatch-usage {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+    }
+
+    /* before / after comparison */
+    .ba-section {
+      margin-top: 4px;
+    }
+    .ba-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .ba-item {
+      flex: 1;
+      border: 2px solid var(--border);
+      box-shadow: 2px 2px 0 var(--shadow);
+      overflow: hidden;
+    }
+    .ba-swatch {
+      height: 36px;
+    }
+    .ba-label {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      padding: 4px 8px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+    }
+    .ba-hex {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: block;
+      margin-top: 1px;
+    }
+    .ba-arrow {
+      font-size: 18px;
+      color: var(--text-secondary);
+      font-weight: 700;
+    }
+
+    /* ── CARDS SECTION WRAPPER ── */
+    .campaigns-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════
+       SCREEN MOCKUP — HOME
+  ════════════════════════════════════ -->
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar -->
+  <div class="app-bar">
+    <span class="app-bar-title">MTBox</span>
+    <div class="app-bar-right">
+      <span class="material-icons">campaign</span>
+      Campaigns
+    </div>
+  </div>
+
+  <!-- Screen Content -->
+  <div class="content">
+
+    <!-- Today Summary -->
+    <div>
+      <div class="section-header">Today Summary</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-cell">
+        <span class="material-icons">flag</span>
+        <span class="stat-value">4</span>
+        <span class="stat-label">Active</span>
+      </div>
+      <div class="stat-cell">
+        <span class="material-icons">check_circle</span>
+        <span class="stat-value">2</span>
+        <span class="stat-label">Done Today</span>
+      </div>
+      <div class="stat-cell">
+        <span class="material-icons">local_fire_department</span>
+        <span class="stat-value">12</span>
+        <span class="stat-label">Best Streak</span>
+      </div>
+    </div>
+
+    <!-- Campaigns -->
+    <div>
+      <div class="section-header">Active Campaigns</div>
+    </div>
+
+    <div class="campaigns-section">
+
+      <!-- Card 1 -->
+      <div class="campaign-card">
+        <div class="card-top-row">
+          <span class="card-name">Morning Run</span>
+          <div class="streak-badge active">
+            <span class="material-icons">local_fire_department</span>
+            7 Day Streak
+          </div>
+        </div>
+        <div class="card-goal">Goal: 30 days</div>
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span>Day 19 of 30</span>
+            <span>63%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:63%"></div>
+          </div>
+        </div>
+        <div class="tick-strip">
+          <!-- 19 done, 2 missed, 9 future -->
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick missed"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick missed"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div>
+        </div>
+        <div class="card-action-row">
+          <div class="btn-checkin">
+            <span class="material-icons">add_task</span>
+            Check In
+          </div>
+          <div class="btn-detail">
+            <span class="material-icons">chevron_right</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="campaign-card">
+        <div class="card-top-row">
+          <span class="card-name">Read Daily</span>
+          <div class="streak-badge broken">
+            <span class="material-icons">local_fire_department</span>
+            1 Day Streak
+          </div>
+        </div>
+        <div class="card-goal">Goal: 21 days</div>
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span>Day 9 of 21</span>
+            <span>43%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:43%"></div>
+          </div>
+        </div>
+        <div class="tick-strip">
+          <!-- 9 done (1 missed mixed), 12 future -->
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick missed"></div><div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        </div>
+        <div class="card-action-row">
+          <div class="btn-checkin">
+            <span class="material-icons">add_task</span>
+            Check In
+          </div>
+          <div class="btn-detail">
+            <span class="material-icons">chevron_right</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      Home
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">flag</span>
+      Campaigns
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      Profile
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       ANNOTATION DIVIDER
+  ════════════════════════════════════ -->
+  <div class="annotation-label">▼ Style Guide — New Palette</div>
+  <hr class="annotation-divider" style="margin: 8px 16px; width: calc(375px - 32px);">
+
+  <!-- ════════════════════════════════════
+       STYLE GUIDE PANEL
+  ════════════════════════════════════ -->
+  <div class="style-guide">
+
+    <div class="sg-title">Palette Refresh — MTB-23</div>
+
+    <div class="sg-subtitle">Color Swatches</div>
+
+    <div class="swatch-grid">
+
+      <div class="swatch-row">
+        <div class="swatch-block" style="background:#4C6EAD;"></div>
+        <div class="swatch-info">
+          <span class="swatch-hex">#4C6EAD</span>
+          <span class="swatch-usage">Primary</span>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch-block" style="background:#F7F3EF;"></div>
+        <div class="swatch-info">
+          <span class="swatch-hex">#F7F3EF</span>
+          <span class="swatch-usage">Background</span>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch-block" style="background:#FFFDF9;"></div>
+        <div class="swatch-info">
+          <span class="swatch-hex">#FFFDF9</span>
+          <span class="swatch-usage">Surface / Card</span>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch-block" style="background:#2C2C2C;"></div>
+        <div class="swatch-info">
+          <span class="swatch-hex">#2C2C2C</span>
+          <span class="swatch-usage">Border / Shadow</span>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch-block" style="background:#1A1A1A;"></div>
+        <div class="swatch-info">
+          <span class="swatch-hex">#1A1A1A</span>
+          <span class="swatch-usage">Text Primary</span>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch-block" style="background:#6B6B6B;"></div>
+        <div class="swatch-info">
+          <span class="swatch-hex">#6B6B6B</span>
+          <span class="swatch-usage">Text Secondary</span>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch-block" style="background:#E8E2DA;"></div>
+        <div class="swatch-info">
+          <span class="swatch-hex">#E8E2DA</span>
+          <span class="swatch-usage">Future Tick</span>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch-block" style="background:#B5735A;"></div>
+        <div class="swatch-info">
+          <span class="swatch-hex">#B5735A</span>
+          <span class="swatch-usage">Warm Accent</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Before / After -->
+    <div class="sg-subtitle">Before vs After — Primary Accent</div>
+    <div class="ba-section">
+      <div class="ba-row">
+
+        <div class="ba-item">
+          <div class="ba-swatch" style="background:#1E50FF;"></div>
+          <div class="ba-label">
+            Before
+            <span class="ba-hex">#1E50FF</span>
+          </div>
+        </div>
+
+        <span class="ba-arrow">→</span>
+
+        <div class="ba-item">
+          <div class="ba-swatch" style="background:#4C6EAD;"></div>
+          <div class="ba-label">
+            After
+            <span class="ba-hex">#4C6EAD</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
