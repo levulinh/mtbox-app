@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 26 — implemented MTB-22 push notifications)
+2026-04-04 (run 27 — implemented MTB-23 color palette refresh)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -45,6 +45,8 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **`CampaignCard` check-in button**: active campaigns show a full-width blue "CHECK IN TODAY" button (`add_task` icon); after check-in it switches to a bordered "CHECKED IN TODAY" row (`check_circle` blue icon, no shadow, inert). Controlled via `Campaign.checkedInToday` getter.
 - **Day tick gold highlight**: pass `showTodayTick: campaign.isActive && !campaign.checkedInToday` to `_DayTickStrip`; today index = `dayHistory.length`. Gold = `Color(0xFFFFD700)`.
 - **Notifier mutation pattern**: `checkIn()` reads the campaign from Hive box, creates an updated copy (immutable model), puts it back, and sets `state = box.values.toList()` to trigger UI rebuild.
+
+- **Muted earthy palette (MTB-23)**: `kBlue=#4C6EAD`, `kBackground=#F7F3EF`, `kBlack=#2C2C2C`, `kWhite=#FFFDF9`. Added `kTextPrimary=#1A1A1A` (text), `kTextSecondary=#6B6B6B` (secondary labels), `kTerracotta=#B5735A` (accent). Use `kTextSecondary` instead of hardcoded `Color(0xFF555555)` or `Color(0xFF888888)` for secondary text.
 
 ## Things to Avoid
 - Don't use `setState` in screens — use Riverpod `ref.watch()` (exception: form screens use `ConsumerStatefulWidget` with `setState` only for local form validation state)
@@ -122,3 +124,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/13 | MTB-19 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/14 | MTB-21 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/15 | MTB-22 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/16 | MTB-23 | In Review |
