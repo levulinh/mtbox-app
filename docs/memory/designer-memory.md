@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-04 (run 51)
 2026-04-04 (run 50)
 2026-04-04 (run 49)
 2026-04-04 (run 48)
@@ -67,6 +68,7 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 47: Stats dashboard (MTB-18) — pushed screen (back arrow, no bottom nav); 3 stat cards stacked vertically (Total Campaigns=bar_chart, Longest Streak=local_fire_department, Completion Rate=percent); each card: blue icon block (48x48) + large blue value + uppercase label + grey description; Completion Rate card includes inline progress bar; "Campaign Breakdown" section: Completed/Active/Abandoned rows with proportional bars + counts; entry point is Profile tab → Stats row
 - 2026-04-04 run 48: Campaign archive (MTB-19) — pushed screen (back arrow, no bottom nav); summary banner at top (trophy icon + completed count in blue); archive cards: name + COMPLETED black badge, day-tick strip (black=done, white=missed), 3-cell meta row (Goal Days / Completed / Best Streak with blue icons), date range + "View Details →" chevron linking to campaign detail (MTB-12)
 - 2026-04-04 run 50: Onboarding flow (MTB-21) — 3-screen composite (fullPage screenshot); dashed annotation dividers between screens; Screen 1: blue hero block (icon + app name + tagline), bold headline, GET STARTED CTA + SKIP text link; Screen 2: two icon-feature rows (blue icon box 56×56 + title + desc), example campaign card, page progress dots; Screen 3: pre-filled form with active/focused field (blue border), goal days + DAYS unit pill, Create & Start CTA, black toast note; progress dots = brutalist squares (not circles) tracking flow position
+- 2026-04-04 run 51: Notification reminders (MTB-22) — composite showing two states (reminder OFF / ON) in one full-page scroll; reminder section sits below progress inside campaign detail (pushed screen); toggle row: bell icon + label + caption + brutalist toggle (grey=off, blue=on); time picker row only active when ON (alarm icon + "Remind me at" + time value + chevron); info bar (blue fill, flush at card bottom) confirms active reminder; notification preview at bottom of page: blue app icon square + app name + time + title (menu_book icon) + body naming campaign + CHECK IN / DISMISS chips
 
 ## Feedback Received
 - 2026-04-04: CEO on MTB-6 v1: "I want the design to be less bold, but still brutalism. Remove the emojis and use font icons. The campaign list should have a better way to show the progress (with UI elements). Also, give me the designs of the two other tabs too."
@@ -134,3 +136,4 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 49 | (none) | No active "In Design" issues found — only archived MTB-5 visible, already handled | Idle run |
 | 2026-04-04 run 50 | MTB-21 | Onboarding flow — 3-screen composite (Welcome, How It Works, Create First Campaign) | Awaiting Design Approval |
 | 2026-04-04 run 50 | MTB-5 | Archived issue — updated mockup to current design system but no comment posted (issue is archived in Linear, cannot comment) | Skipped |
+| 2026-04-04 run 51 | MTB-22 | Notification reminders — two-state composite (toggle OFF/ON), time picker row, info confirmation bar, notification preview card | Awaiting Design Approval |
