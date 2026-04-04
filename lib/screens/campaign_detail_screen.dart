@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../models/campaign.dart';
 import '../providers/mock_data_provider.dart';
 import '../services/notification_service.dart';
@@ -128,6 +129,10 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
                   ),
                   const SizedBox(height: 16),
 
+                  // Share My Progress CTA
+                  _ShareProgressButton(campaignId: campaign.id),
+                  const SizedBox(height: 16),
+
                   // Day grid
                   _SectionLabel(label: 'Campaign Days'),
                   _DayGrid(campaign: campaign),
@@ -141,6 +146,52 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
                   // Daily Reminder
                   _ReminderSection(campaign: campaign),
                 ]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ShareProgressButton extends StatelessWidget {
+  final String campaignId;
+
+  const _ShareProgressButton({required this.campaignId});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push('/campaigns/$campaignId/share'),
+      child: Container(
+        width: double.infinity,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: kBlue,
+          border: Border.fromBorderSide(
+            BorderSide(color: kBlack, width: kBorderWidth),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: kBlack,
+              offset: Offset(3, 3),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.ios_share, color: kWhite, size: 20),
+            SizedBox(width: 8),
+            Text(
+              'SHARE MY PROGRESS',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w900,
+                color: kWhite,
+                letterSpacing: 1.0,
               ),
             ),
           ],
