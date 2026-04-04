@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 375px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      background: #FAFAFA;
+    }
+
+    /* ── Status bar ── */
+    .status-bar {
+      height: 44px;
+      background: #1E50FF;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: #fff;
+      justify-content: space-between;
+    }
+    .status-bar .time { font-size: 13px; font-weight: 700; }
+    .status-bar .icons { display: flex; align-items: center; gap: 4px; }
+    .status-bar .icons .material-icons { font-size: 16px; }
+
+    /* ── App bar ── */
+    .app-bar {
+      height: 56px;
+      background: #1E50FF;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #000;
+    }
+    .app-bar .material-icons { color: #fff; font-size: 22px; }
+    .app-bar .title { color: #fff; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── Screen content ── */
+    .screen-content { padding: 14px 14px 0; }
+
+    /* ── Stats row (3-cell MTB-12 pattern) ── */
+    .stats-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-cell {
+      flex: 1;
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .stat-cell .material-icons { color: #1E50FF; font-size: 20px; }
+    .stat-cell .stat-value { font-size: 18px; font-weight: 700; color: #1E50FF; line-height: 1; }
+    .stat-cell .stat-label { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #555; letter-spacing: 0.5px; }
+
+    /* ── Progress section ── */
+    .section-block { margin-bottom: 14px; }
+    .section-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #555;
+      border-left: 3px solid #1E50FF;
+      padding-left: 8px;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .progress-bar-wrap {
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      padding: 12px;
+    }
+    .progress-label-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .progress-label-row .pl-name { font-size: 13px; font-weight: 700; color: #000; }
+    .progress-label-row .pl-pct { font-size: 13px; font-weight: 700; color: #1E50FF; }
+    .progress-track {
+      height: 10px;
+      background: #FAFAFA;
+      border: 2px solid #000;
+      position: relative;
+      margin-bottom: 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #1E50FF;
+    }
+    .day-label { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; }
+    .tick-strip { display: flex; gap: 2px; margin-top: 6px; flex-wrap: wrap; }
+    .tick {
+      width: 9px;
+      height: 9px;
+      border: 1.5px solid #000;
+    }
+    .tick.done { background: #1E50FF; border-color: #1E50FF; }
+    .tick.missed { background: #fff; }
+    .tick.future { background: #E8E8E8; border-color: #CCC; }
+
+    /* ── Reminders section ── */
+    .reminders-block {
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .reminder-row {
+      display: flex;
+      align-items: center;
+      padding: 13px 12px;
+      gap: 10px;
+      border-bottom: 1px solid #E8E8E8;
+    }
+    .reminder-row:last-child { border-bottom: none; }
+    .reminder-row .row-icon { color: #555; font-size: 20px; }
+    .reminder-row .row-label {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 700;
+      color: #000;
+    }
+    .reminder-row .row-caption {
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+      margin-top: 2px;
+    }
+    .reminder-row .row-text-group { flex: 1; }
+
+    /* Toggle OFF */
+    .toggle {
+      width: 40px;
+      height: 22px;
+      border: 2px solid #000;
+      background: #E0E0E0;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border: 1.5px solid #888;
+    }
+    /* Toggle ON */
+    .toggle.on { background: #1E50FF; border-color: #000; }
+    .toggle.on .toggle-thumb {
+      left: calc(100% - 16px);
+      border-color: #fff;
+    }
+
+    .time-value { font-size: 13px; font-weight: 700; color: #1E50FF; }
+    .row-chevron { color: #000; font-size: 18px; }
+
+    /* Info bar */
+    .info-bar {
+      background: #1E50FF;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-top: 2px solid #000;
+    }
+    .info-bar .material-icons { font-size: 14px; }
+
+    /* ── Dashed annotation divider ── */
+    .annotation-divider {
+      margin: 20px 14px;
+      border: none;
+      border-top: 2px dashed #AAA;
+      position: relative;
+    }
+    .annotation-label {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #AAA;
+      margin: 6px 14px 16px;
+    }
+
+    /* State label pill */
+    .state-pill {
+      display: inline-block;
+      background: #000;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      margin: 10px 14px 10px;
+    }
+    .state-pill.on { background: #1E50FF; }
+
+    /* ── Notification preview ── */
+    .notif-section {
+      padding: 14px;
+      padding-top: 0;
+    }
+    .notif-card {
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      padding: 12px;
+    }
+    .notif-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .notif-app-icon {
+      width: 36px;
+      height: 36px;
+      background: #1E50FF;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .notif-app-icon .material-icons { color: #fff; font-size: 18px; }
+    .notif-meta { flex: 1; }
+    .notif-app-name { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #000; letter-spacing: 0.5px; }
+    .notif-time { font-size: 10px; font-weight: 600; color: #888; }
+    .notif-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .notif-title .material-icons { font-size: 15px; color: #1E50FF; }
+    .notif-body { font-size: 12px; font-weight: 600; color: #555; line-height: 1.4; margin-bottom: 10px; }
+    .notif-actions { display: flex; gap: 8px; }
+    .notif-chip {
+      background: #1E50FF;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 5px 10px;
+      border: 2px solid #000;
+      box-shadow: 1px 1px 0 #000;
+    }
+    .notif-chip.ghost {
+      background: #fff;
+      color: #000;
+    }
+
+    .bottom-spacer { height: 24px; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- STATE LABEL: OFF -->
+  <div class="state-pill">State 1 — Reminder Off</div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar -->
+  <div class="app-bar">
+    <span class="material-icons">arrow_back</span>
+    <span class="title">30-Day Reading</span>
+  </div>
+
+  <!-- Screen Content -->
+  <div class="screen-content">
+
+    <!-- Stats row -->
+    <div class="stats-row">
+      <div class="stat-cell">
+        <span class="material-icons">local_fire_department</span>
+        <span class="stat-value">7</span>
+        <span class="stat-label">Streak</span>
+      </div>
+      <div class="stat-cell">
+        <span class="material-icons">check_circle</span>
+        <span class="stat-value">18</span>
+        <span class="stat-label">Done</span>
+      </div>
+      <div class="stat-cell">
+        <span class="material-icons">flag</span>
+        <span class="stat-value">30</span>
+        <span class="stat-label">Goal</span>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="section-block">
+      <div class="section-header">Progress</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-label-row">
+          <span class="pl-name">Day 18 of 30</span>
+          <span class="pl-pct">60%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:60%"></div>
+        </div>
+        <div class="day-label">18 / 30 days completed</div>
+        <div class="tick-strip">
+          <!-- 18 done, 2 missed in middle, rest future -->
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick missed"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick missed"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reminders section — OFF state -->
+    <div class="section-block">
+      <div class="section-header">
+        <span style="display:inline-flex;align-items:center;gap:5px;vertical-align:middle;">
+          <span class="material-icons" style="font-size:13px;color:#1E50FF;vertical-align:middle;">notifications_active</span>
+          Daily Reminder
+        </span>
+      </div>
+      <div class="reminders-block">
+        <div class="reminder-row">
+          <span class="material-icons row-icon">notifications</span>
+          <div class="row-text-group">
+            <div class="row-label">Daily Reminder</div>
+            <div class="row-caption">Get a nudge each day to check in</div>
+          </div>
+          <!-- Toggle OFF -->
+          <div class="toggle">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+        <!-- Time row hidden when off: shown greyed out -->
+        <div class="reminder-row" style="opacity:0.35;">
+          <span class="material-icons row-icon">alarm</span>
+          <div class="row-text-group">
+            <div class="row-label">Remind me at</div>
+          </div>
+          <span class="time-value">9:00 AM</span>
+          <span class="material-icons row-chevron">chevron_right</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- DASHED ANNOTATION DIVIDER -->
+  <hr class="annotation-divider">
+  <div class="annotation-label">State 2 — Reminder Enabled</div>
+
+  <!-- STATE LABEL: ON -->
+  <div class="state-pill on">State 2 — Reminder On</div>
+
+  <!-- Status Bar (repeat) -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar (repeat) -->
+  <div class="app-bar">
+    <span class="material-icons">arrow_back</span>
+    <span class="title">30-Day Reading</span>
+  </div>
+
+  <!-- Screen Content — ON state -->
+  <div class="screen-content">
+
+    <!-- Stats row -->
+    <div class="stats-row">
+      <div class="stat-cell">
+        <span class="material-icons">local_fire_department</span>
+        <span class="stat-value">7</span>
+        <span class="stat-label">Streak</span>
+      </div>
+      <div class="stat-cell">
+        <span class="material-icons">check_circle</span>
+        <span class="stat-value">18</span>
+        <span class="stat-label">Done</span>
+      </div>
+      <div class="stat-cell">
+        <span class="material-icons">flag</span>
+        <span class="stat-value">30</span>
+        <span class="stat-label">Goal</span>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="section-block">
+      <div class="section-header">Progress</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-label-row">
+          <span class="pl-name">Day 18 of 30</span>
+          <span class="pl-pct">60%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:60%"></div>
+        </div>
+        <div class="day-label">18 / 30 days completed</div>
+        <div class="tick-strip">
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick missed"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick missed"></div><div class="tick done"></div>
+          <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+          <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reminders section — ON state -->
+    <div class="section-block">
+      <div class="section-header">
+        <span style="display:inline-flex;align-items:center;gap:5px;vertical-align:middle;">
+          <span class="material-icons" style="font-size:13px;color:#1E50FF;vertical-align:middle;">notifications_active</span>
+          Daily Reminder
+        </span>
+      </div>
+      <div class="reminders-block">
+        <div class="reminder-row">
+          <span class="material-icons row-icon" style="color:#1E50FF;">notifications_active</span>
+          <div class="row-text-group">
+            <div class="row-label">Daily Reminder</div>
+            <div class="row-caption">Get a nudge each day to check in</div>
+          </div>
+          <!-- Toggle ON -->
+          <div class="toggle on">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+        <!-- Time row visible -->
+        <div class="reminder-row">
+          <span class="material-icons row-icon" style="color:#555;">alarm</span>
+          <div class="row-text-group">
+            <div class="row-label">Remind me at</div>
+          </div>
+          <span class="time-value">9:00 AM</span>
+          <span class="material-icons row-chevron">chevron_right</span>
+        </div>
+        <!-- Info bar -->
+        <div class="info-bar">
+          <span class="material-icons">check_circle</span>
+          Reminder set for 9:00 AM daily
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- ANNOTATION DIVIDER before notification preview -->
+  <hr class="annotation-divider">
+  <div class="annotation-label">Notification Preview</div>
+
+  <!-- Notification preview -->
+  <div class="notif-section">
+    <div class="notif-card">
+      <div class="notif-header">
+        <div class="notif-app-icon">
+          <span class="material-icons">campaign</span>
+        </div>
+        <div class="notif-meta">
+          <div class="notif-app-name">MTBox</div>
+          <div class="notif-time">now</div>
+        </div>
+      </div>
+      <div class="notif-title">
+        <span class="material-icons">menu_book</span>
+        Time to check in!
+      </div>
+      <div class="notif-body">Don't break your streak on 30-Day Reading. Tap to check in.</div>
+      <div class="notif-actions">
+        <div class="notif-chip">Check In</div>
+        <div class="notif-chip ghost">Dismiss</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-spacer"></div>
+
+</body>
+</html>
