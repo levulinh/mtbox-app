@@ -11,6 +11,11 @@ const kTerracotta = Color(0xFFB5735A); // warm terracotta accent
 const kBorderWidth = 2.0;
 const kShadowOffset = 2.0;
 
+// Softened values for content surfaces (MTB-24)
+const kSoftBorderColor = Color(0xFF5A5A5A);
+const kSoftBorderWidth = 1.5;
+const kSoftShadowColor = Color(0x732C2C2C); // rgba(44,44,44,0.45)
+
 final kBrutalistTheme = ThemeData(
   scaffoldBackgroundColor: kBackground,
   colorScheme: const ColorScheme.light(
@@ -61,10 +66,10 @@ final kBrutalistTheme = ThemeData(
 BoxDecoration brutalistBox({Color? color, bool filled = false}) {
   return BoxDecoration(
     color: filled ? kBlue : (color ?? kWhite),
-    border: Border.all(color: kBlack, width: kBorderWidth),
+    border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
     boxShadow: const [
       BoxShadow(
-        color: kBlack,
+        color: kSoftShadowColor,
         offset: Offset(kShadowOffset, kShadowOffset),
         blurRadius: 0,
       ),

@@ -235,7 +235,7 @@ class _ArchiveCard extends StatelessWidget {
             decoration: const BoxDecoration(
               color: kBackground,
               border:
-                  Border.fromBorderSide(BorderSide(color: kBlack, width: 2)),
+                  Border.fromBorderSide(BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth)),
             ),
             child: FractionallySizedBox(
               widthFactor: pct.clamp(0.0, 1.0),
