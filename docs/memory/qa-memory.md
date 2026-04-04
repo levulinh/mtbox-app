@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-05 (session 39: created comprehensive test suite for MTB-28 refined onboarding — 20 unit+widget tests pending PR code merge)
+2026-04-05 (session 40: tested MTB-29 flexible goal types — 37 unit+widget tests passing, PR merged to main)
 
 ## Known Flaky Tests
 (none yet)
@@ -34,6 +34,7 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - **MTB-28 Sample Data Tests**: Comprehensive test suite created but pending PR code merge to validate. Tests verify sample data initialization (2 campaigns with correct IDs, colors, icons, streaks), welcome card UI/interactions, dismiss dialog logic, SAMPLE DATA/LIVE DATA badge toggling, and activity feed rendering. Unit and widget tests structure follows MTBox conventions; E2E tests skipped (no USB device).
 
 ## Issues Tested
+2026-04-05 | MTB-29 | test/unit/flexible_goal_types_test.dart, test/widget/flexible_goal_types_ui_test.dart, integration_test/flexible_goal_types_e2e_test.dart | 37/37 unit+widget passed; E2E committed but not run (no device); tested GoalType enum (4 values), Campaign.unitLabel/checkInLabel for all types, GoalTypeSelector widget (rendering, interactions, 4 cells), CreateCampaignScreen integration (selector visible, unit pill updates, metric field conditional), CampaignCard goal-type chips for all types, check-in button labels adapt to goal type
 2026-04-05 | MTB-28 | test/unit/refined_onboarding_test.dart, test/widget/refined_onboarding_ui_test.dart, integration_test/refined_onboarding_e2e_test.dart | 9 unit + 11 widget tests ready; E2E skipped (no device); comprehensive test suite for sample data feature awaiting PR code merge to validate
 2026-04-04 | MTB-27 | test/widget/share_progress_test.dart, integration_test/share_progress_test.dart | 12/12 widget tests passed; E2E ready but not run (no device); tested ShareProgressScreen structure, campaign data rendering, progress card display, action buttons, MTBox branding, error handling
 2026-04-04 | MTB-26 | test/unit/campaign_colors_icons_test.dart, test/widget/appearance_pickers_test.dart, test/widget/campaign_card_colors_icons_test.dart, integration_test/custom_colors_icons_test.dart | 25/25 unit+widget passed; E2E ready but not run (no device); tested colorHex parsing, iconName lookup, color/icon picker rendering and interactions, CampaignCard visual display with campaign colors
