@@ -14,12 +14,12 @@ _Last updated: 2026-04-04_
 - [x] Campaign detail screen
 - [x] Edit & delete campaign
 - [x] Campaign completion flow
-- [ ] Home screen with live data
+- [x] Home screen with live data
 
 ## Phase 2: Engagement — Make progress feel real
-- [ ] Streak indicators on campaign cards
-- [ ] Activity history feed with real data
-- [ ] Stats dashboard (total campaigns, longest streak, completion rate)
+- [ ] Streak indicators on campaign cards ← scheduled 2026-04-04
+- [ ] Activity history feed with real data ← scheduled 2026-04-04
+- [ ] Stats dashboard (total campaigns, longest streak, completion rate) ← scheduled 2026-04-04
 - [ ] Campaign archive (view completed campaigns)
 
 ## Phase 3: Polish — First-time and power-user experience
