@@ -4,7 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
-2026-04-04 (run 32)
+2026-04-04 (run 33)
 
 ## Color Palette
 Established on first mockup run (2026-04-04). All screens must use these values exactly.
@@ -54,6 +54,11 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 2: Profile tab: avatar = square with initials (no photo/emoji), settings list with icon + label + chevron rows
 - 2026-04-04 run 5: Campaign list screen (MTB-9) — two sections (Active / Completed) with section header showing count; campaign cards with name, goal, Day X of Y label, percentage, progress bar, day-tick strip; empty state: dashed border card with message pointing to FAB
 - 2026-04-04 run 5: Campaign creation (MTB-8) — full-screen pushed view (not modal); two-state design on one screen (error state + clean state separated by dashed annotation divider); error banner (red) at top of form; name field has red border + inline error on validation failure; goal uses number input + attached grey "DAYS" unit pill; Cancel (white) + Create (blue) buttons side by side
+- 2026-04-04 run 33: Daily check-in (MTB-11) — two-state card on home screen: before (gold today-tick + blue CHECK IN button with add_task icon) / after (tick turns blue + bordered CHECKED IN row + black toast confirmation bar with streak count); dashed annotation divider separates states
+- 2026-04-04 run 33: Campaign detail (MTB-12) — pushed screen (back arrow, no bottom nav); 3-stat row (streak, completed, goal) with same stat-card pattern; progress bar + percentage; 7-column calendar grid (done=blue fill, missed=grey, future=light grey, today=2px black border); scrollable recent activity list with check_circle/radio_button_unchecked icons
+- 2026-04-04 run 33: Edit & delete (MTB-13) — same pushed form layout as MTB-8; pre-filled inputs; Cancel+Save button pair; dashed divider before danger zone; delete button is red border/shadow (never blue); confirmation dialog: red header + warning icon + "Keep It" / "Delete" footer
+- 2026-04-04 run 33: Campaign completion (MTB-14) — full-screen blue takeover, no app bar/bottom nav; brutalist confetti = rows of 14px squares with varying fill/opacity; 100×100 white trophy block (emoji_events icon, 3px border, 4px shadow); "GOAL ACHIEVED!" headline; semi-transparent stat blocks; white "Back to Campaigns" CTA + "View Full History" text link
+- 2026-04-04 run 33: Home with live data (MTB-15) — green "Live Data" dot + label in app bar top-right; "Today summary" card at top (3-stat mini grid: Active, Done Today, Best Streak); per-card dual action row: CHECK IN button + detail chevron; "Done Today" badge (green fill, black border) replaces "Active" badge on checked-in campaigns
 
 ## Feedback Received
 - 2026-04-04: CEO on MTB-6 v1: "I want the design to be less bold, but still brutalism. Remove the emojis and use font icons. The campaign list should have a better way to show the progress (with UI elements). Also, give me the designs of the two other tabs too."
@@ -97,3 +102,8 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 30 | (none) | No active "In Design" issues found | Idle run |
 | 2026-04-04 run 31 | (none) | No active "In Design" issues found | Idle run |
 | 2026-04-04 run 32 | (none) | No active "In Design" issues found — only MTB-5 (archived) visible, already handled | Idle run |
+| 2026-04-04 run 33 | MTB-11 | Daily check-in flow — two-state card (before/after), gold today-tick, toast confirmation | Awaiting Design Approval |
+| 2026-04-04 run 33 | MTB-12 | Campaign detail screen — stat row, progress bar, 7-col calendar grid, activity list | Awaiting Design Approval |
+| 2026-04-04 run 33 | MTB-13 | Edit & delete campaign — pre-filled form, red delete button, confirmation dialog overlay | Awaiting Design Approval |
+| 2026-04-04 run 33 | MTB-14 | Campaign completion flow — full-screen blue celebration, brutalist confetti, trophy block | Awaiting Design Approval |
+| 2026-04-04 run 33 | MTB-15 | Home with live data — Live Data indicator, Today summary card, dual-action campaign cards | Awaiting Design Approval |
