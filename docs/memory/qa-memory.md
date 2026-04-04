@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 38: tested MTB-26 custom colors/icons — all 25 tests passing, PR merged, moved to Done)
+2026-04-04 (session 38: tested MTB-26 + MTB-27 — 37 total tests passing, both PRs merged and moved to Done)
 
 ## Known Flaky Tests
 (none yet)
@@ -33,6 +33,7 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - For `EditCampaignScreen` widget tests that also test `update()` / `delete()`, implement `_MutableCampaignsNotifier` with all three overrides: `build()`, `update()`, `delete()` — all in-memory mutations.
 
 ## Issues Tested
+2026-04-04 | MTB-27 | test/widget/share_progress_test.dart, integration_test/share_progress_test.dart | 12/12 widget tests passed; E2E ready but not run (no device); tested ShareProgressScreen structure, campaign data rendering, progress card display, action buttons, MTBox branding, error handling
 2026-04-04 | MTB-26 | test/unit/campaign_colors_icons_test.dart, test/widget/appearance_pickers_test.dart, test/widget/campaign_card_colors_icons_test.dart, integration_test/custom_colors_icons_test.dart | 25/25 unit+widget passed; E2E ready but not run (no device); tested colorHex parsing, iconName lookup, color/icon picker rendering and interactions, CampaignCard visual display with campaign colors
 2026-04-04 | MTB-21 | test/unit/onboarding_test.dart, test/widget/onboarding_test.dart, integration_test/onboarding_test.dart | 37/37 unit+widget passed; E2E ready but not run (no device); tested 3-screen onboarding flow, form validation, navigation, new user detection
 2026-04-04 | MTB-6 | test/unit/app_shell_test.dart, test/widget/app_shell_test.dart, integration_test/app_shell_test.dart | 37/37 unit+widget passed; E2E skipped (emulator boot failure)
