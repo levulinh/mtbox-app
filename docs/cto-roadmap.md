@@ -20,7 +20,7 @@ _Last updated: 2026-04-04_
 - [ ] Streak indicators on campaign cards ← scheduled 2026-04-04
 - [ ] Activity history feed with real data ← scheduled 2026-04-04
 - [ ] Stats dashboard (total campaigns, longest streak, completion rate) ← scheduled 2026-04-04
-- [ ] Campaign archive (view completed campaigns)
+- [ ] Campaign archive (view completed campaigns) ← scheduled 2026-04-04
 
 ## Phase 3: Polish — First-time and power-user experience
 - [ ] Onboarding flow for new users
