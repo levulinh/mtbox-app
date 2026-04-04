@@ -12,6 +12,24 @@ import 'screens/profile_screen.dart';
 import 'screens/stats_screen.dart';
 import 'theme.dart';
 
+CustomTransitionPage<void> _slidePage(LocalKey key, Widget child) {
+  return CustomTransitionPage<void>(
+    key: key,
+    child: child,
+    transitionDuration: const Duration(milliseconds: 250),
+    reverseTransitionDuration: const Duration(milliseconds: 250),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return SlideTransition(
+        position: animation.drive(
+          Tween<Offset>(begin: const Offset(1.0, 0), end: Offset.zero)
+              .chain(CurveTween(curve: Curves.easeOut)),
+        ),
+        child: child,
+      );
+    },
+  );
+}
+
 GoRouter createRouter(String initialLocation) => GoRouter(
   initialLocation: initialLocation,
   routes: [
@@ -33,7 +51,8 @@ GoRouter createRouter(String initialLocation) => GoRouter(
         GoRoute(
           path: '/campaigns/new',
           name: 'create-campaign',
-          builder: (context, state) => const CreateCampaignScreen(),
+          pageBuilder: (context, state) =>
+              _slidePage(state.pageKey, const CreateCampaignScreen()),
         ),
         GoRoute(
           path: '/profile',
@@ -46,39 +65,44 @@ GoRouter createRouter(String initialLocation) => GoRouter(
     GoRoute(
       path: '/archive',
       name: 'campaign-archive',
-      builder: (context, state) => const CampaignArchiveScreen(),
+      pageBuilder: (context, state) =>
+          _slidePage(state.pageKey, const CampaignArchiveScreen()),
     ),
     GoRoute(
       path: '/stats',
       name: 'stats',
-      builder: (context, state) => const StatsScreen(),
+      pageBuilder: (context, state) =>
+          _slidePage(state.pageKey, const StatsScreen()),
     ),
     GoRoute(
       path: '/campaigns/:id',
       name: 'campaign-detail',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
-        return CampaignDetailScreen(campaignId: id);
+        return _slidePage(state.pageKey, CampaignDetailScreen(campaignId: id));
       },
     ),
     GoRoute(
       path: '/campaigns/:id/edit',
       name: 'edit-campaign',
-      builder: (context, state) => EditCampaignScreen(
-        campaignId: state.pathParameters['id']!,
+      pageBuilder: (context, state) => _slidePage(
+        state.pageKey,
+        EditCampaignScreen(campaignId: state.pathParameters['id']!),
       ),
     ),
     GoRoute(
       path: '/campaigns/:id/complete',
       name: 'campaign-complete',
-      builder: (context, state) => CampaignCompletionScreen(
-        campaignId: state.pathParameters['id']!,
+      pageBuilder: (context, state) => _slidePage(
+        state.pageKey,
+        CampaignCompletionScreen(campaignId: state.pathParameters['id']!),
       ),
     ),
     GoRoute(
       path: '/onboarding',
       name: 'onboarding',
-      builder: (context, state) => const OnboardingScreen(),
+      pageBuilder: (context, state) =>
+          _slidePage(state.pageKey, const OnboardingScreen()),
     ),
   ],
 );

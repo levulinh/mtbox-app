@@ -186,10 +186,15 @@ class _ProgressBar extends StatelessWidget {
           BorderSide(color: kBlack, width: kBorderWidth),
         ),
       ),
-      child: FractionallySizedBox(
-        widthFactor: percent.clamp(0.0, 1.0),
-        alignment: Alignment.centerLeft,
-        child: Container(color: isActive ? kBlue : kBlack),
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0, end: percent.clamp(0.0, 1.0)),
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOutCubic,
+        builder: (context, value, _) => FractionallySizedBox(
+          widthFactor: value,
+          alignment: Alignment.centerLeft,
+          child: Container(color: isActive ? kBlue : kBlack),
+        ),
       ),
     );
   }
@@ -249,45 +254,80 @@ class _DayTickStrip extends StatelessWidget {
   }
 }
 
-class _CheckInButton extends StatelessWidget {
+class _CheckInButton extends StatefulWidget {
   final VoidCallback? onTap;
 
   const _CheckInButton({this.onTap});
 
   @override
+  State<_CheckInButton> createState() => _CheckInButtonState();
+}
+
+class _CheckInButtonState extends State<_CheckInButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 80),
+    );
+    _scale = Tween<double>(begin: 1.0, end: 0.96).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeIn),
+    );
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 44,
-        decoration: const BoxDecoration(
-          color: kBlue,
-          border: Border.fromBorderSide(
-            BorderSide(color: kBlack, width: kBorderWidth),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: kBlack,
-              offset: Offset(kShadowOffset, kShadowOffset),
-              blurRadius: 0,
+      onTapDown: (_) => _ctrl.forward(),
+      onTapUp: (_) {
+        _ctrl.reverse();
+        widget.onTap?.call();
+      },
+      onTapCancel: () => _ctrl.reverse(),
+      child: ScaleTransition(
+        scale: _scale,
+        child: Container(
+          height: 44,
+          decoration: const BoxDecoration(
+            color: kBlue,
+            border: Border.fromBorderSide(
+              BorderSide(color: kBlack, width: kBorderWidth),
             ),
-          ],
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add_task, color: kWhite, size: 18),
-            SizedBox(width: 8),
-            Text(
-              'CHECK IN TODAY',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: kWhite,
-                letterSpacing: 1.0,
+            boxShadow: [
+              BoxShadow(
+                color: kBlack,
+                offset: Offset(kShadowOffset, kShadowOffset),
+                blurRadius: 0,
               ),
-            ),
-          ],
+            ],
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.add_task, color: kWhite, size: 18),
+              SizedBox(width: 8),
+              Text(
+                'CHECK IN TODAY',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: kWhite,
+                  letterSpacing: 1.0,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../models/activity_entry.dart';
 import '../providers/mock_data_provider.dart';
 import '../theme.dart';
@@ -535,11 +536,11 @@ class _EmptyFeed extends StatelessWidget {
           BorderSide(color: Color(0xFFCCCCCC), width: 2),
         ),
       ),
-      child: const Column(
+      child: Column(
         children: [
-          Icon(Icons.history, size: 40, color: Color(0xFFCCCCCC)),
-          SizedBox(height: 8),
-          Text(
+          const Icon(Icons.history, size: 40, color: Color(0xFFCCCCCC)),
+          const SizedBox(height: 8),
+          const Text(
             'NO ACTIVITY YET',
             style: TextStyle(
               fontSize: 13,
@@ -548,11 +549,31 @@ class _EmptyFeed extends StatelessWidget {
               letterSpacing: 0.5,
             ),
           ),
-          SizedBox(height: 4),
-          Text(
+          const SizedBox(height: 4),
+          const Text(
             'Check in on a campaign to see your history here.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12, color: kTextSecondary),
+          ),
+          const SizedBox(height: 12),
+          GestureDetector(
+            onTap: () => context.go('/campaigns'),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'GO TO CAMPAIGNS',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: kBlue,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+                SizedBox(width: 4),
+                Icon(Icons.arrow_forward, size: 14, color: kBlue),
+              ],
+            ),
           ),
         ],
       ),
