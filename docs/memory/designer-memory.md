@@ -5,7 +5,6 @@ Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
 2026-04-04 (run 29)
-2026-04-04 (run 28)
 
 ## Color Palette
 Established on first mockup run (2026-04-04). All screens must use these values exactly.
