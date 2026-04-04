@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 31 — implemented MTB-27 progress sharing export screenshot)
+2026-04-05 (run 32 — implemented MTB-28 refined onboarding with sample data dismiss)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -133,6 +133,9 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **`Wrap` for tick strip in share card**: use `Wrap(spacing: 4, runSpacing: 4)` so ticks reflow naturally at any width without overflow.
 - **`path_provider` package**: required for `getTemporaryDirectory()` when saving file for share_plus.
 
+- **MTB-28 sample data pattern**: Sample campaigns use fixed IDs (`sample-read-daily`, `sample-exercise`) so they can be deleted by ID on dismiss. `hasSampleDataProvider` is a `NotifierProvider<SampleDataNotifier, bool>` reading from `Hive.box('settings')` key `hasSampleData`. `CampaignsNotifier.build()` sets `hasSampleData = true` when seeding. `CampaignsNotifier.dismissSamples()` deletes sample IDs and writes `false` to Hive. Home screen watches `hasSampleDataProvider` and conditionally renders the sample pill + welcome card.
+- **Integration tests that use old seed data** (`Morning Run`, `No Sugar`) will need QA updates whenever seed data changes — this is expected.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -156,3 +159,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/18 | MTB-25 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/19 | MTB-26 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/20 | MTB-27 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/21 | MTB-28 | In Review |
