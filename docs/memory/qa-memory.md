@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 33: MTB-21 — 37 unit+widget tests passed, PR merged)
+2026-04-04 (session 34: MTB-22 — 13 unit tests passed, PR merged)
 
 ## Known Flaky Tests
 (none yet)
@@ -45,3 +45,4 @@ Track known flaky tests, recurring issues, testing strategies that work.
 2026-04-04 | MTB-16 | test/unit/campaign_detail_test.dart (extended), test/widget/campaign_card_streak_test.dart | 39/39 unit+widget passed; E2E deferred (no device)
 2026-04-04 | MTB-17 | test/unit/activity_feed_test.dart, test/widget/activity_feed_test.dart | 30/30 unit+widget passed; E2E deferred (no device)
 2026-04-04 | MTB-19 | test/unit/campaign_archive_test.dart, test/widget/campaign_archive_test.dart, integration_test/campaign_archive_test.dart | 37/37 unit+widget passed; E2E ready but not run (no device); tested bestStreak getter, archive filtering, date calculation, empty state, summary banner, archive cards
+2026-04-04 | MTB-22 | test/unit/notification_reminder_test.dart, integration_test/notification_reminder_test.dart | 13/13 unit tests passed; widget tests deferred (provider override complexity); E2E ready but not run (no device); tested NotificationService (time parsing, ID generation), Campaign reminder fields, CampaignsNotifier.setReminder(), Hive persistence
