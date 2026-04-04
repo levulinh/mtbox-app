@@ -163,7 +163,7 @@ class _ValidationBanner extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFFFF0EE),
-        border: Border.all(color: _kErrorRed, width: kBorderWidth),
+        border: Border.all(color: _kErrorRed, width: kSoftBorderWidth),
         boxShadow: const [
           BoxShadow(
             color: _kErrorRed,
@@ -224,12 +224,12 @@ class _NameField extends StatelessWidget {
           decoration: BoxDecoration(
             color: kWhite,
             border: Border.all(
-              color: hasError ? _kErrorRed : kBlack,
-              width: kBorderWidth,
+              color: hasError ? _kErrorRed : kSoftBorderColor,
+              width: kSoftBorderWidth,
             ),
             boxShadow: [
               BoxShadow(
-                color: hasError ? _kErrorRed : kBlack,
+                color: hasError ? _kErrorRed : kSoftShadowColor,
                 offset: const Offset(kShadowOffset, kShadowOffset),
                 blurRadius: 0,
               ),
@@ -315,12 +315,12 @@ class _GoalField extends StatelessWidget {
               decoration: BoxDecoration(
                 color: kWhite,
                 border: Border.all(
-                  color: hasError ? _kErrorRed : kBlack,
-                  width: kBorderWidth,
+                  color: hasError ? _kErrorRed : kSoftBorderColor,
+                  width: kSoftBorderWidth,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: hasError ? _kErrorRed : kBlack,
+                    color: hasError ? _kErrorRed : kSoftShadowColor,
                     offset: const Offset(kShadowOffset, kShadowOffset),
                     blurRadius: 0,
                   ),
@@ -353,15 +353,15 @@ class _GoalField extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 color: const Color(0xFFF0F0F0),
-                border: Border(
-                  top: const BorderSide(color: kBlack, width: kBorderWidth),
-                  right: const BorderSide(color: kBlack, width: kBorderWidth),
-                  bottom: const BorderSide(color: kBlack, width: kBorderWidth),
+                border: const Border(
+                  top: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+                  right: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+                  bottom: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
                   left: BorderSide.none,
                 ),
                 boxShadow: const [
                   BoxShadow(
-                    color: kBlack,
+                    color: kSoftShadowColor,
                     offset: Offset(kShadowOffset, kShadowOffset),
                     blurRadius: 0,
                   ),
@@ -461,10 +461,10 @@ class _ActionButtons extends StatelessWidget {
               height: 50,
               decoration: BoxDecoration(
                 color: kBlue,
-                border: Border.all(color: kBlack, width: kBorderWidth),
+                border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
                 boxShadow: const [
                   BoxShadow(
-                    color: kBlack,
+                    color: kSoftShadowColor,
                     offset: Offset(kShadowOffset, kShadowOffset),
                     blurRadius: 0,
                   ),

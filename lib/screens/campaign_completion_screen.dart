@@ -68,11 +68,11 @@ class CampaignCompletionScreen extends ConsumerWidget {
                   decoration: const BoxDecoration(
                     color: kWhite,
                     border: Border.fromBorderSide(
-                      BorderSide(color: kBlack, width: 3),
+                      BorderSide(color: kSoftBorderColor, width: 2),
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: kBlack,
+                        color: kSoftShadowColor,
                         offset: Offset(4, 4),
                         blurRadius: 0,
                       ),
@@ -164,11 +164,11 @@ class CampaignCompletionScreen extends ConsumerWidget {
                     decoration: const BoxDecoration(
                       color: kWhite,
                       border: Border.fromBorderSide(
-                        BorderSide(color: kBlack, width: 2),
+                        BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: kBlack,
+                          color: kSoftShadowColor,
                           offset: Offset(3, 3),
                           blurRadius: 0,
                         ),

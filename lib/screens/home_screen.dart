@@ -279,7 +279,7 @@ class _StatCell extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         decoration: const BoxDecoration(
           border: Border.fromBorderSide(
-            BorderSide(color: kBlack, width: kBorderWidth),
+            BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
           ),
         ),
         child: Column(
@@ -322,7 +322,7 @@ class _RealTimeNotice extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Color(0xFFE4EAF4),
         border: Border.fromBorderSide(
-          BorderSide(color: kBlue, width: kBorderWidth),
+          BorderSide(color: kBlue, width: kSoftBorderWidth),
         ),
       ),
       child: const Row(
@@ -506,7 +506,7 @@ class _StatusBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: bg,
-        border: Border.all(color: border, width: kBorderWidth),
+        border: Border.all(color: border, width: kSoftBorderWidth),
       ),
       child: Text(
         label,

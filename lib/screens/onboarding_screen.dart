@@ -109,8 +109,8 @@ class _ProgressDots extends StatelessWidget {
           decoration: BoxDecoration(
             color: active ? kBlue : kWhite,
             border: Border.all(
-              color: active ? kBlue : kBlack,
-              width: kBorderWidth,
+              color: active ? kBlue : kSoftBorderColor,
+              width: active ? kBorderWidth : kSoftBorderWidth,
             ),
           ),
         );
@@ -146,10 +146,10 @@ class _WelcomePage extends StatelessWidget {
                   height: 88,
                   decoration: BoxDecoration(
                     color: kWhite,
-                    border: Border.all(color: kBlack, width: kBorderWidth),
+                    border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
                     boxShadow: const [
                       BoxShadow(
-                        color: kBlack,
+                        color: kSoftShadowColor,
                         offset: Offset(3, 3),
                         blurRadius: 0,
                       ),
@@ -223,10 +223,10 @@ class _WelcomePage extends StatelessWidget {
                     height: 52,
                     decoration: BoxDecoration(
                       color: kBlue,
-                      border: Border.all(color: kBlack, width: kBorderWidth),
+                      border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
                       boxShadow: const [
                         BoxShadow(
-                          color: kBlack,
+                          color: kSoftShadowColor,
                           offset: Offset(kShadowOffset, kShadowOffset),
                           blurRadius: 0,
                         ),
@@ -390,10 +390,10 @@ class _HowItWorksPage extends StatelessWidget {
                     height: 52,
                     decoration: BoxDecoration(
                       color: kBlue,
-                      border: Border.all(color: kBlack, width: kBorderWidth),
+                      border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
                       boxShadow: const [
                         BoxShadow(
-                          color: kBlack,
+                          color: kSoftShadowColor,
                           offset: Offset(kShadowOffset, kShadowOffset),
                           blurRadius: 0,
                         ),
@@ -461,10 +461,10 @@ class _FeatureRow extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: kWhite,
-        border: Border.all(color: kBlack, width: kBorderWidth),
+        border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
         boxShadow: const [
           BoxShadow(
-            color: kBlack,
+            color: kSoftShadowColor,
             offset: Offset(kShadowOffset, kShadowOffset),
             blurRadius: 0,
           ),
@@ -523,10 +523,10 @@ class _ExampleCampaignCard extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: kWhite,
-        border: Border.all(color: kBlack, width: kBorderWidth),
+        border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
         boxShadow: const [
           BoxShadow(
-            color: kBlack,
+            color: kSoftShadowColor,
             offset: Offset(kShadowOffset, kShadowOffset),
             blurRadius: 0,
           ),
@@ -586,7 +586,7 @@ class _ExampleCampaignCard extends StatelessWidget {
             height: 10,
             decoration: BoxDecoration(
               color: kWhite,
-              border: Border.all(color: kBlack, width: kBorderWidth),
+              border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
             ),
             child: FractionallySizedBox(
               widthFactor: progress,
@@ -715,7 +715,7 @@ class _CreateCampaignPage extends StatelessWidget {
                     color: kWhite,
                     border: Border.all(
                       color: nameError ? Colors.red : kBlue,
-                      width: kBorderWidth,
+                      width: kSoftBorderWidth,
                     ),
                   ),
                   child: TextField(
@@ -765,8 +765,8 @@ class _CreateCampaignPage extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: kWhite,
                         border: Border.all(
-                          color: daysError ? Colors.red : kBlack,
-                          width: kBorderWidth,
+                          color: daysError ? Colors.red : kSoftBorderColor,
+                          width: kSoftBorderWidth,
                         ),
                       ),
                       child: TextField(
@@ -790,9 +790,9 @@ class _CreateCampaignPage extends StatelessWidget {
                         decoration: const BoxDecoration(
                           color: Color(0xFFE8E8E8),
                           border: Border(
-                            top: BorderSide(color: kBlack, width: kBorderWidth),
-                            right: BorderSide(color: kBlack, width: kBorderWidth),
-                            bottom: BorderSide(color: kBlack, width: kBorderWidth),
+                            top: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+                            right: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
+                            bottom: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
                           ),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -844,10 +844,10 @@ class _CreateCampaignPage extends StatelessWidget {
                     height: 52,
                     decoration: BoxDecoration(
                       color: kBlue,
-                      border: Border.all(color: kBlack, width: kBorderWidth),
+                      border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
                       boxShadow: const [
                         BoxShadow(
-                          color: kBlack,
+                          color: kSoftShadowColor,
                           offset: Offset(kShadowOffset, kShadowOffset),
                           blurRadius: 0,
                         ),
@@ -881,10 +881,10 @@ class _CreateCampaignPage extends StatelessWidget {
                     height: 48,
                     decoration: BoxDecoration(
                       color: kWhite,
-                      border: Border.all(color: kBlack, width: kBorderWidth),
+                      border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
                       boxShadow: const [
                         BoxShadow(
-                          color: kBlack,
+                          color: kSoftShadowColor,
                           offset: Offset(kShadowOffset, kShadowOffset),
                           blurRadius: 0,
                         ),

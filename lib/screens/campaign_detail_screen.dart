@@ -188,7 +188,7 @@ class _DetailProgressBar extends StatelessWidget {
       decoration: const BoxDecoration(
         color: kBackground,
         border: Border.fromBorderSide(
-          BorderSide(color: kBlack, width: 2),
+          BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
         ),
       ),
       child: FractionallySizedBox(
@@ -464,10 +464,10 @@ class _ReminderSection extends ConsumerWidget {
         Container(
           decoration: BoxDecoration(
             color: kWhite,
-            border: Border.all(color: kBlack, width: kBorderWidth),
+            border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
             boxShadow: const [
               BoxShadow(
-                color: kBlack,
+                color: kSoftShadowColor,
                 offset: Offset(kShadowOffset, kShadowOffset),
                 blurRadius: 0,
               ),
@@ -574,7 +574,7 @@ class _ReminderSection extends ConsumerWidget {
                   decoration: const BoxDecoration(
                     color: kBlue,
                     border: Border(
-                      top: BorderSide(color: kBlack, width: kBorderWidth),
+                      top: BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
                     ),
                   ),
                   child: Row(
@@ -614,7 +614,7 @@ class _BrutalistToggle extends StatelessWidget {
       height: 22,
       decoration: BoxDecoration(
         color: value ? kBlue : const Color(0xFFE0E0E0),
-        border: Border.all(color: kBlack, width: kBorderWidth),
+        border: Border.all(color: kSoftBorderColor, width: kSoftBorderWidth),
       ),
       child: Stack(
         children: [
