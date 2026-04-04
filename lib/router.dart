@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'screens/home_screen.dart';
 import 'screens/campaigns_screen.dart';
 import 'screens/create_campaign_screen.dart';
+import 'screens/edit_campaign_screen.dart';
 import 'screens/profile_screen.dart';
 import 'theme.dart';
 
@@ -36,6 +37,13 @@ final router = GoRouter(
               const NoTransitionPage(child: ProfileScreen()),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/campaigns/:id/edit',
+      name: 'edit-campaign',
+      builder: (context, state) => EditCampaignScreen(
+        campaignId: state.pathParameters['id']!,
+      ),
     ),
   ],
 );

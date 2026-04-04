@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../models/campaign.dart';
 import '../theme.dart';
 
@@ -45,6 +46,17 @@ class CampaignCard extends StatelessWidget {
                     color: campaign.isActive ? kWhite : kBlack,
                     letterSpacing: 0.8,
                   ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () => context.push('/campaigns/${campaign.id}/edit'),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: brutalistBox(),
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.edit, size: 16, color: kBlack),
                 ),
               ),
             ],

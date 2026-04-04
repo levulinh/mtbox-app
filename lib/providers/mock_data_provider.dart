@@ -85,6 +85,30 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
     state = box.values.toList();
   }
 
+  void update(String campaignId, {required String name, required int totalDays}) {
+    final box = Hive.box<Campaign>(_kCampaignsBox);
+    final campaign = box.get(campaignId);
+    if (campaign == null) return;
+    final updated = Campaign(
+      id: campaign.id,
+      name: name,
+      goal: name,
+      totalDays: totalDays,
+      currentDay: campaign.currentDay,
+      isActive: campaign.isActive,
+      dayHistory: campaign.dayHistory,
+      lastCheckInDate: campaign.lastCheckInDate,
+    );
+    box.put(campaignId, updated);
+    state = box.values.toList();
+  }
+
+  void delete(String campaignId) {
+    final box = Hive.box<Campaign>(_kCampaignsBox);
+    box.delete(campaignId);
+    state = box.values.toList();
+  }
+
   static String _pad(int n) => n.toString().padLeft(2, '0');
 }
 
