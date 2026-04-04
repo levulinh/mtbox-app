@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 25 — implemented MTB-21 onboarding flow)
+2026-04-04 (run 26 — implemented MTB-22 push notifications)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -12,6 +12,8 @@ Track architecture decisions, libraries used, patterns established, and things t
 | flutter_riverpod | ^3.3.1 | State management | 2026-04-04 |
 | riverpod_annotation | ^4.0.2 | Riverpod codegen support | 2026-04-04 |
 | go_router | ^17.2.0 | Tab and page navigation | 2026-04-04 |
+| flutter_local_notifications | ^21.0.0 | Local push notifications | 2026-04-04 |
+| timezone | ^0.11.0 | Required by flutter_local_notifications for zonedSchedule | 2026-04-04 |
 | hive_flutter | ^1.1.0 | Local persistence for campaign data | 2026-04-04 |
 
 ## Architecture Decisions
@@ -93,6 +95,15 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Onboarding completion**: sets `Hive.box('settings').put('onboardingDone', true)` then calls `context.go('/')`. Skip link also sets the flag. Campaign created in flow uses `DateTime.now().millisecondsSinceEpoch.toString()` as id.
 - **`PageView` with no swipe**: use `physics: const NeverScrollableScrollPhysics()` so only programmatic navigation (buttons) advances screens. `PageController.animateToPage()` used for transitions.
 
+- **Push notifications (MTB-22)**: `NotificationService` static class in `lib/services/notification_service.dart`. Uses `flutter_local_notifications` v21 (all args are named) + `timezone` for daily repeat.
+- **flutter_local_notifications v21 API**: All methods use named params — `initialize(settings:, ...)`, `zonedSchedule(id:, scheduledDate:, notificationDetails:, androidScheduleMode:, title:, body:, payload:, matchDateTimeComponents:)`, `cancel(id:)`. Positional args removed in v21.
+- **`tz.initializeTimeZones()` call**: call this inside `NotificationService.initialize()` (synchronous). Use `tz.TZDateTime.now(tz.local)` for current local time, `tz.TZDateTime(tz.local, y, m, d, h, min)` for the target. Add 1 day if target is already past.
+- **Notification ID from campaign ID**: `campaignId.hashCode.abs() % 2147483647` — unique per campaign, stable across restarts, fits Android's int32 range.
+- **Reminder state on Campaign**: `reminderEnabled` (bool, default false) + `reminderTime` (String? `"HH:mm"`, e.g. `"09:00"`) added as optional Hive fields using the backward-compat sentinel pattern from MTB-11.
+- **Notification deep-link**: `NotificationService.onNotificationTap` is a static callback set in `_MTBoxAppState.initState` after creating the GoRouter; calls `_router.push('/campaigns/$campaignId')`. `MTBoxApp` is now `StatefulWidget` to hold the router instance.
+- **`_ReminderSection` widget** (ConsumerWidget, inline in `campaign_detail_screen.dart`): brutalist toggle row, opacity-0.35 time row when disabled, active `showTimePicker` time row when enabled, blue info bar at card bottom. Calls `NotificationService.scheduleDaily()` / `.cancel()` after Hive state update.
+- **`CampaignDetailScreen` → ConsumerStatefulWidget**: converted from ConsumerWidget to ConsumerStatefulWidget because _ReminderSection needs to be a child ConsumerWidget — both work fine as separate classes.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -110,3 +121,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/12 | MTB-18 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/13 | MTB-19 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/14 | MTB-21 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/15 | MTB-22 | In Review |
