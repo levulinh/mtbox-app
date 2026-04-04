@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 19 — implemented MTB-14 campaign completion flow)
+2026-04-04 (run 20 — implemented MTB-15 home screen with live data)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -66,6 +66,10 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Campaign completion flow**: `checkIn()` returns `bool` — `true` when `newCurrentDay >= totalDays`; sets `isActive: false` on completion. Calling widget checks return value and pushes `/campaigns/:id/complete` route. Completion screen is full-screen (no bottom nav), placed as top-level GoRoute outside ShellRoute.
 - **`switch` expression in BoxDecoration color**: use Dart's `switch` expression pattern (`color: switch (type) { EnumVal => color, _ => fallback }`) for concise multi-case color selection in widget builds.
 - **Test mock override**: when a notifier method signature changes (e.g., void → bool), update the mock subclass in `test/widget/` to match — the analyzer catches this as `invalid_override`.
+- **Home screen live data pattern** (MTB-15): home screen reads `campaignsProvider` directly — no separate stats/feed providers needed. Compute `active`, `doneToday`, `bestStreak` inline in `build()`. This ensures any Hive mutation (create/edit/delete/check-in from any screen) is immediately reflected.
+- **"Done Today" badge**: on the home screen, use a green fill (`Color(0xFF4AFF91)`) badge with black text when `campaign.checkedInToday`, replacing the blue "ACTIVE" badge. Consistent with mockup pattern.
+- **Home card action row**: `Row` with `Expanded(_CheckInBtn or _ConfirmedRow)` + fixed-width `GestureDetector` detail chevron (40×40 brutalistBox). Different from Campaigns tab which uses full-width check-in and a separate edit icon.
+- **`Colors.black.withAlpha(77)`** — use `withAlpha(int)` instead of deprecated `withOpacity(double)` for opacity in Flutter 3.x; `77 ≈ 0.3 * 255`.
 
 ## PRs Opened
 | Date | PR URL | Issue | Status |
@@ -78,3 +82,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/6 | MTB-12 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/7 | MTB-13 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/8 | MTB-14 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/9 | MTB-15 | In Review |
