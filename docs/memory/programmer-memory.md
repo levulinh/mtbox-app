@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 33 — implemented MTB-29 flexible goal types)
+2026-04-05 (run 34 — implemented MTB-30 focus session mode)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -144,6 +144,10 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Campaign card goal-type chip**: `_GoalTypeChip` widget — small grey `(icon + label)` chip in bottom-left of the name column. Uses Dart 3 switch expression with record destructuring `(IconData, String)`.
 - **`_CheckInButton` now takes `label` param**: pass `campaign.checkInLabel` from `CampaignCard` to make the button label dynamic.
 
+- **MTB-30 focus session mode**: `FocusSessionScreen` at `/campaigns/:id/focus` (top-level GoRoute, no bottom nav). Manages `_Phase` enum (`running` / `complete`) internally with a `Timer.periodic`. Captures campaign state snapshot (currentDay, totalDays, streak) *before* calling `checkIn()` so the completion screen can show accurate before→after comparison. Dark palette constants (`_kDark`, `_kDarkCard`, `_kDarkBorder`, `_kDarkSecondary`) are file-private — do not export. Uses `AnnotatedRegion<SystemUiOverlayStyle>` (import `package:flutter/services.dart`) for dark status/nav bar tinting.
+- **Focus session CTA on detail screen**: "START FOCUS SESSION" button uses `brutalistBox()`-style border/shadow on `kBackground` fill (not blue) to visually distinguish it from the blue "SHARE MY PROGRESS" button above it. Only shown when `campaign.isActive && !campaign.checkedInToday`.
+- **Duration picker dialog**: `showDialog` with custom `Dialog(backgroundColor: _kDarkCard)` + manual `Container` — matches dark theme. Options list (5/10/15/20/25/30/45/60 min). Selected option fills `kBlue`.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -169,3 +173,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/20 | MTB-27 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/21 | MTB-28 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/22 | MTB-29 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/23 | MTB-30 | In Review |
