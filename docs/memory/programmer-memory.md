@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 29 — implemented MTB-25 visual delight polish)
+2026-04-04 (run 30 — implemented MTB-26 custom campaign colors and icons)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -114,6 +114,17 @@ Track architecture decisions, libraries used, patterns established, and things t
 
 - **MTB-24 shadow/border two-tier spec**: `kSoftBorderColor=#5A5A5A`, `kSoftBorderWidth=1.5`, `kSoftShadowColor=Color(0x732C2C2C)` (rgba(44,44,44,0.45)). `brutalistBox()` uses soft values. All content surfaces (cards, buttons, badges, progress bars, form fields) use soft values. Structural chrome (bottom nav top border, nav item separators, app bar bottom borders, onboarding page header borders) kept at `kBlack`/`kBorderWidth` (2px). Structural headers identifiable by `offset: Offset(0, 2)` downward shadow pattern.
 
+- **MTB-26 campaign color/icon fields**: `colorHex` (String hex, no `#`, default `'4C6EAD'`) and `iconName` (String, default `'fitness_center'`) added to `Campaign`. Computed getters `campaignColor` (Color) and `iconData` (IconData) on the model — requires `import 'package:flutter/material.dart'` in campaign.dart.
+- **Backward-compat Hive optional string fields**: for string optional fields (not nullable), read with `reader.readString()` directly (no bool sentinel needed) — only guard with `if (reader.availableBytes > 0)` block. This differs from nullable fields which use a bool `hasField` sentinel.
+- **`kCampaignColorOptions`**: list of 8 hex strings (no `#`) in campaign.dart. `kCampaignIconOptions`: list of 8 `(name, IconData)` record tuples in campaign.dart.
+- **`AppearancePickers` shared widget** (`lib/widgets/appearance_pickers.dart`): two 4-column `GridView.builder` (shrinkWrap + NeverScrollableScrollPhysics) for color swatches and icons. Selected color swatch shows check icon; selected icon cell fills with current accent color. Used in both Create and Edit campaign screens.
+- **CampaignCard accent stripe**: outer `Container` now contains a `Row` — 4px `Container` in campaign color + `Expanded` card body. `Stack` wrapping the `Row` for streak badge overlay.
+- **Campaign card icon box**: 40×40 `Container` with `color: campaign.campaignColor` and white icon inside — replaces the plain name text header; name + "DAY X OF Y" move to a `Column` next to the icon.
+- **Progress bar fill color**: `_ProgressBar` now takes a `Color color` param — uses `color` for active campaigns (was always kBlue).
+- **Day tick done color**: `_DayTickStrip` takes `Color color` param — done ticks use campaign color (was kBlue). Border for done/missed ticks softened to `kSoftBorderColor`.
+- **Streak badge color**: stays fixed at `kBlue` regardless of campaign color — per design spec.
+- **`CampaignsNotifier.update()` extended**: now accepts optional `colorHex` and `iconName` params (nullable, default null = keep existing). Also preserves `reminderEnabled`/`reminderTime` fields (fix: these were lost before). All other mutations (checkIn, setReminder) explicitly carry forward colorHex/iconName.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -135,3 +146,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/16 | MTB-23 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/17 | MTB-24 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/18 | MTB-25 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/19 | MTB-26 | In Review |
