@@ -10,10 +10,10 @@ _Last updated: 2026-04-04_
 - Key packages: flutter_riverpod, hive_flutter, go_router, cupertino_icons
 
 ## Phase 1: MVP — Complete the core check-in loop
-- [ ] Daily check-in flow
-- [ ] Campaign detail screen
-- [ ] Edit & delete campaign
-- [ ] Campaign completion flow
+- [x] Daily check-in flow
+- [x] Campaign detail screen
+- [x] Edit & delete campaign
+- [x] Campaign completion flow
 - [ ] Home screen with live data
 
 ## Phase 2: Engagement — Make progress feel real
