@@ -104,7 +104,7 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          '${campaign.currentDay} of ${campaign.totalDays} days — $pct%',
+                          '${campaign.currentDay} of ${campaign.totalDays} ${campaign.unitLabel.toLowerCase()} — $pct%',
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -116,7 +116,7 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
                         _DetailProgressBar(percent: campaign.progressPercent),
                         const SizedBox(height: 4),
                         Text(
-                          '$remaining days remaining',
+                          '$remaining ${campaign.unitLabel.toLowerCase()} remaining',
                           textAlign: TextAlign.right,
                           style: const TextStyle(
                             fontSize: 11,

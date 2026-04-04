@@ -71,16 +71,22 @@ class CampaignCard extends StatelessWidget {
                                               letterSpacing: 0.3,
                                             ),
                                           ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            'DAY ${campaign.currentDay} OF ${campaign.totalDays}',
-                                            style: const TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w600,
-                                              color: kTextSecondary,
-                                              letterSpacing: 0.3,
-                                            ),
+                                          const SizedBox(height: 3),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '${campaign.currentDay} OF ${campaign.totalDays} ${campaign.unitLabel}',
+                                                style: const TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: kTextSecondary,
+                                                  letterSpacing: 0.3,
+                                                ),
+                                              ),
+                                            ],
                                           ),
+                                          const SizedBox(height: 4),
+                                          _GoalTypeChip(campaign: campaign),
                                         ],
                                       ),
                                     ),
@@ -139,7 +145,10 @@ class CampaignCard extends StatelessWidget {
                           const SizedBox(height: 12),
                           campaign.checkedInToday
                               ? _ConfirmedState()
-                              : _CheckInButton(onTap: onCheckIn),
+                              : _CheckInButton(
+                                  label: campaign.checkInLabel,
+                                  onTap: onCheckIn,
+                                ),
                         ],
                       ],
                     ),
@@ -301,9 +310,10 @@ class _DayTickStrip extends StatelessWidget {
 }
 
 class _CheckInButton extends StatelessWidget {
+  final String label;
   final VoidCallback? onTap;
 
-  const _CheckInButton({this.onTap});
+  const _CheckInButton({required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -324,14 +334,14 @@ class _CheckInButton extends StatelessWidget {
             ),
           ],
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add_task, color: kWhite, size: 18),
-            SizedBox(width: 8),
+            const Icon(Icons.add_task, color: kWhite, size: 18),
+            const SizedBox(width: 8),
             Text(
-              'CHECK IN TODAY',
-              style: TextStyle(
+              label,
+              style: const TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: kWhite,
@@ -340,6 +350,52 @@ class _CheckInButton extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Small chip below campaign name showing the goal type.
+class _GoalTypeChip extends StatelessWidget {
+  final Campaign campaign;
+
+  const _GoalTypeChip({required this.campaign});
+
+  @override
+  Widget build(BuildContext context) {
+    final (icon, label) = switch (campaign.goalType) {
+      GoalType.days => (Icons.calendar_today, 'DAYS'),
+      GoalType.hours => (Icons.schedule, 'HOURS'),
+      GoalType.sessions => (Icons.repeat, 'SESSIONS'),
+      GoalType.custom => (
+          Icons.tune,
+          campaign.metricName.isNotEmpty
+              ? campaign.metricName.toUpperCase()
+              : 'CUSTOM'
+        ),
+    };
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0EDE8),
+        border: Border.all(color: kSoftBorderColor, width: 1.0),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 9, color: kTextSecondary),
+          const SizedBox(width: 3),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w700,
+              color: kTextSecondary,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
       ),
     );
   }

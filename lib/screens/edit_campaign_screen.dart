@@ -6,6 +6,7 @@ import '../models/campaign.dart';
 import '../providers/mock_data_provider.dart';
 import '../theme.dart';
 import '../widgets/appearance_pickers.dart';
+import '../widgets/goal_type_selector.dart';
 
 const _kErrorRed = Color(0xFFCC2200);
 const _kDeleteRed = Color(0xFFE53935);
@@ -22,10 +23,12 @@ class EditCampaignScreen extends ConsumerStatefulWidget {
 class _EditCampaignScreenState extends ConsumerState<EditCampaignScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _goalController;
+  late final TextEditingController _metricController;
   bool _submitted = false;
   bool _initialized = false;
   String _selectedColor = kCampaignColorOptions[0];
   String _selectedIcon = kCampaignIconOptions[0].$1;
+  GoalType _selectedGoalType = GoalType.days;
 
   String? get _nameError {
     if (!_submitted) return null;
@@ -36,37 +39,53 @@ class _EditCampaignScreenState extends ConsumerState<EditCampaignScreen> {
   String? get _goalError {
     if (!_submitted) return null;
     final v = int.tryParse(_goalController.text.trim());
-    if (v == null || v <= 0) return 'Enter a valid number of days';
+    if (v == null || v <= 0) return 'Enter a valid goal amount';
     return null;
   }
 
-  bool get _hasErrors => _nameError != null || _goalError != null;
+  String? get _metricError {
+    if (!_submitted) return null;
+    if (_selectedGoalType == GoalType.custom &&
+        _metricController.text.trim().isEmpty) {
+      return 'Metric name is required';
+    }
+    return null;
+  }
+
+  bool get _hasErrors =>
+      _nameError != null || _goalError != null || _metricError != null;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     _goalController = TextEditingController();
+    _metricController = TextEditingController();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _goalController.dispose();
+    _metricController.dispose();
     super.dispose();
   }
 
   void _save() {
     setState(() => _submitted = true);
     final name = _nameController.text.trim();
-    final goalDays = int.tryParse(_goalController.text.trim());
-    if (name.isEmpty || goalDays == null || goalDays <= 0) return;
+    final goalAmount = int.tryParse(_goalController.text.trim());
+    final metric = _metricController.text.trim();
+    if (name.isEmpty || goalAmount == null || goalAmount <= 0) return;
+    if (_selectedGoalType == GoalType.custom && metric.isEmpty) return;
     ref.read(campaignsProvider.notifier).update(
           widget.campaignId,
           name: name,
-          totalDays: goalDays,
+          totalDays: goalAmount,
           colorHex: _selectedColor,
           iconName: _selectedIcon,
+          goalType: _selectedGoalType,
+          metricName: metric,
         );
     context.pop();
   }
@@ -102,6 +121,8 @@ class _EditCampaignScreenState extends ConsumerState<EditCampaignScreen> {
       _goalController.text = campaign.totalDays.toString();
       _selectedColor = campaign.colorHex;
       _selectedIcon = campaign.iconName;
+      _selectedGoalType = campaign.goalType;
+      _metricController.text = campaign.metricName;
       _initialized = true;
     }
 
@@ -155,10 +176,18 @@ class _EditCampaignScreenState extends ConsumerState<EditCampaignScreen> {
                 },
               ),
               const SizedBox(height: 18),
-              _GoalField(
-                controller: _goalController,
-                error: _goalError,
-                onChanged: (_) {
+              _GoalSection(
+                goalType: _selectedGoalType,
+                goalController: _goalController,
+                metricController: _metricController,
+                goalError: _goalError,
+                metricError: _metricError,
+                onGoalTypeChanged: (t) =>
+                    setState(() => _selectedGoalType = t),
+                onGoalChanged: (_) {
+                  if (_submitted) setState(() {});
+                },
+                onMetricChanged: (_) {
                   if (_submitted) setState(() {});
                 },
               ),
@@ -329,25 +358,54 @@ class _NameField extends StatelessWidget {
   }
 }
 
-class _GoalField extends StatelessWidget {
-  final TextEditingController controller;
-  final String? error;
-  final ValueChanged<String> onChanged;
+/// Goal section: type selector + amount field + optional custom metric field.
+class _GoalSection extends StatelessWidget {
+  final GoalType goalType;
+  final TextEditingController goalController;
+  final TextEditingController metricController;
+  final String? goalError;
+  final String? metricError;
+  final ValueChanged<GoalType> onGoalTypeChanged;
+  final ValueChanged<String> onGoalChanged;
+  final ValueChanged<String> onMetricChanged;
 
-  const _GoalField({
-    required this.controller,
-    required this.error,
-    required this.onChanged,
+  const _GoalSection({
+    required this.goalType,
+    required this.goalController,
+    required this.metricController,
+    required this.goalError,
+    required this.metricError,
+    required this.onGoalTypeChanged,
+    required this.onGoalChanged,
+    required this.onMetricChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    final hasError = error != null;
+    final unitLabel = _unitPillLabel(goalType, metricController.text.trim());
+    final hasGoalError = goalError != null;
+    final hasMetricError = metricError != null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'GOAL (DAYS)',
+          'GOAL TYPE',
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: kBlack,
+            letterSpacing: 0.8,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GoalTypeSelector(
+          selected: goalType,
+          onSelected: onGoalTypeChanged,
+        ),
+        const SizedBox(height: 14),
+        const Text(
+          'GOAL AMOUNT',
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w700,
@@ -365,20 +423,20 @@ class _GoalField extends StatelessWidget {
               decoration: BoxDecoration(
                 color: kWhite,
                 border: Border.all(
-                  color: hasError ? _kErrorRed : kSoftBorderColor,
+                  color: hasGoalError ? _kErrorRed : kSoftBorderColor,
                   width: kSoftBorderWidth,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: hasError ? _kErrorRed : kSoftShadowColor,
+                    color: hasGoalError ? _kErrorRed : kSoftShadowColor,
                     offset: const Offset(kShadowOffset, kShadowOffset),
                     blurRadius: 0,
                   ),
                 ],
               ),
               child: TextField(
-                controller: controller,
-                onChanged: onChanged,
+                controller: goalController,
+                onChanged: onGoalChanged,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 style: const TextStyle(
@@ -413,9 +471,9 @@ class _GoalField extends StatelessWidget {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 14),
               alignment: Alignment.center,
-              child: const Text(
-                'DAYS',
-                style: TextStyle(
+              child: Text(
+                unitLabel,
+                style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   color: kTextSecondary,
@@ -425,24 +483,101 @@ class _GoalField extends StatelessWidget {
             ),
           ],
         ),
-        if (hasError) ...[
+        if (hasGoalError) ...[
           const SizedBox(height: 5),
-          Row(
-            children: [
-              const Icon(Icons.error, color: _kErrorRed, size: 13),
-              const SizedBox(width: 4),
-              Text(
-                error!.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: _kErrorRed,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
-          ),
+          _ErrorRow(message: goalError!),
         ],
+        if (goalType == GoalType.custom) ...[
+          const SizedBox(height: 14),
+          const Text(
+            'METRIC NAME',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: kBlack,
+              letterSpacing: 0.8,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: kWhite,
+              border: Border.all(
+                color: hasMetricError ? _kErrorRed : kBlue,
+                width: kSoftBorderWidth,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: hasMetricError ? _kErrorRed : kSoftShadowColor,
+                  offset: const Offset(kShadowOffset, kShadowOffset),
+                  blurRadius: 0,
+                ),
+              ],
+            ),
+            child: TextField(
+              controller: metricController,
+              onChanged: onMetricChanged,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: kBlack,
+              ),
+              decoration: const InputDecoration(
+                hintText: 'e.g. Pages read, Miles run…',
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFFAAAAAA),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          if (hasMetricError) ...[
+            const SizedBox(height: 5),
+            _ErrorRow(message: metricError!),
+          ],
+        ],
+      ],
+    );
+  }
+}
+
+String _unitPillLabel(GoalType type, String metric) {
+  switch (type) {
+    case GoalType.days:
+      return 'DAYS';
+    case GoalType.hours:
+      return 'HRS';
+    case GoalType.sessions:
+      return 'SESSIONS';
+    case GoalType.custom:
+      return metric.isNotEmpty ? metric.toUpperCase() : 'UNITS';
+  }
+}
+
+class _ErrorRow extends StatelessWidget {
+  final String message;
+  const _ErrorRow({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Icon(Icons.error, color: _kErrorRed, size: 13),
+        const SizedBox(width: 4),
+        Text(
+          message.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: _kErrorRed,
+            letterSpacing: 0.5,
+          ),
+        ),
       ],
     );
   }

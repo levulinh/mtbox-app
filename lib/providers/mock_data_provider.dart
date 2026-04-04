@@ -85,6 +85,8 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
       lastCheckInDate: dateStr,
       colorHex: campaign.colorHex,
       iconName: campaign.iconName,
+      goalType: campaign.goalType,
+      metricName: campaign.metricName,
     );
     box.put(campaignId, updated);
     state = box.values.toList();
@@ -97,6 +99,8 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
     required int totalDays,
     String? colorHex,
     String? iconName,
+    GoalType? goalType,
+    String? metricName,
   }) {
     final box = Hive.box<Campaign>(_kCampaignsBox);
     final campaign = box.get(campaignId);
@@ -114,6 +118,8 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
       reminderTime: campaign.reminderTime,
       colorHex: colorHex ?? campaign.colorHex,
       iconName: iconName ?? campaign.iconName,
+      goalType: goalType ?? campaign.goalType,
+      metricName: metricName ?? campaign.metricName,
     );
     box.put(campaignId, updated);
     state = box.values.toList();
@@ -142,6 +148,8 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
       reminderTime: time ?? campaign.reminderTime,
       colorHex: campaign.colorHex,
       iconName: campaign.iconName,
+      goalType: campaign.goalType,
+      metricName: campaign.metricName,
     );
     box.put(campaignId, updated);
     state = box.values.toList();
