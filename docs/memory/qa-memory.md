@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-04 (session 35: MTB-24, MTB-25 — 37 total unit+widget tests passed, both PRs merged)
+2026-04-04 (session 36: idle poll — 0 issues in In Review, all work merged, 2 in Backlog, 20 Done)
 
 ## Known Flaky Tests
 (none yet)
