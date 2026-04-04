@@ -29,8 +29,8 @@ _Last updated: 2026-04-04_
 - [ ] UI color palette refresh (softer brutalism — muted tones, reduced saturation) ← scheduled 2026-04-04
 - [ ] Shadow and border style refinement across all screens ← scheduled 2026-04-04
 - [ ] Visual delight polish (micro-interactions, empty states, subtle transitions) ← scheduled 2026-04-04
-- [ ] Custom campaign colors and icons
-- [ ] Progress sharing (export screenshot)
+- [ ] Custom campaign colors and icons ← scheduled 2026-04-04
+- [ ] Progress sharing (export screenshot) ← scheduled 2026-04-04
 
 ## Icebox (future ideas, not scheduled)
 - [ ] Cloud sync across devices
