@@ -25,21 +25,23 @@ class _MutableCampaignsNotifier extends CampaignsNotifier {
   List<Campaign> build() => List<Campaign>.from(_initial);
 
   @override
-  void checkIn(String campaignId) {
+  bool checkIn(String campaignId) {
     final idx = state.indexWhere((c) => c.id == campaignId);
-    if (idx < 0) return;
+    if (idx < 0) return false;
     final c = state[idx];
-    if (!c.isActive || c.checkedInToday) return;
+    if (!c.isActive || c.checkedInToday) return false;
     final now = DateTime.now();
     final dateStr =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    final newCurrentDay = c.currentDay + 1;
+    final isCompleted = newCurrentDay >= c.totalDays;
     final updated = Campaign(
       id: c.id,
       name: c.name,
       goal: c.goal,
       totalDays: c.totalDays,
-      currentDay: c.currentDay + 1,
-      isActive: c.isActive,
+      currentDay: newCurrentDay,
+      isActive: !isCompleted,
       dayHistory: [...c.dayHistory, true],
       lastCheckInDate: dateStr,
     );
@@ -48,6 +50,7 @@ class _MutableCampaignsNotifier extends CampaignsNotifier {
       updated,
       ...state.sublist(idx + 1),
     ];
+    return isCompleted;
   }
 }
 

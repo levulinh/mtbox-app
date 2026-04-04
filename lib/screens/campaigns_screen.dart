@@ -16,7 +16,12 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
   String? _toastMessage;
 
   void _handleCheckIn(String campaignId) {
-    ref.read(campaignsProvider.notifier).checkIn(campaignId);
+    final completed =
+        ref.read(campaignsProvider.notifier).checkIn(campaignId);
+    if (completed) {
+      context.push('/campaigns/$campaignId/complete');
+      return;
+    }
     final updated = ref
         .read(campaignsProvider)
         .firstWhere((c) => c.id == campaignId);

@@ -62,27 +62,31 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
     state = box.values.toList();
   }
 
-  void checkIn(String campaignId) {
+  /// Returns true if this check-in completed the campaign goal.
+  bool checkIn(String campaignId) {
     final box = Hive.box<Campaign>(_kCampaignsBox);
     final campaign = box.get(campaignId);
     if (campaign == null || !campaign.isActive || campaign.checkedInToday) {
-      return;
+      return false;
     }
     final now = DateTime.now();
     final dateStr =
         '${now.year}-${_pad(now.month)}-${_pad(now.day)}';
+    final newCurrentDay = campaign.currentDay + 1;
+    final isCompleted = newCurrentDay >= campaign.totalDays;
     final updated = Campaign(
       id: campaign.id,
       name: campaign.name,
       goal: campaign.goal,
       totalDays: campaign.totalDays,
-      currentDay: campaign.currentDay + 1,
-      isActive: campaign.isActive,
+      currentDay: newCurrentDay,
+      isActive: !isCompleted,
       dayHistory: [...campaign.dayHistory, true],
       lastCheckInDate: dateStr,
     );
     box.put(campaignId, updated);
     state = box.values.toList();
+    return isCompleted;
   }
 
   void update(String campaignId, {required String name, required int totalDays}) {
