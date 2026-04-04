@@ -10,7 +10,9 @@ import 'screens/edit_campaign_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/focus_session_screen.dart';
+import 'screens/register_screen.dart';
 import 'screens/share_progress_screen.dart';
+import 'screens/sign_in_screen.dart';
 import 'screens/stats_screen.dart';
 import 'theme.dart';
 
@@ -95,6 +97,16 @@ GoRouter createRouter(String initialLocation) => GoRouter(
       path: '/onboarding',
       name: 'onboarding',
       builder: (context, state) => const OnboardingScreen(),
+    ),
+    GoRoute(
+      path: '/sign-in',
+      name: 'sign-in',
+      builder: (context, state) => const SignInScreen(),
+    ),
+    GoRoute(
+      path: '/register',
+      name: 'register',
+      builder: (context, state) => const RegisterScreen(),
     ),
   ],
 );
