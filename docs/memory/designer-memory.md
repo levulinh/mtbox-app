@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-04 (run 50)
 2026-04-04 (run 49)
 2026-04-04 (run 48)
 2026-04-04 (run 47)
@@ -65,6 +66,7 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 - 2026-04-04 run 45: Streak indicator (MTB-16) — top-right badge on campaign cards; two states: active streak = blue fill + white text + local_fire_department icon; broken streak (missed a day) = white fill + black border + grey icon; badge shows "N DAY STREAK"; resets to 1 after a miss (not 0)
 - 2026-04-04 run 47: Stats dashboard (MTB-18) — pushed screen (back arrow, no bottom nav); 3 stat cards stacked vertically (Total Campaigns=bar_chart, Longest Streak=local_fire_department, Completion Rate=percent); each card: blue icon block (48x48) + large blue value + uppercase label + grey description; Completion Rate card includes inline progress bar; "Campaign Breakdown" section: Completed/Active/Abandoned rows with proportional bars + counts; entry point is Profile tab → Stats row
 - 2026-04-04 run 48: Campaign archive (MTB-19) — pushed screen (back arrow, no bottom nav); summary banner at top (trophy icon + completed count in blue); archive cards: name + COMPLETED black badge, day-tick strip (black=done, white=missed), 3-cell meta row (Goal Days / Completed / Best Streak with blue icons), date range + "View Details →" chevron linking to campaign detail (MTB-12)
+- 2026-04-04 run 50: Onboarding flow (MTB-21) — 3-screen composite (fullPage screenshot); dashed annotation dividers between screens; Screen 1: blue hero block (icon + app name + tagline), bold headline, GET STARTED CTA + SKIP text link; Screen 2: two icon-feature rows (blue icon box 56×56 + title + desc), example campaign card, page progress dots; Screen 3: pre-filled form with active/focused field (blue border), goal days + DAYS unit pill, Create & Start CTA, black toast note; progress dots = brutalist squares (not circles) tracking flow position
 
 ## Feedback Received
 - 2026-04-04: CEO on MTB-6 v1: "I want the design to be less bold, but still brutalism. Remove the emojis and use font icons. The campaign list should have a better way to show the progress (with UI elements). Also, give me the designs of the two other tabs too."
@@ -130,3 +132,5 @@ Rules established 2026-04-04, revised 2026-04-04 run 2 per CEO feedback — must
 | 2026-04-04 run 47 | MTB-18 | Stats dashboard — 3 stat cards (Total Campaigns, Longest Streak, Completion Rate), breakdown section, pushed screen from Profile | Awaiting Design Approval |
 | 2026-04-04 run 48 | MTB-19 | Campaign archive — pushed screen; summary banner (trophy + total count); archive cards with COMPLETED badge, progress bar, day-tick strip, 3-cell meta row (Goal/Completed/Best Streak), date range + View Details link | Awaiting Design Approval |
 | 2026-04-04 run 49 | (none) | No active "In Design" issues found — only archived MTB-5 visible, already handled | Idle run |
+| 2026-04-04 run 50 | MTB-21 | Onboarding flow — 3-screen composite (Welcome, How It Works, Create First Campaign) | Awaiting Design Approval |
+| 2026-04-04 run 50 | MTB-5 | Archived issue — updated mockup to current design system but no comment posted (issue is archived in Linear, cannot comment) | Skipped |
