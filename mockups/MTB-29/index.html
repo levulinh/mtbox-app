@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 375px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      background: #F7F3EF;
+    }
+
+    /* ── STRUCTURAL CHROME ── */
+    .status-bar {
+      height: 44px;
+      background: #4C6EAD;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      justify-content: space-between;
+    }
+    .status-bar .icons { display: flex; align-items: center; gap: 3px; }
+    .status-bar .material-icons { font-size: 14px; }
+
+    .app-bar {
+      height: 56px;
+      background: #4C6EAD;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      border-bottom: 2px solid #2C2C2C;
+      box-shadow: 0 2px 0 #2C2C2C;
+      gap: 12px;
+    }
+    .app-bar .material-icons { font-size: 22px; color: white; cursor: pointer; }
+    .app-bar-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .annotation-wrap {
+      padding: 0 16px;
+      position: relative;
+    }
+    .annotation-divider {
+      border-top: 2px dashed #5A5A5A;
+      margin: 20px 0 0 0;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .annotation-label {
+      position: relative;
+      top: -11px;
+      background: #F7F3EF;
+      padding: 2px 10px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #5A5A5A;
+      border: 1.5px solid #5A5A5A;
+    }
+
+    /* ── FORM ── */
+    .content { padding: 16px 16px 24px; }
+
+    .field-group { margin-bottom: 14px; }
+    .field-label {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #6B6B6B;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .field-label .material-icons { font-size: 13px; color: #4C6EAD; }
+
+    .text-input {
+      width: 100%;
+      height: 44px;
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1A1A1A;
+      font-family: inherit;
+      outline: none;
+    }
+    .text-input::placeholder { color: #BBBBBB; font-weight: 500; }
+
+    /* ── GOAL TYPE SEGMENTED CONTROL ── */
+    .seg-control {
+      display: flex;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+    }
+    .seg-cell {
+      flex: 1;
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6B6B6B;
+      background: #FFFDF9;
+      border-right: 1.5px solid #5A5A5A;
+    }
+    .seg-cell:last-child { border-right: none; }
+    .seg-cell .material-icons { font-size: 14px; }
+    .seg-cell.active {
+      background: #4C6EAD;
+      color: white;
+    }
+
+    /* ── AMOUNT ROW ── */
+    .amount-row { display: flex; gap: 8px; align-items: flex-start; }
+    .amount-input {
+      width: 80px;
+      height: 44px;
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 0 12px;
+      font-size: 22px;
+      font-weight: 900;
+      color: #1A1A1A;
+      font-family: inherit;
+      text-align: center;
+    }
+    .unit-block { flex: 1; }
+    .unit-pill {
+      height: 44px;
+      width: 100%;
+      background: #E8E2DA;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6B6B6B;
+      gap: 6px;
+    }
+    .unit-pill .material-icons { font-size: 15px; color: #4C6EAD; }
+    .unit-pill.editable {
+      background: #FFFDF9;
+      color: #1A1A1A;
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: none;
+      letter-spacing: 0;
+      border-color: #4C6EAD;
+      box-shadow: 2px 2px 0 rgba(76,110,173,0.45);
+    }
+    .unit-hint {
+      font-size: 10px;
+      font-weight: 700;
+      color: #6B6B6B;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 5px;
+      padding-left: 2px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-row { display: flex; gap: 8px; margin-top: 20px; }
+    .btn {
+      flex: 1;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .btn .material-icons { font-size: 16px; }
+    .btn-cancel { background: #FFFDF9; color: #1A1A1A; }
+    .btn-create { background: #4C6EAD; color: white; border-color: #2C2C2C; box-shadow: 2px 2px 0 rgba(44,44,44,0.45); }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6B6B6B;
+      padding: 12px 16px 8px;
+      border-left: 3px solid #4C6EAD;
+      margin: 0 16px 12px;
+    }
+
+    /* ── CAMPAIGN CARDS ── */
+    .campaign-card {
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      margin: 0 16px 12px;
+      overflow: hidden;
+    }
+    .card-accent { height: 4px; }
+    .card-body { padding: 12px 14px; }
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .card-icon-box {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      flex-shrink: 0;
+    }
+    .card-icon-box .material-icons { font-size: 18px; color: white; }
+    .card-title-area { flex: 1; min-width: 0; }
+    .card-name {
+      font-size: 14px;
+      font-weight: 900;
+      color: #1A1A1A;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .goal-type-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #E8E2DA;
+      border: 1.5px solid #5A5A5A;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6B6B6B;
+      margin-top: 3px;
+    }
+    .goal-type-chip .material-icons { font-size: 10px; }
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: #4C6EAD;
+      color: white;
+      padding: 3px 7px;
+      border: 1.5px solid #2C2C2C;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .streak-badge .material-icons { font-size: 11px; }
+
+    .progress-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+    .progress-unit-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1A1A1A;
+    }
+    .progress-unit-label .highlight { color: #4C6EAD; font-weight: 900; }
+    .progress-pct {
+      font-size: 12px;
+      font-weight: 900;
+      color: #4C6EAD;
+    }
+    .progress-bar-track {
+      height: 10px;
+      background: #E8E2DA;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      margin-bottom: 6px;
+    }
+    .progress-bar-fill { height: 100%; }
+
+    .tick-row {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 10px;
+    }
+    .tick {
+      flex: 1;
+      height: 7px;
+      border: 1.5px solid #5A5A5A;
+    }
+    .tick.done { background: #4C6EAD; }
+    .tick.missed { background: #FFFDF9; }
+    .tick.future { background: #E8E2DA; }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .card-btn {
+      flex: 1;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      cursor: pointer;
+    }
+    .card-btn .material-icons { font-size: 13px; }
+    .card-btn-checkin { background: #4C6EAD; color: white; }
+    .card-btn-detail { background: #FFFDF9; color: #1A1A1A; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     PANEL 1 — STATE: SESSIONS SELECTED
+════════════════════════════════════════════════ -->
+
+<div class="status-bar">
+  <span>9:41</span>
+  <div class="icons">
+    <span class="material-icons">signal_cellular_alt</span>
+    <span class="material-icons">wifi</span>
+    <span class="material-icons">battery_full</span>
+  </div>
+</div>
+
+<div class="app-bar">
+  <span class="material-icons">arrow_back</span>
+  <span class="app-bar-title">Create Campaign</span>
+</div>
+
+<div class="content">
+
+  <!-- Campaign Name -->
+  <div class="field-group">
+    <div class="field-label">
+      <span class="material-icons">edit</span>
+      Campaign Name
+    </div>
+    <input class="text-input" type="text" value="Morning Run" readonly>
+  </div>
+
+  <!-- Goal Type Selector -->
+  <div class="field-group">
+    <div class="field-label">
+      <span class="material-icons">track_changes</span>
+      Goal Type
+    </div>
+    <div class="seg-control">
+      <div class="seg-cell">
+        <span class="material-icons">calendar_today</span>
+        Days
+      </div>
+      <div class="seg-cell">
+        <span class="material-icons">schedule</span>
+        Hours
+      </div>
+      <div class="seg-cell active">
+        <span class="material-icons">repeat</span>
+        Sessions
+      </div>
+      <div class="seg-cell">
+        <span class="material-icons">tune</span>
+        Custom
+      </div>
+    </div>
+  </div>
+
+  <!-- Goal Amount -->
+  <div class="field-group">
+    <div class="field-label">
+      <span class="material-icons">flag</span>
+      Goal Amount
+    </div>
+    <div class="amount-row">
+      <input class="amount-input" type="number" value="30" readonly>
+      <div class="unit-block">
+        <div class="unit-pill">
+          <span class="material-icons">repeat</span>
+          Sessions
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-cancel">
+      <span class="material-icons">close</span>
+      Cancel
+    </button>
+    <button class="btn btn-create">
+      <span class="material-icons">add_task</span>
+      Create
+    </button>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════
+     ANNOTATION DIVIDER
+════════════════════════════════════════════════ -->
+<div class="annotation-wrap">
+  <div class="annotation-divider">
+    <span class="annotation-label">State 2 — Custom Metric Selected</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     PANEL 2 — STATE: CUSTOM METRIC SELECTED
+════════════════════════════════════════════════ -->
+
+<div class="content" style="padding-top: 20px;">
+
+  <!-- Campaign Name -->
+  <div class="field-group">
+    <div class="field-label">
+      <span class="material-icons">edit</span>
+      Campaign Name
+    </div>
+    <input class="text-input" type="text" value="Read More Books" readonly>
+  </div>
+
+  <!-- Goal Type Selector — Custom active -->
+  <div class="field-group">
+    <div class="field-label">
+      <span class="material-icons">track_changes</span>
+      Goal Type
+    </div>
+    <div class="seg-control">
+      <div class="seg-cell">
+        <span class="material-icons">calendar_today</span>
+        Days
+      </div>
+      <div class="seg-cell">
+        <span class="material-icons">schedule</span>
+        Hours
+      </div>
+      <div class="seg-cell">
+        <span class="material-icons">repeat</span>
+        Sessions
+      </div>
+      <div class="seg-cell active">
+        <span class="material-icons">tune</span>
+        Custom
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Metric Name Field (only visible when Custom is selected) -->
+  <div class="field-group">
+    <div class="field-label">
+      <span class="material-icons">label</span>
+      Metric Name
+    </div>
+    <input class="text-input" type="text" value="Pages read" readonly
+      style="border-color:#4C6EAD; box-shadow: 2px 2px 0 rgba(76,110,173,0.45);">
+  </div>
+
+  <!-- Goal Amount with editable unit label -->
+  <div class="field-group">
+    <div class="field-label">
+      <span class="material-icons">flag</span>
+      Goal Amount
+    </div>
+    <div class="amount-row">
+      <input class="amount-input" type="number" value="100" readonly>
+      <div class="unit-block">
+        <div class="unit-pill editable">
+          <span class="material-icons" style="color:#4C6EAD;font-size:15px;">label</span>
+          Pages read
+        </div>
+        <div class="unit-hint">Reflects your metric name</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-cancel">
+      <span class="material-icons">close</span>
+      Cancel
+    </button>
+    <button class="btn btn-create">
+      <span class="material-icons">add_task</span>
+      Create
+    </button>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════
+     ANNOTATION DIVIDER
+════════════════════════════════════════════════ -->
+<div class="annotation-wrap">
+  <div class="annotation-divider">
+    <span class="annotation-label">State 3 — Campaign Cards With Goal Units</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     PANEL 3 — CAMPAIGN LIST WITH DIFFERENT GOAL TYPES
+════════════════════════════════════════════════ -->
+
+<div style="padding: 20px 0 8px;">
+  <div class="section-header">ACTIVE CAMPAIGNS — 3</div>
+</div>
+
+<!-- Card 1: Sessions type -->
+<div class="campaign-card">
+  <div class="card-accent" style="background:#4C6EAD;"></div>
+  <div class="card-body">
+    <div class="card-top-row">
+      <div class="card-icon-box" style="background:#4C6EAD;">
+        <span class="material-icons">directions_run</span>
+      </div>
+      <div class="card-title-area">
+        <div class="card-name">Morning Run</div>
+        <div class="goal-type-chip">
+          <span class="material-icons">repeat</span>
+          Sessions Goal
+        </div>
+      </div>
+      <div class="streak-badge">
+        <span class="material-icons">whatshot</span>
+        12 Day Streak
+      </div>
+    </div>
+
+    <div class="progress-label-row">
+      <span class="progress-unit-label">
+        <span class="highlight">12</span> sessions of 30
+      </span>
+      <span class="progress-pct">40%</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" style="width:40%;background:#4C6EAD;"></div>
+    </div>
+    <div class="tick-row">
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick missed"></div><div class="tick future"></div><div class="tick future"></div>
+      <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+      <div class="tick future"></div><div class="tick future"></div>
+    </div>
+    <div class="card-actions">
+      <div class="card-btn card-btn-checkin">
+        <span class="material-icons">add_task</span>
+        Log Session
+      </div>
+      <div class="card-btn card-btn-detail">
+        <span class="material-icons">chevron_right</span>
+        Details
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Card 2: Custom metric (Pages) -->
+<div class="campaign-card">
+  <div class="card-accent" style="background:#B5735A;"></div>
+  <div class="card-body">
+    <div class="card-top-row">
+      <div class="card-icon-box" style="background:#B5735A;">
+        <span class="material-icons">menu_book</span>
+      </div>
+      <div class="card-title-area">
+        <div class="card-name">Read More Books</div>
+        <div class="goal-type-chip">
+          <span class="material-icons">tune</span>
+          Custom: Pages read
+        </div>
+      </div>
+      <div class="streak-badge" style="background:#B5735A;">
+        <span class="material-icons">whatshot</span>
+        5 Day Streak
+      </div>
+    </div>
+
+    <div class="progress-label-row">
+      <span class="progress-unit-label">
+        <span class="highlight" style="color:#B5735A;">45</span> pages of 100
+      </span>
+      <span class="progress-pct" style="color:#B5735A;">45%</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" style="width:45%;background:#B5735A;"></div>
+    </div>
+    <div class="tick-row">
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick missed"></div>
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick done" style="background:#B5735A;"></div>
+      <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+      <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+      <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+      <div class="tick future"></div>
+    </div>
+    <div class="card-actions">
+      <div class="card-btn card-btn-checkin" style="background:#B5735A;">
+        <span class="material-icons">add_task</span>
+        Log Pages
+      </div>
+      <div class="card-btn card-btn-detail">
+        <span class="material-icons">chevron_right</span>
+        Details
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Card 3: Hours type -->
+<div class="campaign-card">
+  <div class="card-accent" style="background:#4C6EAD;"></div>
+  <div class="card-body">
+    <div class="card-top-row">
+      <div class="card-icon-box" style="background:#4C6EAD;">
+        <span class="material-icons">laptop_mac</span>
+      </div>
+      <div class="card-title-area">
+        <div class="card-name">Deep Work</div>
+        <div class="goal-type-chip">
+          <span class="material-icons">schedule</span>
+          Hours Goal
+        </div>
+      </div>
+      <div class="streak-badge">
+        <span class="material-icons">whatshot</span>
+        8 Day Streak
+      </div>
+    </div>
+
+    <div class="progress-label-row">
+      <span class="progress-unit-label">
+        <span class="highlight">8h</span> of 20h
+      </span>
+      <span class="progress-pct">40%</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" style="width:40%;background:#4C6EAD;"></div>
+    </div>
+    <div class="tick-row">
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div>
+      <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+      <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+      <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+      <div class="tick future"></div><div class="tick future"></div><div class="tick future"></div>
+    </div>
+    <div class="card-actions">
+      <div class="card-btn card-btn-checkin">
+        <span class="material-icons">add_task</span>
+        Log Hours
+      </div>
+      <div class="card-btn card-btn-detail">
+        <span class="material-icons">chevron_right</span>
+        Details
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="height: 24px;"></div>
+
+</body>
+</html>
