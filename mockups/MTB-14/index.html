@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 375px; height: 812px; font-family: -apple-system, 'SF Pro Display', sans-serif; background: #1E50FF; overflow: hidden; }
+
+    .status-bar { height: 44px; background: #1E50FF; display: flex; align-items: center; padding: 0 20px; color: white; font-size: 12px; justify-content: space-between; font-weight: 600; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-bar .material-icons { font-size: 14px; }
+
+    /* Full-screen celebration — no app bar */
+    .celebration {
+      width: 375px;
+      height: calc(812px - 44px);
+      background: #1E50FF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 24px 40px;
+    }
+
+    /* Geometric brutalist confetti — squares */
+    .confetti-row { display: flex; gap: 6px; margin-bottom: 6px; justify-content: center; }
+    .confetti-sq {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+    .confetti-sq.filled { background: rgba(255,255,255,0.25); }
+    .confetti-sq.solid { background: #fff; border-color: #fff; }
+
+    /* Trophy icon block */
+    .trophy-block {
+      width: 100px; height: 100px;
+      background: #fff;
+      border: 3px solid #000;
+      box-shadow: 4px 4px 0 #000;
+      display: flex; align-items: center; justify-content: center;
+      margin: 16px 0 20px;
+    }
+    .trophy-block .material-icons { font-size: 56px; color: #1E50FF; }
+
+    .goal-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 6px;
+    }
+    .campaign-name {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .headline {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 28px;
+      border-bottom: 3px solid rgba(255,255,255,0.4);
+      padding-bottom: 20px;
+      width: 100%;
+    }
+
+    /* Stats */
+    .stats-row { display: flex; gap: 10px; width: 100%; margin-bottom: 36px; }
+    .stat-block {
+      flex: 1;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.5);
+      padding: 12px 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .stat-block .material-icons { font-size: 18px; color: rgba(255,255,255,0.8); }
+    .stat-block-value { font-size: 24px; font-weight: 700; color: #fff; }
+    .stat-block-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); text-align: center; }
+
+    /* Done button */
+    .done-btn {
+      width: 100%;
+      height: 52px;
+      background: #fff;
+      color: #1E50FF;
+      border: 2px solid #000;
+      box-shadow: 3px 3px 0 #000;
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .done-btn .material-icons { font-size: 20px; }
+
+    /* View history link */
+    .view-history {
+      margin-top: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <div class="celebration">
+
+    <!-- Brutalist geometric confetti -->
+    <div class="confetti-row">
+      <div class="confetti-sq"></div><div class="confetti-sq filled"></div><div class="confetti-sq solid"></div><div class="confetti-sq"></div><div class="confetti-sq filled"></div><div class="confetti-sq solid"></div><div class="confetti-sq"></div><div class="confetti-sq filled"></div>
+    </div>
+    <div class="confetti-row">
+      <div class="confetti-sq filled"></div><div class="confetti-sq solid"></div><div class="confetti-sq"></div><div class="confetti-sq filled"></div><div class="confetti-sq solid"></div><div class="confetti-sq"></div><div class="confetti-sq filled"></div>
+    </div>
+
+    <!-- Trophy -->
+    <div class="trophy-block">
+      <span class="material-icons">emoji_events</span>
+    </div>
+
+    <div class="goal-label">Campaign Complete</div>
+    <div class="campaign-name">Morning Run</div>
+    <div class="headline">Goal Achieved!</div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-block">
+        <span class="material-icons">flag</span>
+        <div class="stat-block-value">30</div>
+        <div class="stat-block-label">Days Goal</div>
+      </div>
+      <div class="stat-block">
+        <span class="material-icons">check_circle</span>
+        <div class="stat-block-value">30</div>
+        <div class="stat-block-label">Completed</div>
+      </div>
+      <div class="stat-block">
+        <span class="material-icons">local_fire_department</span>
+        <div class="stat-block-value">28</div>
+        <div class="stat-block-label">Best Streak</div>
+      </div>
+    </div>
+
+    <!-- Done button -->
+    <button class="done-btn">
+      <span class="material-icons">arrow_back</span>
+      Back to Campaigns
+    </button>
+
+    <!-- View history -->
+    <div class="view-history">View Full History</div>
+
+  </div>
+</body>
+</html>

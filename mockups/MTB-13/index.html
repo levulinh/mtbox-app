@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 375px; height: 812px; font-family: -apple-system, 'SF Pro Display', sans-serif; background: #FAFAFA; overflow: hidden; }
+
+    .status-bar { height: 44px; background: #1E50FF; display: flex; align-items: center; padding: 0 20px; color: white; font-size: 12px; justify-content: space-between; font-weight: 600; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-bar .material-icons { font-size: 14px; }
+
+    .app-bar { height: 56px; background: #1E50FF; display: flex; align-items: center; padding: 0 16px; color: white; border-bottom: 2px solid #000; box-shadow: 0 2px 0 #000; gap: 12px; }
+    .app-bar .material-icons { font-size: 22px; }
+    .app-bar-title { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; flex: 1; }
+
+    .content { padding: 16px; height: calc(812px - 44px - 56px); overflow: hidden; }
+
+    .section-header {
+      font-size: 11px; font-weight: 700; color: #555;
+      text-transform: uppercase; letter-spacing: 1px;
+      border-left: 3px solid #1E50FF; padding-left: 8px;
+      margin-bottom: 12px;
+    }
+
+    /* Form fields */
+    .field { margin-bottom: 16px; }
+    .field-label { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .field-input {
+      width: 100%;
+      height: 44px;
+      border: 2px solid #000;
+      background: #fff;
+      padding: 0 12px;
+      font-size: 15px;
+      font-family: inherit;
+      font-weight: 600;
+      color: #000;
+      outline: none;
+    }
+    .field-row { display: flex; gap: 0; }
+    .field-input-num { width: 100px; height: 44px; border: 2px solid #000; border-right: none; background: #fff; padding: 0 12px; font-size: 15px; font-family: inherit; font-weight: 600; color: #000; outline: none; }
+    .field-unit { height: 44px; background: #F0F0F0; border: 2px solid #000; padding: 0 14px; display: flex; align-items: center; font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Action buttons */
+    .btn-row { display: flex; gap: 10px; margin-bottom: 20px; }
+    .btn { flex: 1; height: 48px; border: 2px solid #000; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; box-shadow: 2px 2px 0 #000; }
+    .btn .material-icons { font-size: 18px; }
+    .btn-cancel { background: #fff; color: #000; }
+    .btn-save { background: #1E50FF; color: #fff; }
+
+    /* Annotation divider */
+    .annotation { display: flex; align-items: center; gap: 10px; margin: 16px 0 12px; }
+    .annotation-line { flex: 1; border-top: 2px dashed #999; }
+    .annotation-label { font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+
+    /* Delete button */
+    .btn-delete { width: 100%; height: 48px; border: 2px solid #E53935; background: #fff; color: #E53935; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; box-shadow: 2px 2px 0 #E53935; }
+    .btn-delete .material-icons { font-size: 18px; }
+
+    /* Delete confirmation dialog overlay */
+    .dialog-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 375px; height: 812px;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100;
+    }
+    .dialog-box {
+      width: 311px;
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 4px 4px 0 #000;
+      padding: 0;
+    }
+    .dialog-header {
+      background: #E53935;
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 2px solid #000;
+    }
+    .dialog-header .material-icons { font-size: 20px; color: #fff; }
+    .dialog-title { font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
+    .dialog-body { padding: 16px; }
+    .dialog-message { font-size: 13px; font-weight: 600; color: #000; line-height: 1.5; margin-bottom: 4px; }
+    .dialog-warning { font-size: 11px; font-weight: 700; color: #E53935; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 8px; }
+    .dialog-actions { display: flex; border-top: 2px solid #000; }
+    .dialog-btn { flex: 1; height: 48px; border: none; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; }
+    .dialog-btn-cancel { background: #fff; color: #000; border-right: 2px solid #000; }
+    .dialog-btn-delete { background: #E53935; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="app-bar">
+    <span class="material-icons">arrow_back</span>
+    <span class="app-bar-title">Edit Campaign</span>
+  </div>
+
+  <div class="content">
+
+    <!-- Edit form -->
+    <div class="section-header">Campaign Details</div>
+
+    <div class="field">
+      <div class="field-label">Campaign Name</div>
+      <input class="field-input" type="text" value="Morning Run" />
+    </div>
+
+    <div class="field">
+      <div class="field-label">Goal (Days)</div>
+      <div class="field-row">
+        <input class="field-input-num" type="number" value="30" />
+        <div class="field-unit">Days</div>
+      </div>
+    </div>
+
+    <!-- Save / Cancel -->
+    <div class="btn-row">
+      <button class="btn btn-cancel">
+        <span class="material-icons">close</span>
+        Cancel
+      </button>
+      <button class="btn btn-save">
+        <span class="material-icons">save</span>
+        Save
+      </button>
+    </div>
+
+    <!-- Annotation -->
+    <div class="annotation">
+      <div class="annotation-line"></div>
+      <div class="annotation-label">Delete Campaign</div>
+      <div class="annotation-line"></div>
+    </div>
+
+    <!-- Delete zone -->
+    <button class="btn-delete">
+      <span class="material-icons">delete_forever</span>
+      Delete This Campaign
+    </button>
+
+  </div>
+
+  <!-- Delete confirmation dialog -->
+  <div class="dialog-overlay">
+    <div class="dialog-box">
+      <div class="dialog-header">
+        <span class="material-icons">warning</span>
+        <span class="dialog-title">Delete Campaign?</span>
+      </div>
+      <div class="dialog-body">
+        <div class="dialog-message">
+          Are you sure you want to delete <strong>"Morning Run"</strong>?
+        </div>
+        <div class="dialog-warning">This cannot be undone. All history will be lost.</div>
+      </div>
+      <div class="dialog-actions">
+        <button class="dialog-btn dialog-btn-cancel">Keep It</button>
+        <button class="dialog-btn dialog-btn-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

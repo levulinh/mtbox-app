@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 375px; height: 812px; font-family: -apple-system, 'SF Pro Display', sans-serif; background: #FAFAFA; overflow: hidden; }
+
+    .status-bar { height: 44px; background: #1E50FF; display: flex; align-items: center; padding: 0 20px; color: white; font-size: 12px; justify-content: space-between; font-weight: 600; }
+    .status-bar .material-icons { font-size: 14px; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+
+    .app-bar { height: 56px; background: #1E50FF; display: flex; align-items: center; padding: 0 16px; color: white; border-bottom: 2px solid #000; box-shadow: 0 2px 0 #000; gap: 12px; }
+    .app-bar .material-icons { font-size: 22px; }
+    .app-bar-title { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .content { padding: 16px; height: calc(812px - 44px - 56px - 60px); overflow-y: auto; }
+
+    /* Annotation divider */
+    .annotation { display: flex; align-items: center; gap: 10px; margin: 16px 0 12px; }
+    .annotation-line { flex: 1; border-top: 2px dashed #999; }
+    .annotation-label { font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+
+    /* Campaign card - before check-in */
+    .campaign-card {
+      background: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      margin-bottom: 12px;
+      padding: 14px;
+    }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .card-title { font-size: 15px; font-weight: 700; color: #000; }
+    .badge { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; padding: 3px 7px; border: 2px solid #000; }
+    .badge-active { background: #1E50FF; color: #fff; }
+    .badge-done { background: #fff; color: #000; }
+
+    .day-label { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+
+    .progress-wrap { margin-bottom: 8px; }
+    .progress-bar-outer { height: 10px; background: #fff; border: 2px solid #000; width: 100%; }
+    .progress-bar-fill { height: 100%; background: #1E50FF; }
+
+    .day-ticks { display: flex; gap: 2px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tick { width: 10px; height: 10px; border: 1px solid #000; }
+    .tick-done { background: #1E50FF; }
+    .tick-today { background: #FFD700; border: 2px solid #000; }
+    .tick-future { background: #F0F0F0; }
+
+    /* Check-in button */
+    .checkin-btn {
+      width: 100%;
+      height: 44px;
+      background: #1E50FF;
+      color: #fff;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .checkin-btn .material-icons { font-size: 18px; }
+
+    /* Confirmed state */
+    .confirmed-state {
+      width: 100%;
+      height: 44px;
+      background: #fff;
+      color: #000;
+      border: 2px solid #000;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .confirmed-state .material-icons { font-size: 18px; color: #1E50FF; }
+
+    /* Streak callout */
+    .streak-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .streak-chip {
+      flex: 1;
+      border: 2px solid #000;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+    }
+    .streak-chip .material-icons { font-size: 16px; color: #1E50FF; }
+    .streak-value { font-size: 18px; font-weight: 700; color: #1E50FF; }
+    .streak-label { font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Bottom nav */
+    .bottom-nav { height: 60px; background: #fff; border-top: 2px solid #000; display: flex; position: absolute; bottom: 0; left: 0; width: 375px; }
+    .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-right: 2px solid #000; }
+    .nav-tab:last-child { border-right: none; }
+    .nav-tab.active { background: #1E50FF; }
+    .nav-tab .material-icons { font-size: 22px; color: #555; }
+    .nav-tab.active .material-icons { color: #fff; }
+    .nav-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #555; }
+    .nav-tab.active .nav-label { color: #fff; }
+
+    /* Section header */
+    .section-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-left: 3px solid #1E50FF;
+      padding-left: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Toast notification */
+    .toast {
+      background: #000;
+      color: #fff;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      border-left: 4px solid #1E50FF;
+    }
+    .toast .material-icons { font-size: 16px; color: #1E50FF; }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="app-bar">
+    <span class="app-bar-title">Home</span>
+  </div>
+
+  <div class="content">
+
+    <!-- STATE 1: Before check-in -->
+    <div class="section-header">Before Check-In</div>
+
+    <div class="campaign-card">
+      <div class="card-header">
+        <div class="card-title">Morning Run</div>
+        <div class="badge badge-active">Active</div>
+      </div>
+      <div class="day-label">Day 12 of 30 — 40%</div>
+      <div class="progress-wrap">
+        <div class="progress-bar-outer"><div class="progress-bar-fill" style="width:40%"></div></div>
+      </div>
+      <div class="day-ticks">
+        <!-- 11 done, 1 today (gold), 18 future -->
+        <div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div>
+        <div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div>
+        <div class="tick tick-done"></div>
+        <div class="tick tick-today"></div>
+        <div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div>
+        <div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div>
+        <div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div>
+        <div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div>
+      </div>
+      <div class="checkin-btn">
+        <span class="material-icons">add_task</span>
+        Check In Today
+      </div>
+    </div>
+
+    <!-- Annotation -->
+    <div class="annotation">
+      <div class="annotation-line"></div>
+      <div class="annotation-label">After tapping "Check In"</div>
+      <div class="annotation-line"></div>
+    </div>
+
+    <!-- STATE 2: After check-in — toast + updated card -->
+    <div class="toast">
+      <span class="material-icons">check_circle</span>
+      Day 12 checked in! Streak: 12 days
+    </div>
+
+    <div class="campaign-card">
+      <div class="card-header">
+        <div class="card-title">Morning Run</div>
+        <div class="badge badge-active">Active</div>
+      </div>
+      <div class="day-label">Day 12 of 30 — 40%</div>
+      <div class="progress-wrap">
+        <div class="progress-bar-outer"><div class="progress-bar-fill" style="width:40%"></div></div>
+      </div>
+      <div class="day-ticks">
+        <div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div>
+        <div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div><div class="tick tick-done"></div>
+        <div class="tick tick-done"></div><div class="tick tick-done"></div>
+        <div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div>
+        <div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div>
+        <div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div>
+        <div class="tick tick-future"></div><div class="tick tick-future"></div><div class="tick tick-future"></div>
+      </div>
+      <!-- Confirmed state — cannot check in again -->
+      <div class="confirmed-state">
+        <span class="material-icons">check_circle</span>
+        Checked In Today
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">flag</span>
+      <span class="nav-label">Campaigns</span>
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      <span class="nav-label">Profile</span>
+    </div>
+  </div>
+</body>
+</html>

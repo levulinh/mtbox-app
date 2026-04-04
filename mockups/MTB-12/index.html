@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 375px; height: 812px; font-family: -apple-system, 'SF Pro Display', sans-serif; background: #FAFAFA; overflow: hidden; }
+
+    .status-bar { height: 44px; background: #1E50FF; display: flex; align-items: center; padding: 0 20px; color: white; font-size: 12px; justify-content: space-between; font-weight: 600; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-bar .material-icons { font-size: 14px; }
+
+    .app-bar { height: 56px; background: #1E50FF; display: flex; align-items: center; padding: 0 16px; color: white; border-bottom: 2px solid #000; box-shadow: 0 2px 0 #000; gap: 12px; }
+    .app-bar .material-icons { font-size: 22px; }
+    .app-bar-title { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .content { padding: 16px; height: calc(812px - 44px - 56px); overflow-y: auto; }
+
+    /* Stats row */
+    .stats-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .stat-card {
+      flex: 1;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      background: #fff;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-card .material-icons { font-size: 18px; color: #1E50FF; }
+    .stat-value { font-size: 22px; font-weight: 700; color: #1E50FF; }
+    .stat-label { font-size: 9px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+
+    /* Progress section */
+    .section-header {
+      font-size: 11px; font-weight: 700; color: #555;
+      text-transform: uppercase; letter-spacing: 1px;
+      border-left: 3px solid #1E50FF; padding-left: 8px;
+      margin-bottom: 10px;
+    }
+
+    .progress-card { background: #fff; border: 2px solid #000; box-shadow: 2px 2px 0 #000; padding: 14px; margin-bottom: 16px; }
+    .progress-label { font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .progress-bar-outer { height: 10px; background: #fff; border: 2px solid #000; width: 100%; margin-bottom: 4px; }
+    .progress-bar-fill { height: 100%; background: #1E50FF; }
+    .progress-detail { font-size: 11px; font-weight: 700; color: #555; text-align: right; }
+
+    /* Calendar grid */
+    .calendar-card { background: #fff; border: 2px solid #000; box-shadow: 2px 2px 0 #000; padding: 14px; margin-bottom: 16px; }
+    .cal-month { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #000; margin-bottom: 8px; }
+    .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 4px; }
+    .cal-weekday { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #555; text-align: center; padding: 2px 0; }
+    .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .cal-day {
+      aspect-ratio: 1;
+      border: 1px solid #E0E0E0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #000;
+      position: relative;
+    }
+    .cal-day.done { background: #1E50FF; border-color: #1E50FF; color: #fff; }
+    .cal-day.missed { background: #fff; border-color: #ccc; color: #ccc; }
+    .cal-day.future { background: #F0F0F0; border-color: #E0E0E0; color: #999; }
+    .cal-day.today { border: 2px solid #000; font-weight: 900; }
+    .cal-day.empty { border: none; background: transparent; }
+
+    /* Day history list */
+    .history-list { display: flex; flex-direction: column; gap: 0; }
+    .history-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    .history-row:last-child { border-bottom: none; }
+    .history-icon .material-icons { font-size: 20px; }
+    .history-icon.done .material-icons { color: #1E50FF; }
+    .history-icon.missed .material-icons { color: #ccc; }
+    .history-date { font-size: 12px; font-weight: 700; color: #000; flex: 1; }
+    .history-day { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; }
+    .history-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .history-status.done { color: #1E50FF; }
+    .history-status.missed { color: #ccc; }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="app-bar">
+    <span class="material-icons">arrow_back</span>
+    <span class="app-bar-title">Morning Run</span>
+  </div>
+
+  <div class="content">
+
+    <!-- Stats row: Streak, Completed, Goal -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="material-icons">local_fire_department</span>
+        <div class="stat-value">12</div>
+        <div class="stat-label">Day Streak</div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons">check_circle</span>
+        <div class="stat-value">18</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons">flag</span>
+        <div class="stat-value">30</div>
+        <div class="stat-label">Goal Days</div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="section-header">Progress</div>
+    <div class="progress-card">
+      <div class="progress-label">18 of 30 days — 60%</div>
+      <div class="progress-bar-outer"><div class="progress-bar-fill" style="width:60%"></div></div>
+      <div class="progress-detail">12 days remaining</div>
+    </div>
+
+    <!-- Calendar grid -->
+    <div class="section-header">This Month</div>
+    <div class="calendar-card">
+      <div class="cal-month">April 2026</div>
+      <div class="cal-weekdays">
+        <div class="cal-weekday">M</div><div class="cal-weekday">T</div><div class="cal-weekday">W</div>
+        <div class="cal-weekday">T</div><div class="cal-weekday">F</div><div class="cal-weekday">S</div><div class="cal-weekday">S</div>
+      </div>
+      <div class="cal-days">
+        <!-- Week 1: Wed Apr 1 start -->
+        <div class="cal-day empty"></div><div class="cal-day empty"></div>
+        <div class="cal-day done">1</div><div class="cal-day done">2</div><div class="cal-day done">3</div><div class="cal-day done">4</div><div class="cal-day missed">5</div>
+        <!-- Week 2 -->
+        <div class="cal-day done">6</div><div class="cal-day done">7</div><div class="cal-day done">8</div><div class="cal-day done">9</div><div class="cal-day done">10</div><div class="cal-day done">11</div><div class="cal-day missed">12</div>
+        <!-- Week 3 -->
+        <div class="cal-day done">13</div><div class="cal-day done">14</div><div class="cal-day done">15</div><div class="cal-day done">16</div><div class="cal-day done">17</div><div class="cal-day today done">18</div><div class="cal-day future">19</div>
+        <!-- Week 4 -->
+        <div class="cal-day future">20</div><div class="cal-day future">21</div><div class="cal-day future">22</div><div class="cal-day future">23</div><div class="cal-day future">24</div><div class="cal-day future">25</div><div class="cal-day future">26</div>
+        <!-- Week 5 -->
+        <div class="cal-day future">27</div><div class="cal-day future">28</div><div class="cal-day future">29</div><div class="cal-day future">30</div>
+      </div>
+    </div>
+
+    <!-- Day history -->
+    <div class="section-header">Recent Activity</div>
+    <div class="history-list">
+      <div class="history-row">
+        <div class="history-icon done"><span class="material-icons">check_circle</span></div>
+        <div>
+          <div class="history-date">Today — Apr 18</div>
+          <div class="history-day">Day 18</div>
+        </div>
+        <div class="history-status done">Done</div>
+      </div>
+      <div class="history-row">
+        <div class="history-icon done"><span class="material-icons">check_circle</span></div>
+        <div>
+          <div class="history-date">Yesterday — Apr 17</div>
+          <div class="history-day">Day 17</div>
+        </div>
+        <div class="history-status done">Done</div>
+      </div>
+      <div class="history-row">
+        <div class="history-icon done"><span class="material-icons">check_circle</span></div>
+        <div>
+          <div class="history-date">Apr 16</div>
+          <div class="history-day">Day 16</div>
+        </div>
+        <div class="history-status done">Done</div>
+      </div>
+      <div class="history-row">
+        <div class="history-icon missed"><span class="material-icons">radio_button_unchecked</span></div>
+        <div>
+          <div class="history-date">Apr 12</div>
+          <div class="history-day">Day 12</div>
+        </div>
+        <div class="history-status missed">Missed</div>
+      </div>
+      <div class="history-row">
+        <div class="history-icon missed"><span class="material-icons">radio_button_unchecked</span></div>
+        <div>
+          <div class="history-date">Apr 5</div>
+          <div class="history-day">Day 5</div>
+        </div>
+        <div class="history-status missed">Missed</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
