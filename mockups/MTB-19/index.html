@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 375px; height: 812px; font-family: -apple-system, 'SF Pro Display', sans-serif; background: #FAFAFA; overflow: hidden; }
+
+    /* Status bar */
+    .status-bar {
+      height: 44px; background: #1E50FF;
+      display: flex; align-items: center; padding: 0 16px;
+      color: white; font-size: 12px; font-weight: 600;
+      justify-content: space-between;
+      border-bottom: 2px solid #000;
+    }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-icons .material-icons { font-size: 14px; }
+
+    /* App bar */
+    .app-bar {
+      height: 56px; background: #1E50FF;
+      display: flex; align-items: center; padding: 0 16px; gap: 12px;
+      color: white;
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #000;
+    }
+    .app-bar .material-icons { font-size: 22px; cursor: pointer; }
+    .app-bar-title { font-size: 18px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; flex: 1; }
+
+    /* Content scroll area */
+    .content {
+      height: calc(812px - 44px - 56px);
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    /* Summary bar */
+    .summary-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: #FFFFFF;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+    .summary-bar .material-icons { font-size: 28px; color: #1E50FF; }
+    .summary-text { flex: 1; }
+    .summary-count { font-size: 22px; font-weight: 700; color: #1E50FF; line-height: 1; }
+    .summary-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-top: 2px; }
+
+    /* Section header */
+    .section-header {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #555;
+      padding-left: 8px;
+      border-left: 3px solid #1E50FF;
+      margin-bottom: 10px;
+    }
+
+    /* Archive card */
+    .archive-card {
+      background: #FFFFFF;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0 #000;
+      margin-bottom: 12px;
+      padding: 14px;
+    }
+
+    .card-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .card-title { font-size: 15px; font-weight: 700; color: #000; flex: 1; padding-right: 8px; }
+    .completed-badge {
+      background: #000; color: #fff;
+      font-size: 9px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 1px; padding: 3px 7px;
+      white-space: nowrap;
+    }
+
+    /* Progress bar (full, 100%) */
+    .progress-wrap { margin-bottom: 8px; }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 10px; font-weight: 700; color: #555;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .progress-track {
+      height: 10px; background: #FAFAFA;
+      border: 2px solid #000;
+      position: relative;
+    }
+    .progress-fill {
+      position: absolute; top: 0; left: 0; height: 100%;
+      background: #000;
+    }
+
+    /* Day ticks */
+    .day-ticks {
+      display: flex; gap: 2px; margin-bottom: 10px;
+    }
+    .tick {
+      flex: 1; height: 8px;
+      border: 1px solid #000;
+      background: #000;
+    }
+    .tick.missed { background: #FFFFFF; }
+
+    /* Card meta row */
+    .card-meta {
+      display: flex; gap: 0; border-top: 1px solid #000;
+      padding-top: 10px; margin-top: 2px;
+    }
+    .meta-cell {
+      flex: 1; text-align: center;
+      border-right: 1px solid #000;
+    }
+    .meta-cell:last-child { border-right: none; }
+    .meta-value {
+      font-size: 13px; font-weight: 700; color: #000;
+      display: flex; align-items: center; justify-content: center; gap: 3px;
+    }
+    .meta-value .material-icons { font-size: 13px; color: #1E50FF; }
+    .meta-key {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: #555; margin-top: 2px;
+    }
+
+    /* View detail row */
+    .card-action {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 10px; border-top: 1px solid #000; padding-top: 10px;
+    }
+    .detail-date { font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+    .detail-btn {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 700; color: #1E50FF;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .detail-btn .material-icons { font-size: 14px; }
+
+    /* Annotation separator */
+    .annotation {
+      display: flex; align-items: center; gap: 8px;
+      margin: 16px 0 12px;
+    }
+    .annotation-line { flex: 1; border-top: 1px dashed #555; }
+    .annotation-label {
+      font-size: 10px; font-weight: 700; color: #555;
+      text-transform: uppercase; letter-spacing: 1px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+
+  <!-- App Bar (pushed screen — back arrow) -->
+  <div class="app-bar">
+    <span class="material-icons">arrow_back</span>
+    <span class="app-bar-title">Archive</span>
+    <span class="material-icons" style="color: rgba(255,255,255,0.6); font-size: 18px;">emoji_events</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Summary banner -->
+    <div class="summary-bar">
+      <span class="material-icons">emoji_events</span>
+      <div class="summary-text">
+        <div class="summary-count">3</div>
+        <div class="summary-label">Campaigns Completed</div>
+      </div>
+    </div>
+
+    <!-- Section header -->
+    <div class="section-header">Completed Campaigns</div>
+
+    <!-- Card 1: Morning Run — fully completed, no misses -->
+    <div class="archive-card">
+      <div class="card-header">
+        <div class="card-title">Morning Run Challenge</div>
+        <div class="completed-badge">Completed</div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Day 30 of 30</span>
+          <span>100%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <div class="day-ticks">
+        <!-- 30 ticks, all done (black) — show subset for visual density -->
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+      </div>
+
+      <div class="card-meta">
+        <div class="meta-cell">
+          <div class="meta-value">
+            <span class="material-icons">flag</span>30
+          </div>
+          <div class="meta-key">Goal Days</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-value">
+            <span class="material-icons">check_circle</span>30
+          </div>
+          <div class="meta-key">Completed</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-value">
+            <span class="material-icons">local_fire_department</span>30
+          </div>
+          <div class="meta-key">Best Streak</div>
+        </div>
+      </div>
+
+      <div class="card-action">
+        <div class="detail-date">Mar 1 – Mar 30, 2026</div>
+        <div class="detail-btn">
+          <span>View Details</span>
+          <span class="material-icons">chevron_right</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Annotation: second card -->
+    <div class="annotation">
+      <div class="annotation-line"></div>
+      <div class="annotation-label">Campaign with missed days</div>
+      <div class="annotation-line"></div>
+    </div>
+
+    <!-- Card 2: Reading Habit — some misses -->
+    <div class="archive-card">
+      <div class="card-header">
+        <div class="card-title">Daily Reading Habit</div>
+        <div class="completed-badge">Completed</div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Day 21 of 21</span>
+          <span>86%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 86%;"></div>
+        </div>
+      </div>
+
+      <div class="day-ticks">
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick missed"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick missed"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick missed"></div><div class="tick"></div><div class="tick"></div>
+        <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+      </div>
+
+      <div class="card-meta">
+        <div class="meta-cell">
+          <div class="meta-value">
+            <span class="material-icons">flag</span>21
+          </div>
+          <div class="meta-key">Goal Days</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-value">
+            <span class="material-icons">check_circle</span>18
+          </div>
+          <div class="meta-key">Completed</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-value">
+            <span class="material-icons">local_fire_department</span>9
+          </div>
+          <div class="meta-key">Best Streak</div>
+        </div>
+      </div>
+
+      <div class="card-action">
+        <div class="detail-date">Feb 1 – Feb 21, 2026</div>
+        <div class="detail-btn">
+          <span>View Details</span>
+          <span class="material-icons">chevron_right</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
