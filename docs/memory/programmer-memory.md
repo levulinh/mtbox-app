@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 16 — implemented MTB-11 daily check-in flow)
+2026-04-04 (run 17 — implemented MTB-12 campaign detail screen)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -51,6 +51,12 @@ Track architecture decisions, libraries used, patterns established, and things t
 - Don't use `BorderRadius` anywhere — brutalism = zero radius
 - Don't use `BoxShadow` with blurRadius > 0 — hard shadows only (`blurRadius: 0`)
 
+- **Campaign detail route outside ShellRoute**: add `GoRoute(path: '/campaigns/:id')` at the TOP LEVEL (not inside `ShellRoute`) so the detail screen gets no bottom nav. go_router correctly prefers the more-specific `/campaigns/new` child under ShellRoute over the top-level `/:id` wildcard — no conflict.
+- **Computed Campaign getters**: added `completedDays` and `currentStreak` as pure getters on the `Campaign` model (no Hive change needed — computed from `dayHistory`).
+- **7-column day grid**: use `GridView.builder` with `crossAxisCount: 7`, `shrinkWrap: true`, `NeverScrollableScrollPhysics` inside a `SliverList` item. Each cell colored: blue=done, white/grey=missed, `Color(0xFFF0F0F0)`=future, today gets `kBlack` border at width 2.
+- **Activity list date labels**: compute relative dates from `dayHistory` index using `DateTime.now().subtract(Duration(days: campaign.currentDay - dayNumber))` — no `startDate` field needed on the model.
+- **GestureDetector on CampaignCard**: wrap the outer `Container` in a `GestureDetector(onTap: () => context.push('/campaigns/${campaign.id}'))` to navigate to detail. Import `go_router` in `campaign_card.dart`.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -59,3 +65,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/3 | MTB-8 | Done |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/4 | MTB-7 | Done |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/5 | MTB-11 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/6 | MTB-12 | In Review |
