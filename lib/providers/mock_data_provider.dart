@@ -113,6 +113,26 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
     state = box.values.toList();
   }
 
+  void setReminder(String campaignId, {required bool enabled, String? time}) {
+    final box = Hive.box<Campaign>(_kCampaignsBox);
+    final campaign = box.get(campaignId);
+    if (campaign == null) return;
+    final updated = Campaign(
+      id: campaign.id,
+      name: campaign.name,
+      goal: campaign.goal,
+      totalDays: campaign.totalDays,
+      currentDay: campaign.currentDay,
+      isActive: campaign.isActive,
+      dayHistory: campaign.dayHistory,
+      lastCheckInDate: campaign.lastCheckInDate,
+      reminderEnabled: enabled,
+      reminderTime: time ?? campaign.reminderTime,
+    );
+    box.put(campaignId, updated);
+    state = box.values.toList();
+  }
+
   static String _pad(int n) => n.toString().padLeft(2, '0');
 }
 

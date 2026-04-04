@@ -7,6 +7,8 @@ class Campaign {
   final bool isActive;
   final List<bool> dayHistory;
   final String? lastCheckInDate;
+  final bool reminderEnabled;
+  final String? reminderTime; // "HH:mm" 24h format, e.g. "09:00"
 
   const Campaign({
     required this.id,
@@ -17,6 +19,8 @@ class Campaign {
     required this.isActive,
     required this.dayHistory,
     this.lastCheckInDate,
+    this.reminderEnabled = false,
+    this.reminderTime,
   });
 
   double get progressPercent => currentDay / totalDays;

@@ -11,8 +11,8 @@ import 'screens/profile_screen.dart';
 import 'screens/stats_screen.dart';
 import 'theme.dart';
 
-final router = GoRouter(
-  initialLocation: '/',
+GoRouter createRouter(String initialLocation) => GoRouter(
+  initialLocation: initialLocation,
   routes: [
     ShellRoute(
       builder: (context, state, child) => _AppShell(child: child),
