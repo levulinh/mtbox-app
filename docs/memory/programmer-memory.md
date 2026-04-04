@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 18 — implemented MTB-13 edit & delete campaign)
+2026-04-04 (run 19 — implemented MTB-14 campaign completion flow)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -62,6 +62,11 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **`CampaignsNotifier.update()`**: takes `name` and `totalDays`, creates a full Campaign copy (immutable), puts it back in Hive by id, sets state. Also updates `goal` field to match `name` (they are kept in sync).
 - **`CampaignsNotifier.delete()`**: calls `box.delete(campaignId)` then sets `state = box.values.toList()`.
 
+## Patterns Established (continued)
+- **Campaign completion flow**: `checkIn()` returns `bool` — `true` when `newCurrentDay >= totalDays`; sets `isActive: false` on completion. Calling widget checks return value and pushes `/campaigns/:id/complete` route. Completion screen is full-screen (no bottom nav), placed as top-level GoRoute outside ShellRoute.
+- **`switch` expression in BoxDecoration color**: use Dart's `switch` expression pattern (`color: switch (type) { EnumVal => color, _ => fallback }`) for concise multi-case color selection in widget builds.
+- **Test mock override**: when a notifier method signature changes (e.g., void → bool), update the mock subclass in `test/widget/` to match — the analyzer catches this as `invalid_override`.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -72,3 +77,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/5 | MTB-11 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/6 | MTB-12 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/7 | MTB-13 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/8 | MTB-14 | In Review |
