@@ -34,7 +34,7 @@ void main() {
 
       // Get the first campaign name before opening edit
       final nameFinder = find.byType(Text);
-      final firstCampaignName = (nameFinder.evaluate().first.widget as Text).data;
+      (nameFinder.evaluate().first.widget as Text).data;
 
       await tester.tap(find.byIcon(Icons.edit).first);
       await tester.pumpAndSettle();

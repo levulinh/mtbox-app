@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'screens/campaign_completion_screen.dart';
 import 'screens/campaign_detail_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/campaigns_screen.dart';
@@ -51,6 +52,13 @@ final router = GoRouter(
       path: '/campaigns/:id/edit',
       name: 'edit-campaign',
       builder: (context, state) => EditCampaignScreen(
+        campaignId: state.pathParameters['id']!,
+      ),
+    ),
+    GoRoute(
+      path: '/campaigns/:id/complete',
+      name: 'campaign-complete',
+      builder: (context, state) => CampaignCompletionScreen(
         campaignId: state.pathParameters['id']!,
       ),
     ),
