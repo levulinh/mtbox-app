@@ -14,6 +14,7 @@ import 'screens/register_screen.dart';
 import 'screens/share_progress_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/stats_screen.dart';
+import 'screens/user_profile_screen.dart';
 import 'theme.dart';
 
 GoRouter createRouter(String initialLocation) => GoRouter(
@@ -107,6 +108,11 @@ GoRouter createRouter(String initialLocation) => GoRouter(
       path: '/register',
       name: 'register',
       builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: '/my-profile',
+      name: 'my-profile',
+      builder: (context, state) => const UserProfileScreen(),
     ),
   ],
 );
