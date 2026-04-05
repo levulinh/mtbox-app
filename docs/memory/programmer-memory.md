@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 40 — wired real Supabase auth + PostgreSQL + Realtime per CEO directive on MTB-10)
+2026-04-05 (run 41 — MTB-36: wired live Supabase credentials on main; PR #29/MTB-10 branch still open but superseded by PR #30/MTB-36)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -220,3 +220,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/27 | MTB-34 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/28 | MTB-35 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/29 | MTB-10 (Supabase) | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/30 | MTB-36 | In Review |
