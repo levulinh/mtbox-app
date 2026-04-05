@@ -6,8 +6,14 @@ import '../theme.dart';
 class CampaignCard extends StatelessWidget {
   final Campaign campaign;
   final VoidCallback? onCheckIn;
+  final bool isPendingSync;
 
-  const CampaignCard({super.key, required this.campaign, this.onCheckIn});
+  const CampaignCard({
+    super.key,
+    required this.campaign,
+    this.onCheckIn,
+    this.isPendingSync = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +147,10 @@ class CampaignCard extends StatelessWidget {
                               campaign.isActive && !campaign.checkedInToday,
                           color: color,
                         ),
-                        if (campaign.isActive) ...[
+                        if (isPendingSync && campaign.checkedInToday) ...[
+                          const SizedBox(height: 8),
+                          _PendingSyncChip(),
+                        ] else if (campaign.isActive) ...[
                           const SizedBox(height: 12),
                           campaign.checkedInToday
                               ? _ConfirmedState()
@@ -424,6 +433,39 @@ class _ConfirmedState extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: kBlack,
               letterSpacing: 1.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Shown on campaign cards when the device is offline and the check-in
+/// hasn't been uploaded to the server yet.
+class _PendingSyncChip extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: const BoxDecoration(
+        color: Color(0xFFFEF3C7),
+        border: Border.fromBorderSide(
+          BorderSide(color: Color(0xFFD97706), width: kSoftBorderWidth),
+        ),
+      ),
+      child: const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.cloud_upload, size: 12, color: Color(0xFFD97706)),
+          SizedBox(width: 5),
+          Text(
+            'PENDING SYNC — WILL UPLOAD WHEN CONNECTED',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF92400E),
+              letterSpacing: 0.5,
             ),
           ),
         ],

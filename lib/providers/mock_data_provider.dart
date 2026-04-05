@@ -180,6 +180,9 @@ class SampleDataNotifier extends Notifier<bool> {
 final hasSampleDataProvider =
     NotifierProvider<SampleDataNotifier, bool>(SampleDataNotifier.new);
 
+// Mock device names rotated across historical activity entries
+const _kMockActivityDevices = ['iPhone 14 Pro', 'MacBook Pro', 'iPad Air'];
+
 final activityFeedProvider = Provider<List<ActivityEntry>>((ref) {
   final campaigns = ref.watch(campaignsProvider);
   final today = DateTime.now();
@@ -218,12 +221,18 @@ final activityFeedProvider = Provider<List<ActivityEntry>>((ref) {
 
     for (int i = 0; i < campaign.dayHistory.length; i++) {
       final daysBack = campaign.dayHistory.length - 1 - i;
+      // Assign mock device names to historical completed entries so the
+      // activity feed shows device attribution for sync awareness.
+      final String? device = campaign.dayHistory[i]
+          ? _kMockActivityDevices[i % _kMockActivityDevices.length]
+          : null;
       entries.add(ActivityEntry(
         campaignName: campaign.name,
         date: anchor.subtract(Duration(days: daysBack)),
         completed: campaign.dayHistory[i],
         dayNumber: i + 1,
         totalDays: campaign.totalDays,
+        deviceName: device,
       ));
     }
 
