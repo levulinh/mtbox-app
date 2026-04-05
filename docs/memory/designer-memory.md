@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-05 (run 75)
 2026-04-05 (run 74)
 2026-04-05 (run 73)
 2026-04-05 (run 72)
@@ -174,6 +175,7 @@ Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, con
 | 2026-04-05 run 67 | MTB-34 | Real-time multi-device sync — 3-state composite: (1) Synced: Home screen with SYNCED badge in app bar (translucent white chip), activity feed with per-entry device attribution chip (device icon + name + "X min ago"); (2) Offline+Catch-up: OFFLINE red badge, amber warning bar below app bar, blue catch-up progress bar on reconnection, campaign cards show yellow PENDING SYNC badge for offline check-ins; (3) Silent notification: non-modal notification card below app bar (sync_alt icon + message naming source device), Your Devices panel with iPhone/MacBook/iPad rows + This Device/Synced/Offline chips, Synced Changes activity feed with device attribution | Awaiting Design Approval |
 | 2026-04-05 run 68 | MTB-35 | Sign-out and data management — 3-panel composite: (1) Account Management screen (pushed, no bottom nav): 3 sections SESSION / DATA MANAGEMENT / DANGER ZONE; Sign Out row (blue icon), Clear Local Data row (terracotta icon + caption), Delete Account row (red border/shadow/text/icon + caption); (2) Sign Out dialog: blue logout icon box + body text + cloud_done reassurance row + Cancel/Sign Out buttons; (3) Delete Account dialog: red warning icon box + red title + body + 3-row consequence checklist (close icons) + Keep My Account / Delete Forever footer | Awaiting Design Approval |
 | 2026-04-05 run 73 | MTB-37 | New Vocab Learning App — style proposals (direct CEO mention). 3-option style guide: (A) Warm Brutalist (Campaign Tracker extension), (B) Clean Editorial (Playfair Display + amber highlighter), (C) Night Scholar (dark mode, yellow highlights). Posted to MTB-37 comment, no status change (issue is "Awaiting Decision" in CTO Directives). | Awaiting CEO direction |
+| 2026-04-05 run 75 | (none) | No "In Design" issues found — queue empty | Idle run |
 | 2026-04-05 run 74 | MTB-37 | CEO steering: "modern, light, and fresh" — refreshed mockup with new "Fresh Editorial" direction. Reading screen (topic chip + article + word states) + definition bottom sheet (AI def + in-context quote). DM Serif Display + Lora + DM Sans, teal + amber palette, rounded corners. No status change (issue stays Awaiting Decision). | Awaiting CEO direction |
 | 2026-04-05 run 72 | MTB-5 | Trashed issue — commentCreate still returns "Entity not found" (9th attempt across runs 56–58, 62, 63, 69–72); skipped; mockup is current; no unhandled issues in "In Design" | Skipped (idle run) |
 | 2026-04-05 run 71 | MTB-5 | Trashed issue — commentCreate still returns "Entity not found" (8th attempt across runs 56–58, 62, 63, 69, 70, 71); skipped; mockup is current; no unhandled issues in "In Design" | Skipped (idle run) |
