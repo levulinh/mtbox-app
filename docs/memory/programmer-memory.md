@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 36 — implemented MTB-32 user profile screen)
+2026-04-05 (run 37 — implemented MTB-33 cloud sync upload screen)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -164,6 +164,8 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Mock devices section**: hard-coded `_DeviceInfo` list (no real device tracking). Current device badge = kBlue fill; past device badge = kWhite + kSoftBorderColor border.
 - **Profile tab update**: account card now reads `userProfileProvider` (initials, displayName) + `authProvider` (email) and shows chevron pushing to `/my-profile`.
 
+- **MTB-33 cloud sync screen**: `CloudSyncScreen` at `/cloud-sync` (top-level GoRoute, no bottom nav). 3 phases managed via `_SyncPhase` enum: `syncing` → `success` → `failed`. Simulation uses `Timer`-based sequential per-campaign upload. `_SyncItem` is a mutable wrapper (field `status` mutated directly, not via constructor param — avoids unused_element_parameter analyzer warning). Sign-in routes to `/cloud-sync` if `Hive.box('settings').get('cloudSyncDone')` is false; success state sets flag to true. Failed state offers Retry (restarts `_startSync()`) and Continue Offline (goes to `/` without setting flag).
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -192,3 +194,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/23 | MTB-30 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/24 | MTB-31 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/25 | MTB-32 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/26 | MTB-33 | In Review |
