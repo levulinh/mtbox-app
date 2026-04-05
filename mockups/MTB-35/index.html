@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375">
+  <title>MTB-35 — Sign-out and Data Management</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4C6EAD;
+      --bg: #F7F3EF;
+      --surface: #FFFDF9;
+      --text: #1A1A1A;
+      --text-sec: #6B6B6B;
+      --border-structural: #2C2C2C;
+      --border-content: #5A5A5A;
+      --shadow-content: 2px 2px 0 rgba(44,44,44,0.45);
+      --shadow-structural: 2px 2px 0 #2C2C2C;
+      --red: #B83232;
+      --terracotta: #B5735A;
+    }
+
+    body {
+      width: 375px;
+      background: #E8E2DA;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      color: var(--text);
+    }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .annotation-divider {
+      width: 375px;
+      padding: 12px 16px;
+      background: #E8E2DA;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .annotation-divider::before,
+    .annotation-divider::after {
+      content: '';
+      flex: 1;
+      border-top: 1.5px dashed #9A9080;
+    }
+    .annotation-divider span {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #9A9080;
+      white-space: nowrap;
+    }
+
+    /* ── PANEL WRAPPER ── */
+    .panel {
+      width: 375px;
+      background: var(--bg);
+      position: relative;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      height: 44px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      color: white;
+    }
+    .status-bar .time {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .status-bar .icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-bar .icons .material-icons {
+      font-size: 16px;
+    }
+
+    /* ── APP BAR ── */
+    .app-bar {
+      height: 56px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      border-bottom: 2px solid var(--border-structural);
+      box-shadow: 0 2px 0 var(--border-structural);
+      color: white;
+    }
+    .app-bar .back-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      box-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+      cursor: pointer;
+    }
+    .app-bar .back-btn .material-icons {
+      font-size: 18px;
+      color: white;
+    }
+    .app-bar .title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* ── CONTENT AREA ── */
+    .content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      padding: 16px 0 8px 8px;
+      border-left: 3px solid var(--primary);
+      margin-bottom: 8px;
+      margin-top: 8px;
+    }
+    .section-header.danger {
+      border-left-color: var(--red);
+    }
+    .section-header span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-sec);
+    }
+
+    /* ── ACTION ROW ── */
+    .action-row {
+      width: 100%;
+      background: var(--surface);
+      border: 1.5px solid var(--border-content);
+      box-shadow: var(--shadow-content);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .action-row.danger {
+      border-color: var(--red);
+      box-shadow: 2px 2px 0 rgba(184,50,50,0.35);
+    }
+
+    /* ── ICON BOX ── */
+    .icon-box {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1.5px solid var(--border-content);
+      box-shadow: var(--shadow-content);
+      background: var(--surface);
+    }
+    .icon-box .material-icons {
+      font-size: 20px;
+      color: var(--primary);
+    }
+    .icon-box.terracotta .material-icons { color: var(--terracotta); }
+    .icon-box.red .material-icons { color: var(--red); }
+
+    /* ── ROW CONTENT ── */
+    .row-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .row-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .row-label.red { color: var(--red); }
+    .row-caption {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-sec);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+    .row-caption.red { color: rgba(184,50,50,0.7); }
+
+    .chevron {
+      flex-shrink: 0;
+      color: var(--border-content);
+    }
+    .chevron.red { color: rgba(184,50,50,0.5); }
+    .chevron .material-icons { font-size: 18px; }
+
+    /* ── DIALOG OVERLAY ── */
+    .dialog-overlay {
+      position: relative;
+      width: 375px;
+    }
+    .overlay-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(26,26,26,0.55);
+      z-index: 1;
+    }
+    .dialog-panel {
+      position: relative;
+      width: 375px;
+    }
+    /* blurred/dimmed screen behind dialog */
+    .screen-behind {
+      width: 375px;
+      background: var(--bg);
+      filter: brightness(0.85);
+    }
+    .dialog-card-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(375px - 40px);
+      z-index: 10;
+    }
+    .dialog-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-content);
+      box-shadow: 3px 3px 0 rgba(44,44,44,0.55);
+      padding: 20px;
+    }
+
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .dialog-icon-box {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1.5px solid var(--border-content);
+      box-shadow: var(--shadow-content);
+      background: var(--primary);
+    }
+    .dialog-icon-box.red {
+      background: var(--red);
+      border-color: var(--red);
+      box-shadow: 2px 2px 0 rgba(184,50,50,0.35);
+    }
+    .dialog-icon-box .material-icons {
+      font-size: 22px;
+      color: white;
+    }
+    .dialog-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .dialog-title.red { color: var(--red); }
+
+    .dialog-divider {
+      height: 1.5px;
+      background: var(--border-content);
+      margin: 0 0 14px 0;
+    }
+
+    .dialog-body {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(76,110,173,0.08);
+      border: 1.5px solid rgba(76,110,173,0.3);
+      padding: 8px 10px;
+      margin-bottom: 16px;
+    }
+    .info-row .material-icons {
+      font-size: 16px;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .info-row span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .warning-checklist {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .warning-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .warning-item .material-icons {
+      font-size: 16px;
+      color: var(--red);
+      flex-shrink: 0;
+    }
+    .warning-item span {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .dialog-footer {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      flex: 1;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1.5px solid var(--border-content);
+      box-shadow: var(--shadow-content);
+      cursor: pointer;
+      background: var(--surface);
+      color: var(--text);
+    }
+    .btn.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .btn.danger {
+      background: var(--red);
+      color: white;
+      border-color: var(--red);
+      box-shadow: 2px 2px 0 rgba(184,50,50,0.45);
+    }
+
+    /* account screen mini (for dialog backdrop) */
+    .mini-screen {
+      padding: 16px;
+    }
+    .mini-section {
+      margin-bottom: 8px;
+    }
+    .mini-header {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-sec);
+      padding-left: 8px;
+      border-left: 2px solid var(--primary);
+      margin-bottom: 6px;
+      margin-top: 10px;
+    }
+    .mini-header.danger { border-left-color: var(--red); }
+    .mini-row {
+      background: var(--surface);
+      border: 1.5px solid var(--border-content);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+    .mini-icon {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border-content);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mini-icon .material-icons {
+      font-size: 16px;
+      color: var(--primary);
+    }
+    .mini-icon.terracotta .material-icons { color: var(--terracotta); }
+    .mini-icon.red .material-icons { color: var(--red); }
+    .mini-label {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .mini-label.red { color: var(--red); }
+    .mini-chevron .material-icons { font-size: 14px; color: var(--border-content); }
+
+    /* panel height for dialogs */
+    .dialog-scene {
+      position: relative;
+      width: 375px;
+      height: 560px;
+      overflow: hidden;
+    }
+    .dialog-scene .screen-fill {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+    }
+    .dialog-scene .dim-layer {
+      position: absolute;
+      inset: 0;
+      background: rgba(26,26,26,0.55);
+      z-index: 2;
+    }
+    .dialog-scene .float-card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 315px;
+      z-index: 3;
+      background: var(--surface);
+      border: 1.5px solid var(--border-content);
+      box-shadow: 3px 3px 0 rgba(44,44,44,0.55);
+      padding: 20px;
+    }
+    .dialog-scene .float-card.red-card {
+      box-shadow: 3px 3px 0 rgba(184,50,50,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL 1 — ACCOUNT MANAGEMENT SCREEN
+  ═══════════════════════════════════════════ -->
+  <div class="panel">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+
+    <!-- App Bar -->
+    <div class="app-bar">
+      <div class="back-btn"><span class="material-icons">arrow_back</span></div>
+      <span class="title">Account</span>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- SESSION section -->
+      <div class="section-header">
+        <span>Session</span>
+      </div>
+
+      <div class="action-row">
+        <div class="icon-box">
+          <span class="material-icons">logout</span>
+        </div>
+        <div class="row-content">
+          <div class="row-label">Sign Out</div>
+        </div>
+        <div class="chevron"><span class="material-icons">chevron_right</span></div>
+      </div>
+
+      <!-- DATA MANAGEMENT section -->
+      <div class="section-header" style="margin-top:4px;">
+        <span>Data Management</span>
+      </div>
+
+      <div class="action-row">
+        <div class="icon-box terracotta">
+          <span class="material-icons">cleaning_services</span>
+        </div>
+        <div class="row-content">
+          <div class="row-label">Clear Local Data</div>
+          <div class="row-caption">Removes data from this device only</div>
+        </div>
+        <div class="chevron"><span class="material-icons">chevron_right</span></div>
+      </div>
+
+      <!-- DANGER ZONE section -->
+      <div class="section-header danger" style="margin-top:4px;">
+        <span>Danger Zone</span>
+      </div>
+
+      <div class="action-row danger">
+        <div class="icon-box red">
+          <span class="material-icons">delete_forever</span>
+        </div>
+        <div class="row-content">
+          <div class="row-label red">Delete Account</div>
+          <div class="row-caption red">Permanently removes all data</div>
+        </div>
+        <div class="chevron red"><span class="material-icons">chevron_right</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       ANNOTATION DIVIDER
+  ═══════════════════════════════════════════ -->
+  <div class="annotation-divider"><span>Sign Out — Confirmation Dialog</span></div>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL 2 — SIGN OUT CONFIRMATION DIALOG
+  ═══════════════════════════════════════════ -->
+  <div class="dialog-scene">
+    <!-- Dimmed background screen -->
+    <div class="screen-fill">
+      <div style="height:44px;background:var(--primary);"></div>
+      <div style="height:56px;background:var(--primary);border-bottom:2px solid var(--border-structural);"></div>
+      <div class="mini-screen">
+        <div class="mini-header">Session</div>
+        <div class="mini-row">
+          <div class="mini-icon"><span class="material-icons">logout</span></div>
+          <div class="mini-label">Sign Out</div>
+          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
+        </div>
+        <div class="mini-header">Data Management</div>
+        <div class="mini-row">
+          <div class="mini-icon terracotta"><span class="material-icons">cleaning_services</span></div>
+          <div class="mini-label">Clear Local Data</div>
+          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
+        </div>
+        <div class="mini-header danger">Danger Zone</div>
+        <div class="mini-row" style="border-color:var(--red);">
+          <div class="mini-icon red"><span class="material-icons">delete_forever</span></div>
+          <div class="mini-label red">Delete Account</div>
+          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dim overlay -->
+    <div class="dim-layer"></div>
+
+    <!-- Dialog Card -->
+    <div class="float-card">
+      <!-- Header -->
+      <div class="dialog-header">
+        <div class="dialog-icon-box">
+          <span class="material-icons">logout</span>
+        </div>
+        <div class="dialog-title">Sign Out?</div>
+      </div>
+
+      <!-- Divider -->
+      <div class="dialog-divider"></div>
+
+      <!-- Body -->
+      <div class="dialog-body">
+        You'll be signed out of this device. Your cloud data remains safe and accessible when you sign back in.
+      </div>
+
+      <!-- Info note -->
+      <div class="info-row">
+        <span class="material-icons">cloud_done</span>
+        <span>Your data stays in the cloud</span>
+      </div>
+
+      <!-- Footer -->
+      <div class="dialog-footer">
+        <div class="btn">Cancel</div>
+        <div class="btn primary">Sign Out</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       ANNOTATION DIVIDER
+  ═══════════════════════════════════════════ -->
+  <div class="annotation-divider"><span>Delete Account — Confirmation Dialog</span></div>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL 3 — DELETE ACCOUNT CONFIRMATION DIALOG
+  ═══════════════════════════════════════════ -->
+  <div class="dialog-scene" style="height:600px;">
+    <!-- Dimmed background screen -->
+    <div class="screen-fill">
+      <div style="height:44px;background:var(--primary);"></div>
+      <div style="height:56px;background:var(--primary);border-bottom:2px solid var(--border-structural);"></div>
+      <div class="mini-screen">
+        <div class="mini-header">Session</div>
+        <div class="mini-row">
+          <div class="mini-icon"><span class="material-icons">logout</span></div>
+          <div class="mini-label">Sign Out</div>
+          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
+        </div>
+        <div class="mini-header">Data Management</div>
+        <div class="mini-row">
+          <div class="mini-icon terracotta"><span class="material-icons">cleaning_services</span></div>
+          <div class="mini-label">Clear Local Data</div>
+          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
+        </div>
+        <div class="mini-header danger">Danger Zone</div>
+        <div class="mini-row" style="border-color:var(--red);">
+          <div class="mini-icon red"><span class="material-icons">delete_forever</span></div>
+          <div class="mini-label red">Delete Account</div>
+          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dim overlay -->
+    <div class="dim-layer"></div>
+
+    <!-- Dialog Card -->
+    <div class="float-card red-card" style="border-color:var(--red);">
+      <!-- Header -->
+      <div class="dialog-header">
+        <div class="dialog-icon-box red">
+          <span class="material-icons">warning</span>
+        </div>
+        <div class="dialog-title red">Delete Account?</div>
+      </div>
+
+      <!-- Divider -->
+      <div class="dialog-divider" style="background:rgba(184,50,50,0.3);"></div>
+
+      <!-- Body -->
+      <div class="dialog-body">
+        This permanently deletes your account and <strong>ALL data</strong> from both this device and the cloud. This cannot be undone.
+      </div>
+
+      <!-- Warning checklist -->
+      <div class="warning-checklist">
+        <div class="warning-item">
+          <span class="material-icons">close</span>
+          <span>All campaigns deleted</span>
+        </div>
+        <div class="warning-item">
+          <span class="material-icons">close</span>
+          <span>All check-ins erased</span>
+        </div>
+        <div class="warning-item">
+          <span class="material-icons">close</span>
+          <span>Account unrecoverable</span>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="dialog-footer">
+        <div class="btn">Keep My Account</div>
+        <div class="btn danger">Delete Forever</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
