@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375">
+  <title>MTB-37 — Vocab App Style Proposals</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 375px;
+      background: #EDEBE7;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    .doc-header {
+      background: #4C6EAD;
+      padding: 20px 16px 16px;
+      border-bottom: 2px solid #2C2C2C;
+      box-shadow: 0 2px 0 #2C2C2C;
+    }
+    .doc-header-label {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 4px;
+    }
+    .doc-header-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    .doc-header-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .annotation-divider {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 16px;
+      background: #EDEBE7;
+    }
+    .annotation-line {
+      flex: 1;
+      height: 0;
+      border-top: 1.5px dashed #999;
+    }
+    .annotation-pill {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6B6B6B;
+      white-space: nowrap;
+    }
+
+    /* ── STYLE META FOOTER ── */
+    .style-meta {
+      padding: 12px 16px 16px;
+    }
+    .swatch-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border: 1.5px solid rgba(44,44,44,0.3);
+      position: relative;
+    }
+    .swatch-label {
+      font-size: 7px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #6B6B6B;
+      letter-spacing: 0.5px;
+      margin-top: 3px;
+      text-align: center;
+      width: 28px;
+    }
+    .swatch-item { display: flex; flex-direction: column; align-items: center; }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+    .tag {
+      font-size: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 7px;
+      border: 1.5px solid #5A5A5A;
+      color: #5A5A5A;
+      background: transparent;
+    }
+
+    /* ═══════════════════════════════════════
+       OPTION A — WARM BRUTALIST
+    ═══════════════════════════════════════ */
+    .panel-a {
+      background: #F7F3EF;
+    }
+
+    .panel-a .status-bar {
+      height: 44px;
+      background: #4C6EAD;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 2px solid #2C2C2C;
+    }
+    .panel-a .status-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .panel-a .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #fff;
+    }
+    .panel-a .status-icons .material-icons {
+      font-size: 14px;
+    }
+
+    .panel-a .app-bar {
+      height: 56px;
+      background: #4C6EAD;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 2px solid #2C2C2C;
+      box-shadow: 0 2px 0 #2C2C2C;
+    }
+    .panel-a .app-bar-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .panel-a .app-bar-action {
+      color: #fff;
+    }
+    .panel-a .app-bar-action .material-icons {
+      font-size: 22px;
+    }
+
+    .panel-a .topic-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #4C6EAD;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 8px;
+      border: 1.5px solid #2C2C2C;
+      box-shadow: 1.5px 1.5px 0 #2C2C2C;
+      margin: 12px 16px 0;
+    }
+    .panel-a .topic-chip .material-icons {
+      font-size: 11px;
+    }
+
+    .panel-a .reading-area {
+      margin: 10px 16px 0;
+      padding: 14px;
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+    }
+    .panel-a .reading-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #6B6B6B;
+      border-left: 3px solid #4C6EAD;
+      padding-left: 7px;
+      margin-bottom: 10px;
+    }
+    .panel-a .reading-text {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 15px;
+      line-height: 1.75;
+      color: #1A1A1A;
+    }
+    .panel-a .word-highlight {
+      color: #B5735A;
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: #B5735A;
+      text-underline-offset: 2px;
+      text-decoration-thickness: 2px;
+      cursor: pointer;
+    }
+
+    .panel-a .definition-sheet {
+      margin: 10px 16px 0;
+      background: #FFFDF9;
+      border: 1.5px solid #2C2C2C;
+      border-top: 3px solid #4C6EAD;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+    }
+    .panel-a .def-header {
+      padding: 10px 14px 8px;
+      border-bottom: 1.5px solid #5A5A5A;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .panel-a .def-word {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+    .panel-a .def-pos {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #B5735A;
+      padding: 2px 6px;
+      border: 1.5px solid #B5735A;
+    }
+    .panel-a .def-body {
+      padding: 10px 14px;
+    }
+    .panel-a .def-text {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #3A3A3A;
+    }
+    .panel-a .def-example {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 12px;
+      font-style: italic;
+      color: #6B6B6B;
+      border-left: 2px solid #D5CCBE;
+      padding-left: 8px;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .panel-a .def-actions {
+      padding: 10px 14px;
+      border-top: 1.5px solid #5A5A5A;
+      display: flex;
+      gap: 8px;
+    }
+    .panel-a .btn-save {
+      flex: 1;
+      background: #4C6EAD;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 9px 12px;
+      border: 1.5px solid #2C2C2C;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .panel-a .btn-save .material-icons { font-size: 14px; }
+    .panel-a .btn-dismiss {
+      background: #FFFDF9;
+      color: #6B6B6B;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 9px 12px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .panel-a .btn-dismiss .material-icons { font-size: 14px; }
+
+    .panel-a .style-label {
+      padding: 14px 16px 4px;
+    }
+    .panel-a .option-letter {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #4C6EAD;
+      margin-bottom: 3px;
+    }
+    .panel-a .option-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: #1A1A1A;
+      letter-spacing: -0.5px;
+    }
+    .panel-a .option-desc {
+      font-size: 11px;
+      font-weight: 500;
+      color: #6B6B6B;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════
+       OPTION B — CLEAN EDITORIAL
+    ═══════════════════════════════════════ */
+    .panel-b {
+      background: #FDFAF5;
+    }
+
+    .panel-b .status-bar {
+      height: 44px;
+      background: #2D5A8E;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+    .panel-b .status-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+    }
+    .panel-b .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #fff;
+    }
+    .panel-b .status-icons .material-icons { font-size: 14px; }
+
+    .panel-b .app-bar {
+      height: 56px;
+      background: #FDFAF5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid #D5CCBE;
+    }
+    .panel-b .app-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .panel-b .app-bar-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1A1510;
+      letter-spacing: -0.3px;
+    }
+    .panel-b .app-bar-action .material-icons {
+      font-size: 22px;
+      color: #2D5A8E;
+    }
+
+    .panel-b .topic-strip {
+      padding: 10px 16px;
+      background: #FDFAF5;
+      border-bottom: 1px solid #E8E0D0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .panel-b .topic-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #2D5A8E;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .panel-b .topic-name .material-icons { font-size: 13px; }
+    .panel-b .progress-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      color: #9A9080;
+    }
+
+    .panel-b .reading-area {
+      padding: 18px 16px;
+    }
+    .panel-b .reading-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      color: #1A1510;
+      letter-spacing: 0.01em;
+    }
+    .panel-b .word-highlight {
+      background: rgba(232, 184, 75, 0.35);
+      color: #1A1510;
+      border-bottom: 2px solid #E8B84B;
+      padding: 0 1px;
+      cursor: pointer;
+    }
+
+    .panel-b .definition-card {
+      margin: 0 12px;
+      background: #fff;
+      border: 1px solid #D5CCBE;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.09), 0 1px 3px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .panel-b .def-header {
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid #EAE2D5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .panel-b .def-header-left {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .panel-b .def-word {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1A1510;
+    }
+    .panel-b .def-pos {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: #9A9080;
+      letter-spacing: 0.5px;
+    }
+    .panel-b .def-audio .material-icons {
+      font-size: 18px;
+      color: #C5BFB5;
+    }
+    .panel-b .def-body {
+      padding: 12px 14px;
+    }
+    .panel-b .def-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #3A342A;
+    }
+    .panel-b .def-example {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-style: italic;
+      color: #7A7268;
+      padding: 8px 10px;
+      background: #FAF6EE;
+      border-left: 3px solid #E8B84B;
+      margin-top: 10px;
+      border-radius: 0 2px 2px 0;
+      line-height: 1.5;
+    }
+    .panel-b .def-actions {
+      padding: 10px 14px 12px;
+      display: flex;
+      gap: 8px;
+    }
+    .panel-b .btn-save {
+      flex: 1;
+      background: #2D5A8E;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 9px 12px;
+      border: none;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(45,90,142,0.3);
+    }
+    .panel-b .btn-save .material-icons { font-size: 14px; }
+    .panel-b .btn-dismiss {
+      background: #FDFAF5;
+      color: #7A7268;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 9px 12px;
+      border: 1px solid #D5CCBE;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .panel-b .btn-dismiss .material-icons { font-size: 14px; }
+
+    .panel-b .style-label {
+      padding: 14px 16px 4px;
+    }
+    .panel-b .option-letter {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #2D5A8E;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 3px;
+    }
+    .panel-b .option-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1A1510;
+    }
+    .panel-b .option-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: #7A7268;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════
+       OPTION C — NIGHT SCHOLAR
+    ═══════════════════════════════════════ */
+    .panel-c {
+      background: #1C1C1E;
+    }
+
+    .panel-c .status-bar {
+      height: 44px;
+      background: #1C1C1E;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid #3A3A3C;
+    }
+    .panel-c .status-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: #E5E5EA;
+      font-family: 'Inter', sans-serif;
+    }
+    .panel-c .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #E5E5EA;
+    }
+    .panel-c .status-icons .material-icons { font-size: 14px; }
+
+    .panel-c .app-bar {
+      height: 56px;
+      background: #1C1C1E;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid #3A3A3C;
+    }
+    .panel-c .app-bar-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: #E5E5EA;
+      letter-spacing: -0.3px;
+    }
+    .panel-c .app-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .panel-c .app-bar-row .material-icons {
+      font-size: 22px;
+      color: #7EB3FF;
+    }
+    .panel-c .progress-badge {
+      background: rgba(126, 179, 255, 0.15);
+      border: 1px solid rgba(126, 179, 255, 0.3);
+      color: #7EB3FF;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 7px;
+    }
+
+    .panel-c .reading-area {
+      padding: 16px;
+    }
+    .panel-c .topic-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .panel-c .topic-dot {
+      width: 6px;
+      height: 6px;
+      background: #7EB3FF;
+    }
+    .panel-c .topic-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: #7EB3FF;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .panel-c .reading-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #EBEBF0;
+      font-weight: 400;
+    }
+    .panel-c .word-highlight {
+      color: #FFD60A;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(255, 214, 10, 0.5);
+      text-decoration-thickness: 1.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .panel-c .definition-card {
+      margin: 0 12px;
+      background: #2C2C2E;
+      border: 1px solid #48484A;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .panel-c .def-header {
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid #3A3A3C;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .panel-c .def-header-inner { display: flex; align-items: baseline; gap: 8px; }
+    .panel-c .def-word {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #7EB3FF;
+      letter-spacing: -0.5px;
+    }
+    .panel-c .def-pos {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: #636366;
+      letter-spacing: 0.5px;
+      padding: 2px 6px;
+      border: 1px solid #48484A;
+    }
+    .panel-c .def-close .material-icons {
+      font-size: 18px;
+      color: #636366;
+    }
+    .panel-c .def-body {
+      padding: 12px 14px;
+    }
+    .panel-c .def-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #AEAEB2;
+    }
+    .panel-c .def-example {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-style: italic;
+      color: #8E8E93;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.04);
+      border-left: 2px solid #FFD60A;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+    .panel-c .def-actions {
+      padding: 10px 14px 12px;
+      display: flex;
+      gap: 8px;
+    }
+    .panel-c .btn-save {
+      flex: 1;
+      background: #FFD60A;
+      color: #1C1C1E;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 9px 12px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .panel-c .btn-save .material-icons { font-size: 14px; }
+    .panel-c .btn-examples {
+      background: transparent;
+      color: #7EB3FF;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 9px 12px;
+      border: 1px solid #48484A;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .panel-c .btn-examples .material-icons { font-size: 14px; }
+
+    .panel-c .style-label {
+      padding: 14px 16px 4px;
+    }
+    .panel-c .option-letter {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #7EB3FF;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 3px;
+    }
+    .panel-c .option-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: #E5E5EA;
+      letter-spacing: -0.5px;
+    }
+    .panel-c .option-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: #636366;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* ── SWATCHES for Panel C ── */
+    .panel-c .style-meta {
+      padding: 12px 16px 16px;
+    }
+    .panel-c .swatch {
+      border-color: rgba(255,255,255,0.15);
+    }
+    .panel-c .swatch-label {
+      color: #636366;
+    }
+    .panel-c .tag {
+      border-color: #48484A;
+      color: #636366;
+    }
+
+    /* ── FOOTER ── */
+    .doc-footer {
+      background: #2C2C2C;
+      padding: 16px;
+      text-align: center;
+    }
+    .doc-footer-text {
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DOCUMENT HEADER -->
+  <div class="doc-header">
+    <div class="doc-header-label">MTB-37 · Design Direction</div>
+    <div class="doc-header-title">Vocab App —<br>Style Proposals</div>
+    <div class="doc-header-sub">3 visual directions for review by CEO.<br>Each shown on the reading + word-tap core loop.</div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       OPTION A: WARM BRUTALIST
+  ───────────────────────────────────────── -->
+  <div class="annotation-divider">
+    <div class="annotation-line"></div>
+    <div class="annotation-pill">Option A</div>
+    <div class="annotation-line"></div>
+  </div>
+
+  <div class="panel-a">
+
+    <!-- Style Label -->
+    <div class="style-label">
+      <div class="option-letter">Option A</div>
+      <div class="option-title">Warm Brutalist</div>
+      <div class="option-desc">Extends Campaign Tracker. Familiar, earthy, intentional. Georgian serif adds literary weight to reading passages.</div>
+    </div>
+
+    <!-- Swatch row -->
+    <div class="style-meta">
+      <div class="swatch-row">
+        <div class="swatch-item"><div class="swatch" style="background:#4C6EAD;"></div><div class="swatch-label">Primary</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#F7F3EF;"></div><div class="swatch-label">BG</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#FFFDF9;"></div><div class="swatch-label">Surface</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#B5735A;"></div><div class="swatch-label">Accent</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#2C2C2C;"></div><div class="swatch-label">Shadow</div></div>
+      </div>
+      <div class="tag-row">
+        <div class="tag">Sharp Shadows</div>
+        <div class="tag">Serif Body</div>
+        <div class="tag">No Rounding</div>
+        <div class="tag">Terracotta Accent</div>
+      </div>
+    </div>
+
+    <!-- Mini mockup: Reading screen with definition sheet -->
+    <div style="padding:0 0 16px;">
+      <div class="panel-a status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <span class="material-icons">signal_cellular_alt</span>
+          <span class="material-icons">wifi</span>
+          <span class="material-icons">battery_full</span>
+        </div>
+      </div>
+      <div class="panel-a app-bar">
+        <span class="material-icons app-bar-action" style="font-size:20px;">arrow_back</span>
+        <span class="app-bar-title">Reading</span>
+        <span class="app-bar-action"><span class="material-icons">bookmark_border</span></span>
+      </div>
+
+      <div class="panel-a topic-chip">
+        <span class="material-icons">science</span>
+        Deep Sea Biology
+      </div>
+
+      <div class="panel-a reading-area">
+        <div class="reading-section-label">Article · Paragraph 2 of 7</div>
+        <div class="panel-a reading-text">
+          The <span class="panel-a word-highlight">bioluminescent</span> organisms that inhabit the bathypelagic zone produce light through chemical reactions, enabling complex signalling in an environment devoid of sunlight. These adaptations have evolved over millions of years.
+        </div>
+      </div>
+
+      <!-- Definition bottom sheet -->
+      <div class="panel-a definition-sheet">
+        <div class="panel-a def-header">
+          <span class="panel-a def-word">bioluminescent</span>
+          <span class="panel-a def-pos">adj.</span>
+        </div>
+        <div class="panel-a def-body">
+          <div class="panel-a def-text">Producing light through a chemical reaction within a living organism, requiring no external light source.</div>
+          <div class="panel-a def-example">"The bioluminescent plankton turned the waves an eerie blue as they crashed on the shore."</div>
+        </div>
+        <div class="panel-a def-actions">
+          <button class="panel-a btn-save"><span class="material-icons">bookmark_add</span>Save Word</button>
+          <button class="panel-a btn-dismiss"><span class="material-icons">close</span>Skip</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       OPTION B: CLEAN EDITORIAL
+  ───────────────────────────────────────── -->
+  <div class="annotation-divider">
+    <div class="annotation-line"></div>
+    <div class="annotation-pill">Option B</div>
+    <div class="annotation-line"></div>
+  </div>
+
+  <div class="panel-b">
+
+    <!-- Style Label -->
+    <div class="style-label">
+      <div class="option-letter">Option B</div>
+      <div class="option-title">Clean Editorial</div>
+      <div class="option-desc">Reading-first. Amber highlight feels like a physical pen. Playfair Display brings a refined, literary quality to headings.</div>
+    </div>
+
+    <!-- Swatch row -->
+    <div class="style-meta">
+      <div class="swatch-row">
+        <div class="swatch-item"><div class="swatch" style="background:#2D5A8E;"></div><div class="swatch-label">Primary</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#FDFAF5;"></div><div class="swatch-label">BG</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#E8B84B;"></div><div class="swatch-label">Accent</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#D5CCBE;"></div><div class="swatch-label">Border</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#1A1510;"></div><div class="swatch-label">Text</div></div>
+      </div>
+      <div class="tag-row">
+        <div class="tag">Soft Shadows</div>
+        <div class="tag">Highlighter Accent</div>
+        <div class="tag">Playfair Headings</div>
+        <div class="tag">4px Radius</div>
+      </div>
+    </div>
+
+    <!-- Mini mockup -->
+    <div style="padding:0 0 16px;">
+      <div class="panel-b status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <span class="material-icons">signal_cellular_alt</span>
+          <span class="material-icons">wifi</span>
+          <span class="material-icons">battery_full</span>
+        </div>
+      </div>
+      <div class="panel-b app-bar">
+        <div class="app-bar-left">
+          <span class="material-icons" style="font-size:20px; color:#2D5A8E;">arrow_back</span>
+          <span class="app-bar-title">Reading</span>
+        </div>
+        <div class="app-bar-action"><span class="material-icons">bookmark_border</span></div>
+      </div>
+
+      <div class="panel-b topic-strip">
+        <div class="topic-name"><span class="material-icons">science</span>Deep Sea Biology</div>
+        <div class="progress-label">Para 2 of 7</div>
+      </div>
+
+      <div class="panel-b reading-area">
+        <div class="panel-b reading-text">
+          The <span class="panel-b word-highlight">bioluminescent</span> organisms that inhabit the bathypelagic zone produce light through chemical reactions, enabling complex signalling in an environment devoid of sunlight.
+        </div>
+      </div>
+
+      <!-- Definition floating card -->
+      <div class="panel-b definition-card">
+        <div class="panel-b def-header">
+          <div class="def-header-left">
+            <span class="panel-b def-word">bioluminescent</span>
+            <span class="panel-b def-pos">adjective</span>
+          </div>
+          <div class="panel-b def-audio"><span class="material-icons">volume_up</span></div>
+        </div>
+        <div class="panel-b def-body">
+          <div class="panel-b def-text">Describing an organism capable of producing and emitting light through a biochemical reaction within its own body tissues.</div>
+          <div class="panel-b def-example">"The bioluminescent plankton illuminated the ocean surface with a ghostly blue glow."</div>
+        </div>
+        <div class="panel-b def-actions">
+          <button class="panel-b btn-save"><span class="material-icons">bookmark_add</span>Save Word</button>
+          <button class="panel-b btn-dismiss"><span class="material-icons">close</span>Skip</button>
+        </div>
+      </div>
+
+      <div style="height:14px;"></div>
+    </div>
+
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       OPTION C: NIGHT SCHOLAR
+  ───────────────────────────────────────── -->
+  <div class="annotation-divider" style="background:#EDEBE7;">
+    <div class="annotation-line"></div>
+    <div class="annotation-pill">Option C</div>
+    <div class="annotation-line"></div>
+  </div>
+
+  <div class="panel-c">
+
+    <!-- Style Label -->
+    <div class="style-label">
+      <div class="option-letter">Option C</div>
+      <div class="option-title">Night Scholar</div>
+      <div class="option-desc">Dark-mode first. Premium and focused. Yellow word highlights pop with high contrast. Built for long reading sessions.</div>
+    </div>
+
+    <!-- Swatch row -->
+    <div class="panel-c style-meta">
+      <div class="swatch-row">
+        <div class="swatch-item"><div class="swatch" style="background:#1C1C1E;"></div><div class="swatch-label" style="color:#636366;">BG</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#2C2C2E;"></div><div class="swatch-label" style="color:#636366;">Surface</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#7EB3FF;"></div><div class="swatch-label" style="color:#636366;">Primary</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#FFD60A;"></div><div class="swatch-label" style="color:#636366;">Accent</div></div>
+        <div class="swatch-item"><div class="swatch" style="background:#EBEBF0;"></div><div class="swatch-label" style="color:#636366;">Text</div></div>
+      </div>
+      <div class="tag-row">
+        <div class="tag" style="border-color:#48484A; color:#636366;">Dark Mode</div>
+        <div class="tag" style="border-color:#48484A; color:#636366;">Yellow Highlights</div>
+        <div class="tag" style="border-color:#48484A; color:#636366;">High Contrast</div>
+        <div class="tag" style="border-color:#48484A; color:#636366;">Inter Body</div>
+      </div>
+    </div>
+
+    <!-- Mini mockup -->
+    <div style="padding:0 0 16px;">
+      <div class="panel-c status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <span class="material-icons">signal_cellular_alt</span>
+          <span class="material-icons">wifi</span>
+          <span class="material-icons">battery_full</span>
+        </div>
+      </div>
+      <div class="panel-c app-bar">
+        <span class="material-icons" style="font-size:20px; color:#8E8E93;">arrow_back</span>
+        <span class="app-bar-title">Reading</span>
+        <div class="app-bar-row">
+          <span class="progress-badge">2 / 7</span>
+          <span class="material-icons">bookmark_border</span>
+        </div>
+      </div>
+
+      <div class="panel-c reading-area">
+        <div class="topic-row">
+          <div class="topic-dot"></div>
+          <div class="topic-label">Deep Sea Biology</div>
+        </div>
+        <div class="panel-c reading-text">
+          The <span class="panel-c word-highlight">bioluminescent</span> organisms that inhabit the bathypelagic zone produce light through chemical reactions, enabling complex signalling in an environment devoid of sunlight.
+        </div>
+      </div>
+
+      <!-- Definition floating card (dark) -->
+      <div class="panel-c definition-card">
+        <div class="panel-c def-header">
+          <div class="def-header-inner">
+            <span class="panel-c def-word">bioluminescent</span>
+            <span class="panel-c def-pos">adj.</span>
+          </div>
+          <div class="panel-c def-close"><span class="material-icons">close</span></div>
+        </div>
+        <div class="panel-c def-body">
+          <div class="panel-c def-text">Describing living organisms capable of producing light through an internal chemical reaction — no external energy source required.</div>
+          <div class="panel-c def-example">"The bioluminescent jellyfish pulsed gently in the darkness, trailing streaks of cold light."</div>
+        </div>
+        <div class="panel-c def-actions">
+          <button class="panel-c btn-save"><span class="material-icons">bookmark_add</span>Save Word</button>
+          <button class="panel-c btn-examples"><span class="material-icons">auto_awesome</span>More</button>
+        </div>
+      </div>
+
+      <div style="height:16px; background:#1C1C1E;"></div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="doc-footer-text">MTB-37 · Vera · Style Proposals · 2026-04-05</div>
+  </div>
+
+</body>
+</html>
