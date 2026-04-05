@@ -166,9 +166,21 @@ class ProfileScreen extends ConsumerWidget {
                     const SizedBox(height: 8),
                     Container(
                       decoration: brutalistBox(),
-                      child: const _SettingsRow(
-                        icon: Icons.settings,
-                        label: 'Preferences',
+                      child: Column(
+                        children: [
+                          const _SettingsRow(
+                            icon: Icons.settings,
+                            label: 'Preferences',
+                          ),
+                          const Divider(height: 1, color: kBlack, thickness: 1),
+                          GestureDetector(
+                            onTap: () => context.push('/account'),
+                            child: const _SettingsRow(
+                              icon: Icons.manage_accounts,
+                              label: 'Account',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 24),

@@ -12,6 +12,7 @@ import 'screens/profile_screen.dart';
 import 'screens/focus_session_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/share_progress_screen.dart';
+import 'screens/account_management_screen.dart';
 import 'screens/cloud_sync_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/stats_screen.dart';
@@ -119,6 +120,11 @@ GoRouter createRouter(String initialLocation) => GoRouter(
       path: '/my-profile',
       name: 'my-profile',
       builder: (context, state) => const UserProfileScreen(),
+    ),
+    GoRoute(
+      path: '/account',
+      name: 'account',
+      builder: (context, state) => const AccountManagementScreen(),
     ),
   ],
 );

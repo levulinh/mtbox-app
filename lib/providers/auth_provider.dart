@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../models/campaign.dart';
 import '../models/user_account.dart';
 
 enum AuthError { invalidCredentials, emailAlreadyInUse }
@@ -66,6 +67,27 @@ class AuthNotifier extends Notifier<AuthState> {
 
   Future<void> signOut() async {
     await _settingsBox.delete(_currentUserKey);
+    state = const AuthState();
+  }
+
+  Future<void> clearLocalData() async {
+    final campaignsBox = Hive.box<Campaign>('campaigns');
+    await campaignsBox.clear();
+    // Reset non-auth settings so onboarding runs fresh on next sign-in
+    await _settingsBox.delete('onboardingDone');
+    await _settingsBox.delete('cloudSyncDone');
+    await _settingsBox.delete('hasSampleData');
+    // Auth (currentUser) intentionally preserved — keeps cloud account
+  }
+
+  Future<void> deleteAccount() async {
+    final email = state.currentEmail;
+    if (email != null) {
+      await _usersBox.delete(email);
+    }
+    final campaignsBox = Hive.box<Campaign>('campaigns');
+    await campaignsBox.clear();
+    await _settingsBox.clear();
     state = const AuthState();
   }
 }
