@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 38 — implemented MTB-34 real-time multi-device sync)
+2026-04-05 (run 39 — implemented MTB-35 sign-out and data management)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -171,6 +171,12 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Home screen sync integration pattern**: `SliverToBoxAdapter` children inserted between `SliverAppBar` and `SliverPadding` for `_OfflineBar` (yellow) and `_CatchUpBar` (blue progress) — avoids padding issues. App bar right widget switches between `SAMPLE DATA` badge and `_SyncBadge` based on `hasSampleData`. `_SyncNotification` shown in the content list when `incomingNotification != null`. `_DevicesPanel` shown when signed in and not offline.
 - **`CampaignCard.isPendingSync`**: optional bool param (default false). When `true && campaign.checkedInToday`, shows `_PendingSyncChip` (yellow/amber) instead of `_ConfirmedState`. Used in `CampaignsScreen` which watches `syncStateProvider` and passes `isOffline && c.checkedInToday`.
 
+- **MTB-35 account management screen**: `AccountManagementScreen` at `/account` (top-level GoRoute, no bottom nav). Entry: Profile tab → "Account" row under SETTINGS section. Three sections: SESSION (Sign Out), DATA MANAGEMENT (Clear Local Data), DANGER ZONE (Delete Account). Each row triggers a `showDialog` with `_BrutalistDialog`.
+- **`_BrutalistDialog` pattern**: custom `Dialog(backgroundColor: Colors.transparent)` with `Container` — colored header bar (blue/terracotta/red), body content slot, two-button footer (white cancel + colored confirm). Used for all 3 account dialogs.
+- **`AuthNotifier.clearLocalData()`**: clears campaigns box + onboarding/cloudSyncDone/hasSampleData settings keys. Preserves `currentUser` (auth stays). User remains signed in with empty local data.
+- **`AuthNotifier.deleteAccount()`**: removes user from users box, clears all of settings box, clears campaigns box, sets state = AuthState(). Navigate to `/sign-in` after calling.
+- **`_kRed = Color(0xFFB83232)`**: file-private constant in `account_management_screen.dart` for danger zone styling — same red as MTB-13 delete flow. Not exported from theme.dart (one-off screen use).
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -201,3 +207,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/25 | MTB-32 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/26 | MTB-33 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/27 | MTB-34 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/28 | MTB-35 | In Review |
