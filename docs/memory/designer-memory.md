@@ -4,6 +4,7 @@
 Track design decisions, color palette, typography, and feedback received.
 
 ## Last Updated
+2026-04-05 (run 69)
 2026-04-05 (run 68)
 2026-04-05 (run 67)
 2026-04-05 (run 66)
@@ -167,3 +168,4 @@ Introduced 2026-04-04 run 53. Two-tier system: structural chrome stays bold, con
 | 2026-04-05 run 66 | MTB-33 | Cloud sync upload — 3-state composite: (1) Sync In Progress: cloud_upload icon block, progress bar at 60%, item list showing each campaign with Done/Uploading.../Pending badge; (2) Sync Successful: check_circle icon, 3-stat row (campaigns/check-ins/best streak), cloud_done info card, "Continue to App" CTA; (3) Sync Failed: red cloud_off icon, red error card (Connection Error), red progress bar showing partial upload, Retry Sync (blue) + Continue Offline (white) buttons; security info card on all 3 states reassures user local data is untouched | Awaiting Design Approval |
 | 2026-04-05 run 67 | MTB-34 | Real-time multi-device sync — 3-state composite: (1) Synced: Home screen with SYNCED badge in app bar (translucent white chip), activity feed with per-entry device attribution chip (device icon + name + "X min ago"); (2) Offline+Catch-up: OFFLINE red badge, amber warning bar below app bar, blue catch-up progress bar on reconnection, campaign cards show yellow PENDING SYNC badge for offline check-ins; (3) Silent notification: non-modal notification card below app bar (sync_alt icon + message naming source device), Your Devices panel with iPhone/MacBook/iPad rows + This Device/Synced/Offline chips, Synced Changes activity feed with device attribution | Awaiting Design Approval |
 | 2026-04-05 run 68 | MTB-35 | Sign-out and data management — 3-panel composite: (1) Account Management screen (pushed, no bottom nav): 3 sections SESSION / DATA MANAGEMENT / DANGER ZONE; Sign Out row (blue icon), Clear Local Data row (terracotta icon + caption), Delete Account row (red border/shadow/text/icon + caption); (2) Sign Out dialog: blue logout icon box + body text + cloud_done reassurance row + Cancel/Sign Out buttons; (3) Delete Account dialog: red warning icon box + red title + body + 3-row consequence checklist (close icons) + Keep My Account / Delete Forever footer | Awaiting Design Approval |
+| 2026-04-05 run 69 | MTB-5 | Trashed issue — commentCreate still returns "Entity not found" (6th attempt across runs 56–58, 62, 63, 69); skipped; mockup is current; no unhandled issues in "In Design" | Skipped (idle run) |
