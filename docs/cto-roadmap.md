@@ -49,7 +49,7 @@ _Last updated: 2026-04-05_
 
 ## Phase 5b: Cloud Wiring — Connect live backend to working UI
 <!-- CEO credential handoff (MTB-10 mention 2026-04-05): live Supabase URL + keys provided; Programmer confirmed no live wiring yet -->
-- [ ] Connect live Supabase credentials and wire backend integration (MTB-36) ← scheduled 2026-04-05
+- [x] Connect live Supabase credentials and wire backend integration (MTB-36) ← scheduled 2026-04-05
 
 ## Icebox (future ideas, not scheduled)
 - [ ] Multi-user / social accountability features
