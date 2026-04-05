@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/campaign.dart';
 import '../models/activity_entry.dart';
+import '../services/supabase_service.dart';
 
 const _kCampaignsBox = 'campaigns';
 
@@ -37,6 +39,8 @@ final _sampleCampaigns = [
 ];
 
 class CampaignsNotifier extends Notifier<List<Campaign>> {
+  RealtimeChannel? _realtimeChannel;
+
   @override
   List<Campaign> build() {
     final box = Hive.box<Campaign>(_kCampaignsBox);
@@ -46,7 +50,82 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
       }
       Hive.box('settings').put('hasSampleData', true);
     }
+    // Load from Supabase and subscribe to realtime changes (fire-and-forget).
+    Future.microtask(_syncFromSupabase);
+    _subscribeRealtime();
+    ref.onDispose(() => _realtimeChannel?.unsubscribe());
     return box.values.toList();
+  }
+
+  // ── Supabase sync ─────────────────────────────────────────────────────
+
+  Future<void> _syncFromSupabase() async {
+    final userId = SupabaseService.client.auth.currentUser?.id;
+    if (userId == null) return;
+    try {
+      final campaigns = await SupabaseService.fetchCampaigns(userId);
+      if (campaigns.isEmpty) {
+        // New user — push local (sample) campaigns to Supabase.
+        final box = Hive.box<Campaign>(_kCampaignsBox);
+        for (final c in box.values) {
+          await SupabaseService.upsertCampaign(c, userId);
+        }
+        return;
+      }
+      // Merge: Supabase is source of truth — overwrite Hive.
+      final box = Hive.box<Campaign>(_kCampaignsBox);
+      await box.clear();
+      for (final c in campaigns) {
+        await box.put(c.id, c);
+      }
+      state = box.values.toList();
+    } catch (_) {
+      // Network failure — local Hive data remains active.
+    }
+  }
+
+  void _subscribeRealtime() {
+    final userId = SupabaseService.client.auth.currentUser?.id;
+    if (userId == null) return;
+    _realtimeChannel = SupabaseService.client
+        .channel('campaigns_data_$userId')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'campaigns',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'user_id',
+            value: userId,
+          ),
+          callback: _handleRealtimeChange,
+        );
+    _realtimeChannel!.subscribe();
+  }
+
+  void _handleRealtimeChange(PostgresChangePayload payload) {
+    final box = Hive.box<Campaign>(_kCampaignsBox);
+    switch (payload.eventType) {
+      case PostgresChangeEvent.insert:
+      case PostgresChangeEvent.update:
+        final campaign = SupabaseService.campaignFromMap(payload.newRecord);
+        box.put(campaign.id, campaign);
+        state = box.values.toList();
+      case PostgresChangeEvent.delete:
+        final id = payload.oldRecord['id'] as String?;
+        if (id != null) {
+          box.delete(id);
+          state = box.values.toList();
+        }
+      default:
+        break;
+    }
+  }
+
+  void _upsertAsync(Campaign campaign) {
+    final userId = SupabaseService.client.auth.currentUser?.id;
+    if (userId == null) return;
+    SupabaseService.upsertCampaign(campaign, userId).ignore();
   }
 
   /// Deletes the 2 sample campaigns and clears the sample-data flag.
@@ -56,12 +135,15 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
     box.delete(_kSampleExerciseId);
     Hive.box('settings').put('hasSampleData', false);
     state = box.values.toList();
+    SupabaseService.deleteCampaign(_kSampleReadDailyId).ignore();
+    SupabaseService.deleteCampaign(_kSampleExerciseId).ignore();
   }
 
   void add(Campaign campaign) {
     final box = Hive.box<Campaign>(_kCampaignsBox);
     box.put(campaign.id, campaign);
     state = box.values.toList();
+    _upsertAsync(campaign);
   }
 
   /// Returns true if this check-in completed the campaign goal.
@@ -92,6 +174,7 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
     );
     box.put(campaignId, updated);
     state = box.values.toList();
+    _upsertAsync(updated);
     return isCompleted;
   }
 
@@ -125,12 +208,14 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
     );
     box.put(campaignId, updated);
     state = box.values.toList();
+    _upsertAsync(updated);
   }
 
   void delete(String campaignId) {
     final box = Hive.box<Campaign>(_kCampaignsBox);
     box.delete(campaignId);
     state = box.values.toList();
+    SupabaseService.deleteCampaign(campaignId).ignore();
   }
 
   void setReminder(String campaignId, {required bool enabled, String? time}) {
@@ -155,6 +240,7 @@ class CampaignsNotifier extends Notifier<List<Campaign>> {
     );
     box.put(campaignId, updated);
     state = box.values.toList();
+    _upsertAsync(updated);
   }
 
   static String _pad(int n) => n.toString().padLeft(2, '0');

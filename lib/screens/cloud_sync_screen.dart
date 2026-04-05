@@ -28,7 +28,7 @@ class CloudSyncScreen extends ConsumerStatefulWidget {
 class _CloudSyncScreenState extends ConsumerState<CloudSyncScreen> {
   _SyncPhase _phase = _SyncPhase.syncing;
   List<_SyncItem> _items = [];
-  int _uploadedAtFailure = 0;
+  final int _uploadedAtFailure = 0;
   Timer? _timer;
 
   @override
