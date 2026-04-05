@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 37 — implemented MTB-33 cloud sync upload screen)
+2026-04-05 (run 38 — implemented MTB-34 real-time multi-device sync)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -166,6 +166,11 @@ Track architecture decisions, libraries used, patterns established, and things t
 
 - **MTB-33 cloud sync screen**: `CloudSyncScreen` at `/cloud-sync` (top-level GoRoute, no bottom nav). 3 phases managed via `_SyncPhase` enum: `syncing` → `success` → `failed`. Simulation uses `Timer`-based sequential per-campaign upload. `_SyncItem` is a mutable wrapper (field `status` mutated directly, not via constructor param — avoids unused_element_parameter analyzer warning). Sign-in routes to `/cloud-sync` if `Hive.box('settings').get('cloudSyncDone')` is false; success state sets flag to true. Failed state offers Retry (restarts `_startSync()`) and Continue Offline (goes to `/` without setting flag).
 
+- **MTB-34 real-time multi-device sync**: `SyncStateNotifier` in `lib/providers/sync_provider.dart` — `NotifierProvider<SyncStateNotifier, SyncState>` with `SyncPhase` enum (`synced`/`syncing`/`offline`). Simulates a 30s cycle: synced→offline(15s)→syncing+progress(6s+3s)→synced+notification(4s). `SyncState` carries `pendingChanges`, `catchUpProgress`, `incomingNotification`. `kMockDevices` list of `DeviceInfo` in sync_provider.dart for the devices panel.
+- **`ActivityEntry.deviceName`**: optional `String?` field — null = this device, non-null = device name for remote check-ins. Added to `activityFeedProvider`: completed entries get a rotated mock device name (`_kMockActivityDevices[i % 3]`).
+- **Home screen sync integration pattern**: `SliverToBoxAdapter` children inserted between `SliverAppBar` and `SliverPadding` for `_OfflineBar` (yellow) and `_CatchUpBar` (blue progress) — avoids padding issues. App bar right widget switches between `SAMPLE DATA` badge and `_SyncBadge` based on `hasSampleData`. `_SyncNotification` shown in the content list when `incomingNotification != null`. `_DevicesPanel` shown when signed in and not offline.
+- **`CampaignCard.isPendingSync`**: optional bool param (default false). When `true && campaign.checkedInToday`, shows `_PendingSyncChip` (yellow/amber) instead of `_ConfirmedState`. Used in `CampaignsScreen` which watches `syncStateProvider` and passes `isOffline && c.checkedInToday`.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -195,3 +200,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/24 | MTB-31 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/25 | MTB-32 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/26 | MTB-33 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/27 | MTB-34 | In Review |
