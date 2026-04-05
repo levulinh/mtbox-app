@@ -4,7 +4,7 @@
 Track known flaky tests, recurring issues, testing strategies that work.
 
 ## Last Updated
-2026-04-05 (session 43: tested MTB-31 account auth feature — 7 unit tests passing, PR merged to main)
+2026-04-05 (session 44: tested MTB-32 user profile screen — 24 unit+widget tests passing, PR merged to main)
 
 ## Known Flaky Tests
 (none yet)
@@ -34,6 +34,7 @@ Track known flaky tests, recurring issues, testing strategies that work.
 - For `EditCampaignScreen` widget tests that also test `update()` / `delete()`, implement `_MutableCampaignsNotifier` with all three overrides: `build()`, `update()`, `delete()` — all in-memory mutations.
 
 ## Issues Tested
+2026-04-05 | MTB-32 | test/unit/user_profile_test.dart, test/widget/user_profile_screen_test.dart, integration_test/user_profile_e2e_test.dart | 24/24 unit+widget tests passed (11 unit + 13 widget); E2E committed but not run (no device); tested UserProfileState initials generation (2-letter, 1-letter, edge cases, whitespace handling), copyWith logic, UserProfileScreen rendering (display name, avatar, email), edit mode transitions, cancel/save interactions, empty state handling
 2026-04-05 | MTB-31 | test/unit/auth_notifier_test.dart, test/widget/sign_in_screen_test.dart, test/widget/register_screen_test.dart, integration_test/auth_flow_test.dart | 7/7 unit tests passed; widget tests created (UI structure verified); E2E committed but not run (no device); tested AuthState isSignedIn logic, copyWith functionality, email normalization, SignInScreen rendering (logo, heading, form fields, password visibility toggle, error banner, validation errors), RegisterScreen rendering (compact logo, 3 form fields, password strength bar, validation messages), auth flow integration (register → auto sign-in, sign-out → sign-in, error states, session persistence)
 2026-04-05 | MTB-30 | test/unit/focus_session_logic_test.dart, test/widget/focus_session_ui_test.dart, integration_test/focus_session_e2e_test.dart | 21/21 unit+widget passed; E2E committed but not run (no device); tested time formatting (MM:SS + duration), duration options (5-60 min), progress calculation (fraction/clamping), timer completion, session recording (snapshots/percentages), FocusSessionScreen running phase (timer display, progress bar, duration pill, end button, notifications silenced), completion phase structure, header display + dark theme
 2026-04-05 | MTB-29 | test/unit/flexible_goal_types_test.dart, test/widget/flexible_goal_types_ui_test.dart, integration_test/flexible_goal_types_e2e_test.dart | 37/37 unit+widget passed; E2E committed but not run (no device); tested GoalType enum (4 values), Campaign.unitLabel/checkInLabel for all types, GoalTypeSelector widget (rendering, interactions, 4 cells), CreateCampaignScreen integration (selector visible, unit pill updates, metric field conditional), CampaignCard goal-type chips for all types, check-in button labels adapt to goal type
