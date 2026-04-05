@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../providers/auth_provider.dart';
 import '../theme.dart';
 import '../widgets/auth_widgets.dart';
@@ -41,7 +42,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     if (!mounted) return;
     final auth = ref.read(authProvider);
     if (auth.isSignedIn) {
-      context.go('/');
+      final settings = Hive.box('settings');
+      final cloudSyncDone =
+          settings.get('cloudSyncDone', defaultValue: false) as bool;
+      context.go(cloudSyncDone ? '/' : '/cloud-sync');
     }
   }
 
