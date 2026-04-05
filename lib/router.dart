@@ -12,6 +12,7 @@ import 'screens/profile_screen.dart';
 import 'screens/focus_session_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/share_progress_screen.dart';
+import 'screens/cloud_sync_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/stats_screen.dart';
 import 'screens/user_profile_screen.dart';
@@ -98,6 +99,11 @@ GoRouter createRouter(String initialLocation) => GoRouter(
       path: '/onboarding',
       name: 'onboarding',
       builder: (context, state) => const OnboardingScreen(),
+    ),
+    GoRoute(
+      path: '/cloud-sync',
+      name: 'cloud-sync',
+      builder: (context, state) => const CloudSyncScreen(),
     ),
     GoRoute(
       path: '/sign-in',
