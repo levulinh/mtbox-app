@@ -21,6 +21,9 @@ Future<void> main() async {
   await NotificationService.initialize();
 
   final settings = Hive.box('settings');
+  if (!settings.containsKey('memberSince')) {
+    settings.put('memberSince', DateTime.now().millisecondsSinceEpoch);
+  }
   final currentUser = settings.get('currentUser') as String?;
   final onboardingDone = settings.get('onboardingDone', defaultValue: false) as bool;
 
