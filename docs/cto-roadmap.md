@@ -42,7 +42,7 @@ _Last updated: 2026-04-05_
 ## Phase 5: Cloud — Account management and cross-device sync
 <!-- CEO steering (MTB-10 mention 2026-04-05): add account management and cloud synchronization using Supabase -->
 - [x] Account registration and sign-in (Supabase Auth — email/password) ← scheduled 2026-04-05
-- [ ] User profile screen (display name, avatar, account settings) ← scheduled 2026-04-05
+- [x] User profile screen (display name, avatar, account settings) ← scheduled 2026-04-05
 - [ ] Cloud sync — upload local campaign data to Supabase on sign-in ← scheduled 2026-04-05
 - [ ] Real-time multi-device sync (changes reflect across devices instantly) ← scheduled 2026-04-05
 - [ ] Sign-out and data management (delete account, clear local data) ← scheduled 2026-04-05
