@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 39 — implemented MTB-35 sign-out and data management)
+2026-04-05 (run 40 — wired real Supabase auth + PostgreSQL + Realtime per CEO directive on MTB-10)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -16,6 +16,7 @@ Track architecture decisions, libraries used, patterns established, and things t
 | timezone | ^0.11.0 | Required by flutter_local_notifications for zonedSchedule | 2026-04-04 |
 | hive_flutter | ^1.1.0 | Local persistence for campaign data | 2026-04-04 |
 | image_picker | ^1.2.1 | Pick photos from gallery or camera for avatar | 2026-04-05 |
+| supabase_flutter | ^2.12.2 | Real Supabase auth + PostgreSQL + Realtime | 2026-04-05 |
 
 ## Architecture Decisions
 - **Riverpod 3.x uses `Notifier<T>` + `NotifierProvider`** — `StateNotifier` was removed in Riverpod 3. Use `class Foo extends Notifier<T>` with a `build()` method, and `NotifierProvider<Foo, T>(Foo.new)`. The `state` field works the same way inside the notifier.
@@ -177,6 +178,16 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **`AuthNotifier.deleteAccount()`**: removes user from users box, clears all of settings box, clears campaigns box, sets state = AuthState(). Navigate to `/sign-in` after calling.
 - **`_kRed = Color(0xFFB83232)`**: file-private constant in `account_management_screen.dart` for danger zone styling — same red as MTB-13 delete flow. Not exported from theme.dart (one-off screen use).
 
+- **Supabase integration (MTB-10 CEO directive)**: `SupabaseService` in `lib/services/supabase_service.dart` — holds URL + publishable key, campaign serialization helpers (`campaignToMap` / `campaignFromMap`), and DB helpers (`fetchCampaigns`, `upsertCampaign`, `deleteCampaign`). Project URL: `https://euxbkoxtetsqhiiitpvv.supabase.co`. Uses new publishable key (not legacy JWT anon key).
+- **Supabase auth replaces Hive local auth**: `AuthNotifier` calls `supabase.auth.signInWithPassword` / `signUp` / `signOut`. Session persisted automatically by supabase_flutter (no manual Hive `currentUser` key). Startup routing reads `SupabaseService.client.auth.currentSession`. `AuthError` enum and `AuthState` unchanged — UI works as-is.
+- **Supabase account deletion limitation**: client-side `supabase.auth.admin.deleteUser()` requires service role key (not safe in client app). Current `deleteAccount()` clears local data + signs out only. Full deletion needs a server-side Supabase Edge Function.
+- **Campaign sync pattern**: `CampaignsNotifier.build()` calls `Future.microtask(_syncFromSupabase)` to load from Supabase after Hive. On startup with empty Supabase, pushes local (sample) campaigns up. Otherwise Supabase is source of truth — overwrites Hive. Every mutation calls `_upsertAsync(campaign)` (fire-and-forget). Delete calls `SupabaseService.deleteCampaign(id).ignore()`.
+- **Supabase Realtime in CampaignsNotifier**: subscribes to `campaigns` table filtered by `user_id`. Handles `insert`/`update` (merge into Hive + state) and `delete` (remove from Hive + state). Channel name: `campaigns_data_$userId`. Unsubscribed via `ref.onDispose`.
+- **Supabase Realtime in SyncStateNotifier**: subscribes to `campaigns` table for `update` events. Channel subscription status drives `SyncPhase` (subscribed=synced, channelError/timedOut/closed=offline). Remote updates show a 4s notification.
+- **`PostgresChangeFilterType.eq`** — the correct enum for equality filter in `PostgresChangeFilter`. Not `FilterType.eq` (that doesn't exist).
+- **`docs/supabase_migration.sql`**: CEO must run this in Supabase SQL editor to create `campaigns` table + RLS policy + enable Realtime publication.
+- **`SharePlus.instance.share(ShareParams(files: [...], subject: ...))`** — updated from deprecated `Share.shareXFiles` in share_plus v12.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -208,3 +219,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/26 | MTB-33 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/27 | MTB-34 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/28 | MTB-35 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/29 | MTB-10 (Supabase) | In Review |
