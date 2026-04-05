@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +17,13 @@ class CampaignsScreen extends ConsumerStatefulWidget {
 
 class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
   String? _toastMessage;
+  Timer? _toastTimer;
+
+  @override
+  void dispose() {
+    _toastTimer?.cancel();
+    super.dispose();
+  }
 
   void _handleCheckIn(String campaignId) {
     final completed =
@@ -26,9 +35,13 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
     final updated = ref
         .read(campaignsProvider)
         .firstWhere((c) => c.id == campaignId);
+    _toastTimer?.cancel();
     setState(() {
       _toastMessage =
           'Day ${updated.currentDay} checked in! Streak: ${updated.currentStreak} days';
+    });
+    _toastTimer = Timer(const Duration(milliseconds: 2500), () {
+      if (mounted) setState(() => _toastMessage = null);
     });
   }
 
@@ -108,38 +121,106 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
   }
 }
 
-class _CheckInToast extends StatelessWidget {
+class _CheckInToast extends StatefulWidget {
   final String message;
 
   const _CheckInToast({required this.message});
 
   @override
+  State<_CheckInToast> createState() => _CheckInToastState();
+}
+
+class _CheckInToastState extends State<_CheckInToast>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<Offset> _slide;
+  late final Animation<double> _fade;
+
+  // Confetti color palette using app colors
+  static const _confettiColors = [
+    kBlue,
+    kWhite,
+    Color(0xFFFFD700), // gold
+    Color(0xFFB5735A), // terracotta
+    Color(0xFF4AFF91), // green
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _slide = Tween<Offset>(
+      begin: const Offset(0, -1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOut));
+    _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeIn);
+    _ctrl.forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: const BoxDecoration(
-        color: kBlack,
-        border: Border(
-          left: BorderSide(color: kBlue, width: 4),
-        ),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.check_circle, color: kBlue, size: 16),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              message.toUpperCase(),
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: kWhite,
-                letterSpacing: 0.5,
+    return SlideTransition(
+      position: _slide,
+      child: FadeTransition(
+        opacity: _fade,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Confetti row
+            SizedBox(
+              height: 12,
+              child: Row(
+                children: List.generate(24, (i) {
+                  final color =
+                      _confettiColors[i % _confettiColors.length];
+                  return Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 1),
+                      color: color,
+                    ),
+                  );
+                }),
               ),
             ),
-          ),
-        ],
+            Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: const BoxDecoration(
+                color: kBlack,
+                border: Border(
+                  left: BorderSide(color: kBlue, width: 4),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.check_circle, color: kBlue, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      widget.message.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: kWhite,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -259,22 +340,41 @@ class _EmptyState extends StatelessWidget {
                     height: 1.5,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'TAP + TO BEGIN',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: kBlue,
-                        letterSpacing: 0.5,
+                const SizedBox(height: 16),
+                GestureDetector(
+                  onTap: () => context.push('/campaigns/new'),
+                  child: Container(
+                    height: 48,
+                    decoration: const BoxDecoration(
+                      color: kBlue,
+                      border: Border.fromBorderSide(
+                        BorderSide(color: kBlack, width: kBorderWidth),
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: kBlack,
+                          offset: Offset(kShadowOffset, kShadowOffset),
+                          blurRadius: 0,
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_downward, size: 16, color: kBlue),
-                  ],
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.add, color: kWhite, size: 18),
+                        SizedBox(width: 8),
+                        Text(
+                          'START A CAMPAIGN',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: kWhite,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
