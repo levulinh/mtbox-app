@@ -1,3 +1,32 @@
+import 'package:flutter/material.dart';
+
+// Available campaign color palette (hex strings, no #)
+const kCampaignColorOptions = [
+  '4C6EAD', // Blue
+  'B5735A', // Terracotta
+  '5A8A6E', // Forest
+  '9B6B9B', // Plum
+  'C4A052', // Amber
+  '6B8A9B', // Steel
+  '8B7355', // Khaki
+  '9B5A6B', // Rose
+];
+
+// Available campaign icons: (name, IconData)
+const kCampaignIconOptions = [
+  ('fitness_center', Icons.fitness_center),
+  ('menu_book', Icons.menu_book),
+  ('directions_run', Icons.directions_run),
+  ('self_improvement', Icons.self_improvement),
+  ('language', Icons.language),
+  ('code', Icons.code),
+  ('music_note', Icons.music_note),
+  ('restaurant', Icons.restaurant),
+];
+
+/// The type of unit used to measure campaign progress.
+enum GoalType { days, hours, sessions, custom }
+
 class Campaign {
   final String id;
   final String name;
@@ -9,6 +38,10 @@ class Campaign {
   final String? lastCheckInDate;
   final bool reminderEnabled;
   final String? reminderTime; // "HH:mm" 24h format, e.g. "09:00"
+  final String colorHex; // e.g. '4C6EAD' (no #)
+  final String iconName; // e.g. 'fitness_center'
+  final GoalType goalType;
+  final String metricName; // used when goalType == GoalType.custom
 
   const Campaign({
     required this.id,
@@ -21,7 +54,53 @@ class Campaign {
     this.lastCheckInDate,
     this.reminderEnabled = false,
     this.reminderTime,
+    this.colorHex = '4C6EAD',
+    this.iconName = 'fitness_center',
+    this.goalType = GoalType.days,
+    this.metricName = '',
   });
+
+  /// The campaign's accent color, parsed from [colorHex].
+  Color get campaignColor =>
+      Color(int.parse(colorHex, radix: 16) | 0xFF000000);
+
+  /// The campaign's icon, looked up by [iconName].
+  IconData get iconData {
+    for (final (name, icon) in kCampaignIconOptions) {
+      if (name == iconName) return icon;
+    }
+    return Icons.fitness_center;
+  }
+
+  /// Short uppercase unit label for this goal type.
+  String get unitLabel {
+    switch (goalType) {
+      case GoalType.days:
+        return 'DAYS';
+      case GoalType.hours:
+        return 'HRS';
+      case GoalType.sessions:
+        return 'SESSIONS';
+      case GoalType.custom:
+        return metricName.isNotEmpty ? metricName.toUpperCase() : 'UNITS';
+    }
+  }
+
+  /// Label for the check-in action button.
+  String get checkInLabel {
+    switch (goalType) {
+      case GoalType.days:
+        return 'CHECK IN TODAY';
+      case GoalType.hours:
+        return 'LOG HOURS';
+      case GoalType.sessions:
+        return 'LOG SESSION';
+      case GoalType.custom:
+        return metricName.isNotEmpty
+            ? 'LOG ${metricName.toUpperCase()}'
+            : 'LOG PROGRESS';
+    }
+  }
 
   double get progressPercent => currentDay / totalDays;
 

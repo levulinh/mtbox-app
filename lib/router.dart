@@ -9,7 +9,14 @@ import 'screens/create_campaign_screen.dart';
 import 'screens/edit_campaign_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/focus_session_screen.dart';
+import 'screens/register_screen.dart';
+import 'screens/share_progress_screen.dart';
+import 'screens/account_management_screen.dart';
+import 'screens/cloud_sync_screen.dart';
+import 'screens/sign_in_screen.dart';
 import 'screens/stats_screen.dart';
+import 'screens/user_profile_screen.dart';
 import 'theme.dart';
 
 CustomTransitionPage<void> _slidePage(LocalKey key, Widget child) {
@@ -99,10 +106,49 @@ GoRouter createRouter(String initialLocation) => GoRouter(
       ),
     ),
     GoRoute(
+      path: '/campaigns/:id/share',
+      name: 'share-progress',
+      builder: (context, state) => ShareProgressScreen(
+        campaignId: state.pathParameters['id']!,
+      ),
+    ),
+    GoRoute(
+      path: '/campaigns/:id/focus',
+      name: 'focus-session',
+      builder: (context, state) => FocusSessionScreen(
+        campaignId: state.pathParameters['id']!,
+      ),
+    ),
+    GoRoute(
       path: '/onboarding',
       name: 'onboarding',
       pageBuilder: (context, state) =>
           _slidePage(state.pageKey, const OnboardingScreen()),
+    ),
+    GoRoute(
+      path: '/cloud-sync',
+      name: 'cloud-sync',
+      builder: (context, state) => const CloudSyncScreen(),
+    ),
+    GoRoute(
+      path: '/sign-in',
+      name: 'sign-in',
+      builder: (context, state) => const SignInScreen(),
+    ),
+    GoRoute(
+      path: '/register',
+      name: 'register',
+      builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: '/my-profile',
+      name: 'my-profile',
+      builder: (context, state) => const UserProfileScreen(),
+    ),
+    GoRoute(
+      path: '/account',
+      name: 'account',
+      builder: (context, state) => const AccountManagementScreen(),
     ),
   ],
 );

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 375px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      background: #E8E2DA;
+    }
+
+    /* ── Status bar ── */
+    .status-bar {
+      height: 44px;
+      background: #4C6EAD;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      justify-content: space-between;
+    }
+    .status-bar .material-icons { font-size: 14px; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+
+    /* ── App bar ── */
+    .app-bar {
+      height: 56px;
+      background: #4C6EAD;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      border-bottom: 2px solid #2C2C2C;
+      box-shadow: 0 2px 0 #2C2C2C;
+      gap: 12px;
+    }
+    .app-bar-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      flex: 1;
+      letter-spacing: 0.5px;
+    }
+    .app-bar .material-icons { font-size: 24px; }
+
+    /* ── Screens wrapper ── */
+    .screen { width: 375px; background: #F7F3EF; }
+
+    /* ── Content padding ── */
+    .content { padding: 16px; }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6B6B6B;
+      border-left: 3px solid #4C6EAD;
+      padding-left: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* ── Stat row ── */
+    .stat-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .stat-cell {
+      flex: 1;
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-cell .material-icons { font-size: 20px; color: #4C6EAD; }
+    .stat-value { font-size: 20px; font-weight: 700; color: #4C6EAD; line-height: 1; }
+    .stat-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: #6B6B6B; }
+
+    /* ── Progress card ── */
+    .progress-card {
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .progress-day-label { font-size: 12px; font-weight: 700; color: #1A1A1A; }
+    .progress-pct { font-size: 14px; font-weight: 900; color: #4C6EAD; }
+    .progress-bar-track {
+      height: 10px;
+      background: #E8E2DA;
+      border: 1.5px solid #5A5A5A;
+      margin-bottom: 10px;
+    }
+    .progress-bar-fill { height: 100%; background: #4C6EAD; }
+
+    /* ── Tick strip ── */
+    .tick-strip { display: flex; gap: 3px; flex-wrap: wrap; }
+    .tick { width: 9px; height: 9px; border: 1.5px solid #5A5A5A; }
+    .tick.done { background: #4C6EAD; border-color: #4C6EAD; }
+    .tick.missed { background: #FFFDF9; border-color: #5A5A5A; }
+    .tick.future { background: #E8E2DA; border-color: #B0A898; }
+
+    /* ── Share Progress button ── */
+    .share-btn {
+      width: 100%;
+      height: 50px;
+      background: #4C6EAD;
+      border: 2px solid #2C2C2C;
+      box-shadow: 3px 3px 0 #2C2C2C;
+      color: white;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .share-btn .material-icons { font-size: 20px; }
+
+    /* ── Activity rows ── */
+    .activity-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #E8E2DA;
+    }
+    .activity-row:last-child { border-bottom: none; }
+    .activity-row .material-icons { font-size: 18px; color: #4C6EAD; }
+    .activity-date { font-size: 12px; font-weight: 700; color: #1A1A1A; flex: 1; }
+    .activity-badge {
+      font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 2px 6px; border: 1.5px solid #5A5A5A;
+    }
+    .activity-badge.done { background: #4C6EAD; color: white; border-color: #4C6EAD; }
+    .activity-badge.missed { background: #FFFDF9; color: #B5735A; border-color: #B5735A; }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .annotation {
+      background: #E8E2DA;
+      border-top: 2px dashed #B0A898;
+      border-bottom: 2px dashed #B0A898;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .annotation .material-icons { font-size: 16px; color: #4C6EAD; }
+    .annotation-label {
+      font-size: 10px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 1.5px; color: #6B6B6B;
+    }
+
+    /* ═══════════════════════════════════════
+       STATE 2 — Share Preview Screen
+    ═══════════════════════════════════════ */
+    .share-preview-screen { width: 375px; background: #F7F3EF; }
+
+    .share-card-wrapper { padding: 16px 16px 0; }
+
+    /* The shareable image card */
+    .share-card {
+      background: #FFFDF9;
+      border: 2px solid #2C2C2C;
+      box-shadow: 4px 4px 0 #2C2C2C;
+      padding: 20px;
+      margin-bottom: 0;
+    }
+
+    /* Branding strip */
+    .card-brand-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid #E8E2DA;
+    }
+    .card-brand-dot {
+      width: 26px; height: 26px;
+      background: #4C6EAD;
+      border: 1.5px solid #2C2C2C;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-brand-dot .material-icons { font-size: 15px; color: white; }
+    .card-brand-name {
+      font-size: 11px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 2px; color: #4C6EAD;
+    }
+    .card-brand-tag {
+      margin-left: auto;
+      font-size: 9px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 1px; color: #B5735A;
+      border: 1.5px solid #B5735A;
+      padding: 2px 6px;
+    }
+
+    /* Campaign name */
+    .card-campaign-name {
+      font-size: 22px; font-weight: 900; color: #1A1A1A;
+      letter-spacing: -0.5px; line-height: 1.1;
+      text-transform: uppercase; margin-bottom: 3px;
+    }
+    .card-campaign-sub {
+      font-size: 10px; font-weight: 700; color: #6B6B6B;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+    }
+
+    /* Big progress number */
+    .card-progress-big {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .card-pct-big {
+      font-size: 54px; font-weight: 900; color: #4C6EAD;
+      line-height: 1; letter-spacing: -3px;
+    }
+    .card-pct-unit {
+      font-size: 24px; font-weight: 900; color: #4C6EAD;
+      margin-bottom: 6px;
+    }
+    .card-count-block {
+      margin-left: auto;
+      text-align: right;
+      padding-bottom: 6px;
+    }
+    .card-count-value {
+      font-size: 22px; font-weight: 900; color: #1A1A1A; line-height: 1;
+    }
+    .card-count-label {
+      font-size: 10px; font-weight: 700; color: #6B6B6B; text-transform: uppercase;
+    }
+
+    /* Progress bar in card */
+    .card-bar-track {
+      height: 14px;
+      background: #E8E2DA;
+      border: 2px solid #2C2C2C;
+      margin-bottom: 12px;
+    }
+    .card-bar-fill { height: 100%; background: #4C6EAD; }
+
+    /* Tick strip in card */
+    .card-tick-strip { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 16px; }
+    .card-tick { width: 10px; height: 10px; border: 1.5px solid #5A5A5A; }
+    .card-tick.done { background: #4C6EAD; border-color: #4C6EAD; }
+    .card-tick.missed { background: #FFFDF9; }
+    .card-tick.future { background: #E8E2DA; border-color: #B0A898; }
+
+    /* Card footer */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1.5px solid #E8E2DA;
+    }
+    .card-footer-streak {
+      display: flex; align-items: center; gap: 4px;
+      background: #4C6EAD;
+      border: 1.5px solid #2C2C2C;
+      padding: 4px 8px;
+      color: white;
+      font-size: 10px; font-weight: 900; text-transform: uppercase;
+    }
+    .card-footer-streak .material-icons { font-size: 12px; }
+    .card-footer-date {
+      margin-left: auto;
+      font-size: 10px; font-weight: 700; color: #6B6B6B; text-transform: uppercase;
+    }
+
+    /* ── Action buttons ── */
+    .share-actions { padding: 14px 16px; display: flex; gap: 10px; }
+    .action-btn {
+      flex: 1; height: 48px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+    .action-btn.save {
+      background: #FFFDF9;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      color: #1A1A1A;
+    }
+    .action-btn.share-now {
+      background: #4C6EAD;
+      border: 2px solid #2C2C2C;
+      box-shadow: 2px 2px 0 #2C2C2C;
+      color: white;
+    }
+    .action-btn .material-icons { font-size: 18px; }
+
+    /* ── Share sheet ── */
+    .share-sheet-section { padding: 0 16px 20px; }
+    .share-sheet {
+      background: #FFFDF9;
+      border: 2px solid #2C2C2C;
+      box-shadow: 4px 4px 0 #2C2C2C;
+      padding: 16px;
+    }
+    .share-apps { display: flex; gap: 0; justify-content: space-between; margin-bottom: 14px; }
+    .share-app { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .share-app-icon {
+      width: 48px; height: 48px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .share-app-icon.messages { background: #4C6EAD; color: white; }
+    .share-app-icon .material-icons { font-size: 22px; }
+    .share-app-icon.mail { background: #FFFDF9; color: #1A1A1A; }
+    .share-app-icon.instagram { background: #B5735A; color: white; }
+    .share-app-icon.more { background: #E8E2DA; color: #1A1A1A; }
+    .share-app-label { font-size: 9px; font-weight: 900; text-transform: uppercase; color: #6B6B6B; letter-spacing: 0.5px; }
+
+    .share-copy-row {
+      display: flex; align-items: center; height: 40px;
+      border: 1.5px solid #5A5A5A; background: #F7F3EF; padding: 0 10px; gap: 8px;
+    }
+    .share-copy-row .material-icons { font-size: 16px; color: #6B6B6B; }
+    .copy-filename { font-size: 11px; font-weight: 600; color: #6B6B6B; flex: 1; }
+    .copy-btn {
+      background: #4C6EAD;
+      border: 1.5px solid #2C2C2C;
+      color: white;
+      font-size: 10px; font-weight: 900; text-transform: uppercase;
+      padding: 4px 10px; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════
+       STATE 1 — Campaign Detail (entry point)
+  ════════════════════════════════════ -->
+  <div class="screen">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+    <div class="app-bar">
+      <span class="material-icons">arrow_back</span>
+      <span class="app-bar-title">Morning Run</span>
+      <span class="material-icons" style="font-size:20px;opacity:0.8">edit</span>
+    </div>
+
+    <div class="content">
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat-cell">
+          <span class="material-icons">local_fire_department</span>
+          <span class="stat-value">14</span>
+          <span class="stat-label">Streak</span>
+        </div>
+        <div class="stat-cell">
+          <span class="material-icons">check_circle</span>
+          <span class="stat-value">22</span>
+          <span class="stat-label">Done</span>
+        </div>
+        <div class="stat-cell">
+          <span class="material-icons">flag</span>
+          <span class="stat-value">30</span>
+          <span class="stat-label">Goal</span>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="section-label">Progress</div>
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-day-label">Day 22 of 30</span>
+          <span class="progress-pct">73%</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" style="width:73%"></div>
+        </div>
+        <div class="tick-strip" id="ticks1"></div>
+      </div>
+
+      <!-- Share CTA -->
+      <div class="share-btn">
+        <span class="material-icons">ios_share</span>
+        Share My Progress
+      </div>
+
+      <!-- Activity -->
+      <div class="section-label">Recent Activity</div>
+      <div class="progress-card">
+        <div class="activity-row">
+          <span class="material-icons">check_circle</span>
+          <span class="activity-date">Today, Apr 4</span>
+          <span class="activity-badge done">Done</span>
+        </div>
+        <div class="activity-row">
+          <span class="material-icons">check_circle</span>
+          <span class="activity-date">Yesterday, Apr 3</span>
+          <span class="activity-badge done">Done</span>
+        </div>
+        <div class="activity-row">
+          <span class="material-icons" style="color:#B0A898">radio_button_unchecked</span>
+          <span class="activity-date">Apr 2</span>
+          <span class="activity-badge missed">Missed</span>
+        </div>
+        <div class="activity-row">
+          <span class="material-icons">check_circle</span>
+          <span class="activity-date">Apr 1</span>
+          <span class="activity-badge done">Done</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANNOTATION -->
+  <div class="annotation">
+    <span class="material-icons">arrow_downward</span>
+    <span class="annotation-label">Tap "Share My Progress" → Share Preview</span>
+  </div>
+
+  <!-- ════════════════════════════════════
+       STATE 2 — Share Preview Screen
+  ════════════════════════════════════ -->
+  <div class="share-preview-screen">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+    <div class="app-bar">
+      <span class="material-icons">close</span>
+      <span class="app-bar-title">Share Progress</span>
+    </div>
+
+    <div class="share-card-wrapper">
+      <div class="section-label" style="margin-bottom:12px">Preview</div>
+
+      <!-- THE SHAREABLE CARD (what gets exported as image) -->
+      <div class="share-card">
+        <!-- Brand -->
+        <div class="card-brand-strip">
+          <div class="card-brand-dot">
+            <span class="material-icons">bolt</span>
+          </div>
+          <span class="card-brand-name">MTBox</span>
+          <span class="card-brand-tag">Campaign Tracker</span>
+        </div>
+
+        <!-- Campaign name + goal -->
+        <div class="card-campaign-name">Morning Run</div>
+        <div class="card-campaign-sub">30-Day Challenge</div>
+
+        <!-- Big percentage + count -->
+        <div class="card-progress-big">
+          <span class="card-pct-big">73</span>
+          <span class="card-pct-unit">%</span>
+          <div class="card-count-block">
+            <div class="card-count-value">22 / 30</div>
+            <div class="card-count-label">Days Complete</div>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="card-bar-track">
+          <div class="card-bar-fill" style="width:73%"></div>
+        </div>
+
+        <!-- Tick strip -->
+        <div class="card-tick-strip" id="cardTicks"></div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+          <div class="card-footer-streak">
+            <span class="material-icons">local_fire_department</span>
+            14-Day Streak
+          </div>
+          <span class="card-footer-date">Apr 4, 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save + Share buttons -->
+    <div class="share-actions">
+      <div class="action-btn save">
+        <span class="material-icons">download</span>
+        Save to Gallery
+      </div>
+      <div class="action-btn share-now">
+        <span class="material-icons">ios_share</span>
+        Share Now
+      </div>
+    </div>
+
+    <!-- Share sheet -->
+    <div class="share-sheet-section">
+      <div class="section-label" style="margin-bottom:12px">Share Via</div>
+      <div class="share-sheet">
+        <div class="share-apps">
+          <div class="share-app">
+            <div class="share-app-icon messages">
+              <span class="material-icons">chat</span>
+            </div>
+            <span class="share-app-label">Messages</span>
+          </div>
+          <div class="share-app">
+            <div class="share-app-icon mail">
+              <span class="material-icons">mail_outline</span>
+            </div>
+            <span class="share-app-label">Mail</span>
+          </div>
+          <div class="share-app">
+            <div class="share-app-icon instagram">
+              <span class="material-icons">photo_camera</span>
+            </div>
+            <span class="share-app-label">Instagram</span>
+          </div>
+          <div class="share-app">
+            <div class="share-app-icon more">
+              <span class="material-icons">more_horiz</span>
+            </div>
+            <span class="share-app-label">More</span>
+          </div>
+        </div>
+        <div class="share-copy-row">
+          <span class="material-icons">image</span>
+          <span class="copy-filename">morning-run-progress.png</span>
+          <div class="copy-btn">Copy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function buildTicks(containerId, total, done, cssClass) {
+      const el = document.getElementById(containerId);
+      for (let i = 0; i < total; i++) {
+        const t = document.createElement('div');
+        if (i < done) t.className = cssClass + ' done';
+        else if (i === done) t.className = cssClass + ' missed';
+        else t.className = cssClass + ' future';
+        el.appendChild(t);
+      }
+    }
+    buildTicks('ticks1', 30, 22, 'tick');
+    buildTicks('cardTicks', 30, 22, 'card-tick');
+  </script>
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375">
+  <title>MTB-26 — Custom Campaign Colors & Icons</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4C6EAD;
+      --bg: #F7F3EF;
+      --surface: #FFFDF9;
+      --text: #1A1A1A;
+      --text-secondary: #6B6B6B;
+      --border: 1.5px solid #5A5A5A;
+      --shadow: 2px 2px 0 rgba(44,44,44,0.45);
+      --chrome-border: 2px solid #2C2C2C;
+      --font: -apple-system, 'SF Pro Display', sans-serif;
+    }
+
+    body {
+      width: 375px;
+      background: #E0DDD8;
+      font-family: var(--font);
+      padding: 0;
+    }
+
+    /* ── ANNOTATION DIVIDER ── */
+    .annotation {
+      background: #E0DDD8;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .annotation::before,
+    .annotation::after {
+      content: '';
+      flex: 1;
+      border-top: 2px dashed #8B8680;
+    }
+    .annotation-label {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #6B6560;
+      white-space: nowrap;
+    }
+
+    /* ── PHONE SHELL ── */
+    .screen {
+      width: 375px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      height: 44px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      color: white;
+      border-bottom: var(--chrome-border);
+    }
+    .status-bar .time { font-size: 13px; font-weight: 800; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-icons .material-icons { font-size: 14px; }
+
+    /* ── APP BAR ── */
+    .app-bar {
+      height: 56px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      border-bottom: var(--chrome-border);
+      box-shadow: 0 2px 0 #2C2C2C;
+      gap: 10px;
+    }
+    .app-bar .material-icons { font-size: 22px; cursor: pointer; }
+    .app-bar-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      height: 60px;
+      background: var(--surface);
+      border-top: var(--chrome-border);
+      display: flex;
+      align-items: stretch;
+    }
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      border-right: 1.5px solid #5A5A5A;
+    }
+    .nav-tab:last-child { border-right: none; }
+    .nav-tab .material-icons { font-size: 20px; color: #6B6B6B; }
+    .nav-tab .nav-label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #6B6B6B; }
+    .nav-tab.active { background: var(--primary); }
+    .nav-tab.active .material-icons,
+    .nav-tab.active .nav-label { color: white; }
+
+    /* ── CONTENT ── */
+    .content { padding: 16px; background: var(--bg); }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      padding-left: 8px;
+      border-left: 3px solid var(--primary);
+      margin-bottom: 12px;
+      margin-top: 4px;
+    }
+    .section-header span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    /* ── SUBSECTION LABEL ── */
+    .sub-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      margin-top: 14px;
+    }
+
+    /* ── COLOR SWATCHES ── */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 44px);
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .swatch {
+      width: 44px;
+      height: 44px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .swatch.selected {
+      border: 2px solid #2C2C2C;
+    }
+    .swatch .material-icons { font-size: 18px; color: white; }
+
+    /* ── ICON GRID ── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 44px);
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .icon-cell {
+      width: 44px;
+      height: 44px;
+      background: var(--surface);
+      border: 1.5px solid #5A5A5A;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .icon-cell .material-icons { font-size: 20px; color: var(--text-secondary); }
+    .icon-cell.selected { background: var(--primary); }
+    .icon-cell.selected .material-icons { color: white; }
+
+    /* ── BUTTON ── */
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      background: var(--primary);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 2px solid #2C2C2C;
+      box-shadow: 2px 2px 0 #2C2C2C;
+      cursor: pointer;
+      margin-top: 20px;
+      gap: 8px;
+      font-family: var(--font);
+    }
+
+    /* ── CAMPAIGN CARD ── */
+    .campaign-card {
+      background: var(--surface);
+      border: 1.5px solid #5A5A5A;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      display: flex;
+      overflow: hidden;
+    }
+    .card-accent {
+      width: 4px;
+      flex-shrink: 0;
+    }
+    .card-body {
+      flex: 1;
+      padding: 12px 12px 10px 10px;
+    }
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .card-icon-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-icon-box {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-icon-box .material-icons { font-size: 20px; color: white; }
+    .card-name {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .card-meta {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* streak badge */
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--primary);
+      border: 1.5px solid #5A5A5A;
+      box-shadow: var(--shadow);
+      padding: 3px 5px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      align-self: flex-start;
+    }
+    .streak-badge .material-icons { font-size: 10px; color: white; }
+    .streak-badge .badge-text {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: white;
+      font-family: var(--font);
+    }
+
+    /* progress bar */
+    .progress-wrap {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-track {
+      flex: 1;
+      height: 10px;
+      background: #E8E2DA;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+    }
+    .progress-pct {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      width: 28px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* day tick strip */
+    .tick-strip {
+      display: flex;
+      gap: 3px;
+    }
+    .tick {
+      width: 22px;
+      height: 8px;
+      border: 1.5px solid #5A5A5A;
+    }
+    .tick.done { }
+    .tick.missed { background: var(--surface); }
+    .tick.future { background: #E8E2DA; }
+
+    /* ── FORM FIELD ── */
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      height: 44px;
+      background: var(--surface);
+      border: 1.5px solid #5A5A5A;
+      box-shadow: var(--shadow);
+      padding: 0 12px;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .form-input.active { border: 2px solid var(--primary); }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       PANEL 1: EDIT CAMPAIGN — APPEARANCE PICKERS
+       ══════════════════════════════════════════ -->
+  <div class="screen">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+    <!-- App Bar (pushed, back arrow) -->
+    <div class="app-bar">
+      <span class="material-icons">arrow_back</span>
+      <span class="app-bar-title">Edit Campaign</span>
+    </div>
+
+    <div class="content">
+
+      <!-- Existing form fields (name, goal) -->
+      <div class="form-group">
+        <div class="form-label">Campaign Name</div>
+        <input class="form-input" type="text" value="Morning Run" readonly>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Goal (Days)</div>
+        <input class="form-input" type="text" value="30" readonly>
+      </div>
+
+      <!-- Appearance section -->
+      <div class="section-header" style="margin-top:20px;">
+        <span>Appearance</span>
+      </div>
+
+      <!-- Color Palette -->
+      <div class="sub-label">Campaign Color</div>
+      <div class="swatch-grid">
+        <!-- Blue (selected) -->
+        <div class="swatch selected" style="background:#4C6EAD;">
+          <span class="material-icons">check</span>
+        </div>
+        <!-- Terracotta -->
+        <div class="swatch" style="background:#B5735A;"></div>
+        <!-- Forest -->
+        <div class="swatch" style="background:#5A8A6E;"></div>
+        <!-- Plum -->
+        <div class="swatch" style="background:#9B6B9B;"></div>
+        <!-- Amber -->
+        <div class="swatch" style="background:#C4A052;"></div>
+        <!-- Steel -->
+        <div class="swatch" style="background:#6B8A9B;"></div>
+        <!-- Khaki -->
+        <div class="swatch" style="background:#8B7355;"></div>
+        <!-- Rose -->
+        <div class="swatch" style="background:#9B5A6B;"></div>
+      </div>
+
+      <!-- Icon Grid -->
+      <div class="sub-label">Campaign Icon</div>
+      <div class="icon-grid">
+        <!-- fitness_center (selected) -->
+        <div class="icon-cell selected">
+          <span class="material-icons">fitness_center</span>
+        </div>
+        <div class="icon-cell">
+          <span class="material-icons">menu_book</span>
+        </div>
+        <div class="icon-cell">
+          <span class="material-icons">directions_run</span>
+        </div>
+        <div class="icon-cell">
+          <span class="material-icons">self_improvement</span>
+        </div>
+        <div class="icon-cell">
+          <span class="material-icons">language</span>
+        </div>
+        <div class="icon-cell">
+          <span class="material-icons">code</span>
+        </div>
+        <div class="icon-cell">
+          <span class="material-icons">music_note</span>
+        </div>
+        <div class="icon-cell">
+          <span class="material-icons">restaurant</span>
+        </div>
+      </div>
+
+      <button class="btn-primary">
+        <span class="material-icons" style="font-size:18px;">save</span>
+        Save Changes
+      </button>
+
+    </div><!-- /content -->
+  </div><!-- /screen -->
+
+
+  <!-- ══════════════════════════════════
+       ANNOTATION DIVIDER
+       ══════════════════════════════════ -->
+  <div class="annotation">
+    <span class="annotation-label">Home Screen — Campaigns with Custom Colors &amp; Icons</span>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       PANEL 2: HOME SCREEN — CAMPAIGN LIST
+       ══════════════════════════════════════════ -->
+  <div class="screen">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+    <!-- App Bar -->
+    <div class="app-bar">
+      <span class="app-bar-title" style="flex:1;">Campaigns</span>
+    </div>
+
+    <div class="content">
+
+      <!-- Card 1: Morning Run — Forest #5A8A6E -->
+      <div class="campaign-card">
+        <div class="card-accent" style="background:#5A8A6E;"></div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-icon-name">
+              <div class="card-icon-box" style="background:#5A8A6E;">
+                <span class="material-icons">directions_run</span>
+              </div>
+              <div>
+                <div class="card-name">Morning Run</div>
+                <div class="card-meta">Day 12 of 30</div>
+              </div>
+            </div>
+            <div class="streak-badge">
+              <span class="material-icons">whatshot</span>
+              <span class="badge-text">12d streak</span>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-track">
+              <div class="progress-fill" style="width:40%;background:#5A8A6E;"></div>
+            </div>
+            <span class="progress-pct">40%</span>
+          </div>
+          <div class="tick-strip">
+            <div class="tick done" style="background:#5A8A6E;"></div>
+            <div class="tick done" style="background:#5A8A6E;"></div>
+            <div class="tick done" style="background:#5A8A6E;"></div>
+            <div class="tick done" style="background:#5A8A6E;"></div>
+            <div class="tick done" style="background:#5A8A6E;"></div>
+            <div class="tick missed"></div>
+            <div class="tick future"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Daily Reading — Blue #4C6EAD -->
+      <div class="campaign-card">
+        <div class="card-accent" style="background:#4C6EAD;"></div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-icon-name">
+              <div class="card-icon-box" style="background:#4C6EAD;">
+                <span class="material-icons">menu_book</span>
+              </div>
+              <div>
+                <div class="card-name">Daily Reading</div>
+                <div class="card-meta">Day 7 of 21</div>
+              </div>
+            </div>
+            <div class="streak-badge">
+              <span class="material-icons">whatshot</span>
+              <span class="badge-text">7d streak</span>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-track">
+              <div class="progress-fill" style="width:33%;background:#4C6EAD;"></div>
+            </div>
+            <span class="progress-pct">33%</span>
+          </div>
+          <div class="tick-strip">
+            <div class="tick done" style="background:#4C6EAD;"></div>
+            <div class="tick done" style="background:#4C6EAD;"></div>
+            <div class="tick done" style="background:#4C6EAD;"></div>
+            <div class="tick done" style="background:#4C6EAD;"></div>
+            <div class="tick done" style="background:#4C6EAD;"></div>
+            <div class="tick done" style="background:#4C6EAD;"></div>
+            <div class="tick future"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Meditation — Plum #9B6B9B -->
+      <div class="campaign-card">
+        <div class="card-accent" style="background:#9B6B9B;"></div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-icon-name">
+              <div class="card-icon-box" style="background:#9B6B9B;">
+                <span class="material-icons">self_improvement</span>
+              </div>
+              <div>
+                <div class="card-name">Meditation</div>
+                <div class="card-meta">Day 3 of 30</div>
+              </div>
+            </div>
+            <div class="streak-badge">
+              <span class="material-icons">whatshot</span>
+              <span class="badge-text">3d streak</span>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-track">
+              <div class="progress-fill" style="width:10%;background:#9B6B9B;"></div>
+            </div>
+            <span class="progress-pct">10%</span>
+          </div>
+          <div class="tick-strip">
+            <div class="tick done" style="background:#9B6B9B;"></div>
+            <div class="tick done" style="background:#9B6B9B;"></div>
+            <div class="tick done" style="background:#9B6B9B;"></div>
+            <div class="tick future"></div>
+            <div class="tick future"></div>
+            <div class="tick future"></div>
+            <div class="tick future"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <div class="nav-tab">
+        <span class="material-icons">home</span>
+        <span class="nav-label">Home</span>
+      </div>
+      <div class="nav-tab active">
+        <span class="material-icons">campaign</span>
+        <span class="nav-label">Campaigns</span>
+      </div>
+      <div class="nav-tab">
+        <span class="material-icons">person</span>
+        <span class="nav-label">Profile</span>
+      </div>
+    </div>
+  </div><!-- /screen -->
+
+</body>
+</html>

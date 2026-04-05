@@ -6,6 +6,7 @@ import 'models/campaign.dart';
 import 'models/campaign_adapter.dart';
 import 'router.dart';
 import 'services/notification_service.dart';
+import 'services/supabase_service.dart';
 import 'theme.dart';
 
 Future<void> main() async {
@@ -14,10 +15,28 @@ Future<void> main() async {
   Hive.registerAdapter(CampaignAdapter());
   await Hive.openBox<Campaign>('campaigns');
   await Hive.openBox('settings');
+  await SupabaseService.initialize();
   await NotificationService.initialize();
-  final onboardingDone =
-      Hive.box('settings').get('onboardingDone', defaultValue: false) as bool;
-  final initialLocation = onboardingDone ? '/' : '/onboarding';
+
+  final settings = Hive.box('settings');
+  if (!settings.containsKey('memberSince')) {
+    settings.put('memberSince', DateTime.now().millisecondsSinceEpoch);
+  }
+
+  // Use Supabase session for routing — no local credential storage needed.
+  final session = SupabaseService.client.auth.currentSession;
+  final currentUser = session?.user.email;
+  final onboardingDone = settings.get('onboardingDone', defaultValue: false) as bool;
+
+  final String initialLocation;
+  if (currentUser == null) {
+    initialLocation = '/sign-in';
+  } else if (!onboardingDone) {
+    initialLocation = '/onboarding';
+  } else {
+    initialLocation = '/';
+  }
+
   runApp(ProviderScope(child: MTBoxApp(initialLocation: initialLocation)));
 }
 

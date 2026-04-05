@@ -6,12 +6,19 @@ import '../theme.dart';
 class CampaignCard extends StatelessWidget {
   final Campaign campaign;
   final VoidCallback? onCheckIn;
+  final bool isPendingSync;
 
-  const CampaignCard({super.key, required this.campaign, this.onCheckIn});
+  const CampaignCard({
+    super.key,
+    required this.campaign,
+    this.onCheckIn,
+    this.isPendingSync = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final pct = (campaign.progressPercent * 100).round();
+    final color = campaign.campaignColor;
 
     return GestureDetector(
       onTap: () => context.push('/campaigns/${campaign.id}'),
@@ -20,87 +27,143 @@ class CampaignCard extends StatelessWidget {
         decoration: brutalistBox(),
         child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: campaign.hasStreak
-                              ? const EdgeInsets.only(right: 82)
-                              : EdgeInsets.zero,
-                          child: Text(
-                            campaign.name,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: kBlack,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // 4px accent stripe in campaign color
+                Container(width: 4, color: color),
+                // Card body
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 12, 12, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: campaign.hasStreak
+                                    ? const EdgeInsets.only(right: 82)
+                                    : EdgeInsets.zero,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // 40×40 icon box in campaign color
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      color: color,
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        campaign.iconData,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            campaign.name,
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w800,
+                                              color: kBlack,
+                                              letterSpacing: 0.3,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 3),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '${campaign.currentDay} OF ${campaign.totalDays} ${campaign.unitLabel}',
+                                                style: const TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: kTextSecondary,
+                                                  letterSpacing: 0.3,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4),
+                                          _GoalTypeChip(campaign: campaign),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () =>
+                                  context.push('/campaigns/${campaign.id}/edit'),
+                              child: Container(
+                                width: 32,
+                                height: 32,
+                                decoration: brutalistBox(),
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.edit,
+                                    size: 16, color: kBlack),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () =>
-                            context.push('/campaigns/${campaign.id}/edit'),
-                        child: Container(
-                          width: 32,
-                          height: 32,
-                          decoration: brutalistBox(),
-                          alignment: Alignment.center,
-                          child: const Icon(Icons.edit, size: 16, color: kBlack),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _ProgressBar(
+                                percent: campaign.progressPercent,
+                                isActive: campaign.isActive,
+                                color: color,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SizedBox(
+                              width: 28,
+                              child: Text(
+                                '$pct%',
+                                textAlign: TextAlign.right,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: kTextSecondary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    campaign.goal,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Text(
-                        'DAY ${campaign.currentDay} OF ${campaign.totalDays}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.8,
+                        const SizedBox(height: 6),
+                        _DayTickStrip(
+                          totalDays: campaign.totalDays,
+                          dayHistory: campaign.dayHistory,
+                          showTodayTick:
+                              campaign.isActive && !campaign.checkedInToday,
+                          color: color,
                         ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        '$pct%',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: campaign.isActive ? kBlue : kBlack,
-                        ),
-                      ),
-                    ],
+                        if (isPendingSync && campaign.checkedInToday) ...[
+                          const SizedBox(height: 8),
+                          _PendingSyncChip(),
+                        ] else if (campaign.isActive) ...[
+                          const SizedBox(height: 12),
+                          campaign.checkedInToday
+                              ? _ConfirmedState()
+                              : _CheckInButton(
+                                  label: campaign.checkInLabel,
+                                  onTap: onCheckIn,
+                                ),
+                        ],
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 6),
-                  _ProgressBar(
-                    percent: campaign.progressPercent,
-                    isActive: campaign.isActive,
-                  ),
-                  const SizedBox(height: 10),
-                  _DayTickStrip(
-                    totalDays: campaign.totalDays,
-                    dayHistory: campaign.dayHistory,
-                    showTodayTick: campaign.isActive && !campaign.checkedInToday,
-                  ),
-                  if (campaign.isActive) ...[
-                    const SizedBox(height: 12),
-                    campaign.checkedInToday
-                        ? _ConfirmedState()
-                        : _CheckInButton(onTap: onCheckIn),
-                  ],
-                ],
-              ),
+                ),
+              ],
             ),
             if (campaign.hasStreak)
               Positioned(
@@ -173,15 +236,20 @@ class _StreakBadge extends StatelessWidget {
 class _ProgressBar extends StatelessWidget {
   final double percent;
   final bool isActive;
+  final Color color;
 
-  const _ProgressBar({required this.percent, required this.isActive});
+  const _ProgressBar({
+    required this.percent,
+    required this.isActive,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 16,
+      height: 10,
       decoration: const BoxDecoration(
-        color: kBackground,
+        color: Color(0xFFE8E2DA),
         border: Border.fromBorderSide(
           BorderSide(color: kSoftBorderColor, width: kSoftBorderWidth),
         ),
@@ -193,7 +261,7 @@ class _ProgressBar extends StatelessWidget {
         builder: (context, value, _) => FractionallySizedBox(
           widthFactor: value,
           alignment: Alignment.centerLeft,
-          child: Container(color: isActive ? kBlue : kBlack),
+          child: Container(color: isActive ? color : kBlack),
         ),
       ),
     );
@@ -203,13 +271,14 @@ class _ProgressBar extends StatelessWidget {
 class _DayTickStrip extends StatelessWidget {
   final int totalDays;
   final List<bool> dayHistory;
-  // When true, the tick at index dayHistory.length is highlighted gold
   final bool showTodayTick;
+  final Color color;
 
   const _DayTickStrip({
     required this.totalDays,
     required this.dayHistory,
     required this.showTodayTick,
+    required this.color,
   });
 
   @override
@@ -229,14 +298,14 @@ class _DayTickStrip extends StatelessWidget {
           tickColor = const Color(0xFFFFD700);
           borderColor = kBlack;
         } else if (done) {
-          tickColor = kBlue;
-          borderColor = kBlack;
+          tickColor = color;
+          borderColor = kSoftBorderColor;
         } else if (future) {
-          tickColor = const Color(0xFFE8E8E8);
+          tickColor = const Color(0xFFE8E2DA);
           borderColor = Colors.grey.shade300;
         } else {
           tickColor = kWhite;
-          borderColor = kBlack;
+          borderColor = kSoftBorderColor;
         }
 
         return Expanded(
@@ -255,9 +324,10 @@ class _DayTickStrip extends StatelessWidget {
 }
 
 class _CheckInButton extends StatefulWidget {
+  final String label;
   final VoidCallback? onTap;
 
-  const _CheckInButton({this.onTap});
+  const _CheckInButton({required this.label, this.onTap});
 
   @override
   State<_CheckInButton> createState() => _CheckInButtonState();
@@ -312,14 +382,14 @@ class _CheckInButtonState extends State<_CheckInButton>
               ),
             ],
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add_task, color: kWhite, size: 18),
-              SizedBox(width: 8),
+              const Icon(Icons.add_task, color: kWhite, size: 18),
+              const SizedBox(width: 8),
               Text(
-                'CHECK IN TODAY',
-                style: TextStyle(
+                widget.label,
+                style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: kWhite,
@@ -329,6 +399,52 @@ class _CheckInButtonState extends State<_CheckInButton>
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Small chip below campaign name showing the goal type.
+class _GoalTypeChip extends StatelessWidget {
+  final Campaign campaign;
+
+  const _GoalTypeChip({required this.campaign});
+
+  @override
+  Widget build(BuildContext context) {
+    final (icon, label) = switch (campaign.goalType) {
+      GoalType.days => (Icons.calendar_today, 'DAYS'),
+      GoalType.hours => (Icons.schedule, 'HOURS'),
+      GoalType.sessions => (Icons.repeat, 'SESSIONS'),
+      GoalType.custom => (
+          Icons.tune,
+          campaign.metricName.isNotEmpty
+              ? campaign.metricName.toUpperCase()
+              : 'CUSTOM'
+        ),
+    };
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0EDE8),
+        border: Border.all(color: kSoftBorderColor, width: 1.0),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 9, color: kTextSecondary),
+          const SizedBox(width: 3),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w700,
+              color: kTextSecondary,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -357,6 +473,39 @@ class _ConfirmedState extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: kBlack,
               letterSpacing: 1.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Shown on campaign cards when the device is offline and the check-in
+/// hasn't been uploaded to the server yet.
+class _PendingSyncChip extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: const BoxDecoration(
+        color: Color(0xFFFEF3C7),
+        border: Border.fromBorderSide(
+          BorderSide(color: Color(0xFFD97706), width: kSoftBorderWidth),
+        ),
+      ),
+      child: const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.cloud_upload, size: 12, color: Color(0xFFD97706)),
+          SizedBox(width: 5),
+          Text(
+            'PENDING SYNC — WILL UPLOAD WHEN CONNECTED',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF92400E),
+              letterSpacing: 0.5,
             ),
           ),
         ],

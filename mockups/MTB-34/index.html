@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=375">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4C6EAD;
+      --bg: #F7F3EF;
+      --surface: #FFFDF9;
+      --text: #1A1A1A;
+      --text-sec: #6B6B6B;
+      --border: #2C2C2C;
+      --border-c: 1.5px solid #5A5A5A;
+      --shadow-c: 2px 2px 0 rgba(44,44,44,0.45);
+      --accent: #B5735A;
+      --red: #B83232;
+    }
+
+    body {
+      width: 375px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      background: #D8D1CA;
+    }
+
+    /* ── Annotation divider ─────────────────────── */
+    .annotation-divider {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      gap: 10px;
+      background: #D8D1CA;
+    }
+    .annotation-divider::before,
+    .annotation-divider::after {
+      content: '';
+      flex: 1;
+      border-top: 1.5px dashed #8A8078;
+    }
+    .annotation-label {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #6A625A;
+      white-space: nowrap;
+    }
+
+    /* ── Screen shell ───────────────────────────── */
+    .screen {
+      width: 375px;
+      background: var(--bg);
+    }
+
+    .status-bar {
+      height: 44px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      color: white;
+      justify-content: space-between;
+    }
+    .status-time {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .status-icons .material-icons {
+      font-size: 14px;
+      color: white;
+    }
+
+    .app-bar {
+      height: 56px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      border-bottom: 2px solid var(--border);
+      box-shadow: 0 2px 0 var(--border);
+      justify-content: space-between;
+    }
+    .app-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .app-bar-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .material-icons.back { font-size: 22px; color: white; }
+
+    /* Sync status badge */
+    .sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .sync-badge .material-icons { font-size: 12px; }
+    .sync-badge.synced {
+      background: rgba(255,255,255,0.18);
+      border: 1.5px solid rgba(255,255,255,0.45);
+      color: white;
+    }
+    .sync-badge.syncing {
+      background: rgba(255,255,255,0.12);
+      border: 1.5px dashed rgba(255,255,255,0.5);
+      color: white;
+    }
+    .sync-badge.offline {
+      background: var(--red);
+      border: 1.5px solid #8B1A1A;
+      color: white;
+    }
+
+    /* ── Content areas ─────────────────────────── */
+    .content { padding: 14px 16px; }
+
+    .section-header {
+      border-left: 3px solid var(--primary);
+      padding-left: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-sec);
+      margin-bottom: 10px;
+    }
+
+    /* Today summary stats */
+    .today-card {
+      background: var(--surface);
+      border: var(--border-c);
+      box-shadow: var(--shadow-c);
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .stats-row {
+      display: flex;
+      gap: 8px;
+    }
+    .stat-cell {
+      flex: 1;
+      background: var(--bg);
+      border: var(--border-c);
+      box-shadow: var(--shadow-c);
+      padding: 8px 4px;
+      text-align: center;
+    }
+    .stat-cell .material-icons { font-size: 16px; color: var(--primary); display: block; margin-bottom: 2px; }
+    .stat-value { font-size: 17px; font-weight: 900; color: var(--primary); display: block; }
+    .stat-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-sec); }
+
+    /* Campaign card */
+    .campaign-card {
+      background: var(--surface);
+      border: var(--border-c);
+      box-shadow: var(--shadow-c);
+      padding: 12px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .campaign-card.accent-left { border-left: 4px solid var(--primary); }
+    .campaign-card.accent-terracotta { border-left: 4px solid var(--accent); }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .card-name {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      flex: 1;
+    }
+    .card-badges {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 6px;
+      font-size: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 1px 1px 0 rgba(44,44,44,0.45);
+    }
+    .badge .material-icons { font-size: 10px; }
+    .badge.active { background: var(--primary); color: white; }
+    .badge.streak { background: var(--primary); color: white; }
+    .badge.done-today { background: #2E7D32; color: white; }
+    .badge.pending { background: #FEF3C7; color: #92400E; border-color: #D97706; }
+    .badge.pending .material-icons { color: #D97706; }
+
+    .day-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-sec);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pct { font-size: 10px; font-weight: 900; color: var(--primary); }
+
+    .progress-bar {
+      height: 10px;
+      background: var(--bg);
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 1px 1px 0 rgba(44,44,44,0.45);
+      margin-bottom: 6px;
+    }
+    .progress-fill { height: 100%; }
+    .fill-primary { background: var(--primary); }
+    .fill-accent { background: var(--accent); }
+
+    .tick-strip { display: flex; gap: 2px; margin-bottom: 8px; }
+    .tick {
+      width: 13px; height: 13px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 1px 1px 0 rgba(44,44,44,0.4);
+    }
+    .tick.done { background: var(--primary); }
+    .tick.done-acc { background: var(--accent); }
+    .tick.missed { background: var(--surface); }
+    .tick.future { background: #E8E2DA; }
+    .tick.today { background: #FFD080; border: 2px solid var(--border); }
+
+    /* Device attribution */
+    .device-attr {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg);
+      border: 1.5px solid #5A5A5A;
+      padding: 2px 6px;
+      font-size: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sec);
+    }
+    .device-attr .material-icons { font-size: 10px; color: var(--primary); }
+
+    .card-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .btn-check {
+      flex: 1;
+      background: var(--primary);
+      color: white;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: var(--shadow-c);
+      padding: 8px 0;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .btn-check .material-icons { font-size: 14px; }
+    .btn-detail {
+      width: 36px;
+      background: var(--surface);
+      border: 1.5px solid #5A5A5A;
+      box-shadow: var(--shadow-c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-detail .material-icons { font-size: 18px; color: var(--text-sec); }
+
+    /* ── Activity feed ──────────────────────────── */
+    .activity-item {
+      background: var(--surface);
+      border: var(--border-c);
+      box-shadow: var(--shadow-c);
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .act-icon {
+      width: 32px; height: 32px;
+      background: var(--primary);
+      border: 1.5px solid #5A5A5A;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .act-icon .material-icons { font-size: 16px; color: white; }
+    .act-icon.missed-icon { background: var(--bg); }
+    .act-icon.missed-icon .material-icons { color: #5A5A5A; }
+    .act-body { flex: 1; min-width: 0; }
+    .act-title { font-size: 12px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+    .act-meta {
+      font-size: 9px; font-weight: 700; color: var(--text-sec);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 5px;
+      margin-bottom: 4px;
+    }
+    .act-meta .material-icons { font-size: 10px; }
+
+    /* ── State 2: offline / catch-up ────────────── */
+    .offline-bar {
+      background: #FEF3C7;
+      border-bottom: 2px solid #D97706;
+      padding: 8px 16px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 900; color: #78350F;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .offline-bar .material-icons { font-size: 16px; color: #D97706; }
+
+    .catchup-bar {
+      background: var(--primary);
+      border-bottom: 2px solid var(--border);
+      padding: 6px 16px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 9px; font-weight: 900; color: white;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .catchup-bar .material-icons { font-size: 13px; }
+    .catchup-track { flex: 1; height: 3px; background: rgba(255,255,255,0.3); }
+    .catchup-fill { height: 100%; width: 68%; background: white; }
+
+    /* ── State 3: silent notification ───────────── */
+    .sync-notification {
+      margin: 8px 16px 0;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      box-shadow: 3px 3px 0 var(--border);
+      padding: 10px 12px;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .notif-icon {
+      width: 36px; height: 36px;
+      background: var(--primary);
+      border: 1.5px solid #5A5A5A;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .notif-icon .material-icons { font-size: 18px; color: white; }
+    .notif-body { flex: 1; }
+    .notif-title { font-size: 11px; font-weight: 900; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .notif-text { font-size: 10px; font-weight: 600; color: var(--text-sec); line-height: 1.4; }
+    .notif-time { font-size: 9px; font-weight: 700; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
+
+    /* Device sync status in activity detail */
+    .device-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 0;
+      border-bottom: 1.5px solid #E8E2DA;
+    }
+    .device-row:last-child { border-bottom: none; }
+    .device-icon-box {
+      width: 28px; height: 28px;
+      border: 1.5px solid #5A5A5A;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .device-icon-box .material-icons { font-size: 14px; color: var(--primary); }
+    .device-name { font-size: 11px; font-weight: 800; color: var(--text); flex: 1; }
+    .device-status-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 3px 6px;
+      font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;
+      border: 1.5px solid #5A5A5A;
+      box-shadow: 1px 1px 0 rgba(44,44,44,0.4);
+    }
+    .device-status-badge .material-icons { font-size: 9px; }
+    .device-status-badge.this { background: var(--primary); color: white; }
+    .device-status-badge.synced { background: var(--surface); color: var(--text-sec); }
+    .device-status-badge.offline { background: #FEF3C7; color: #92400E; border-color: #D97706; }
+
+    /* ── Bottom nav ─────────────────────────────── */
+    .bottom-nav {
+      height: 60px;
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      display: flex;
+    }
+    .nav-tab {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 3px;
+      border-right: 1.5px solid #5A5A5A;
+      font-size: 8px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-sec);
+    }
+    .nav-tab:last-child { border-right: none; }
+    .nav-tab .material-icons { font-size: 22px; }
+    .nav-tab.active { background: var(--primary); color: white; }
+    .nav-tab.active .material-icons { color: white; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- STATE 1: LIVE SYNC — Home with device attribution -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="app-bar">
+    <div class="app-bar-left">
+      <span class="app-bar-title">MTBox</span>
+    </div>
+    <div class="sync-badge synced">
+      <span class="material-icons">sync</span>
+      SYNCED
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Today summary -->
+    <div class="today-card">
+      <div class="section-header">Today</div>
+      <div class="stats-row">
+        <div class="stat-cell">
+          <span class="material-icons">flag</span>
+          <span class="stat-value">3</span>
+          <span class="stat-label">Active</span>
+        </div>
+        <div class="stat-cell">
+          <span class="material-icons">check_circle</span>
+          <span class="stat-value">1</span>
+          <span class="stat-label">Done</span>
+        </div>
+        <div class="stat-cell">
+          <span class="material-icons">whatshot</span>
+          <span class="stat-value">12</span>
+          <span class="stat-label">Best Streak</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign 1 — checked in from another device -->
+    <div class="section-header">Active Campaigns</div>
+    <div class="campaign-card accent-left">
+      <div class="card-header">
+        <span class="card-name">Morning Run</span>
+        <div class="card-badges">
+          <div class="badge streak">
+            <span class="material-icons">whatshot</span>
+            12 Day
+          </div>
+          <div class="badge done-today">
+            <span class="material-icons">check</span>
+            Done
+          </div>
+        </div>
+      </div>
+      <div class="day-label">
+        <span>Day 12 of 30</span>
+        <span class="pct">40%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill fill-primary" style="width:40%"></div>
+      </div>
+      <div class="tick-strip">
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick today"></div>
+        <div class="tick future"></div>
+      </div>
+      <!-- Device attribution — checked in on another device -->
+      <div class="device-attr">
+        <span class="material-icons">phone_iphone</span>
+        Checked in from iPhone 14 Pro · 2 min ago
+      </div>
+    </div>
+
+    <!-- Campaign 2 — pending check-in -->
+    <div class="campaign-card accent-terracotta">
+      <div class="card-header">
+        <span class="card-name">Read Daily</span>
+        <div class="card-badges">
+          <div class="badge streak">
+            <span class="material-icons">whatshot</span>
+            5 Day
+          </div>
+          <div class="badge active">Active</div>
+        </div>
+      </div>
+      <div class="day-label">
+        <span>Day 5 of 21</span>
+        <span class="pct">24%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill fill-accent" style="width:24%"></div>
+      </div>
+      <div class="tick-strip">
+        <div class="tick done-acc"></div><div class="tick done-acc"></div>
+        <div class="tick done-acc"></div><div class="tick done-acc"></div>
+        <div class="tick done-acc"></div>
+        <div class="tick today"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+      </div>
+      <div class="card-actions">
+        <div class="btn-check">
+          <span class="material-icons">add_task</span>
+          Check In
+        </div>
+        <div class="btn-detail">
+          <span class="material-icons">chevron_right</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent activity with device names -->
+    <div class="activity-section">
+      <div class="section-header" style="margin-top:4px">Recent Activity</div>
+      <div class="activity-item">
+        <div class="act-icon">
+          <span class="material-icons">check_circle</span>
+        </div>
+        <div class="act-body">
+          <div class="act-title">Morning Run · Day 12</div>
+          <div class="act-meta">
+            <span class="material-icons">access_time</span>
+            Today, 7:14 AM
+          </div>
+          <div class="device-attr">
+            <span class="material-icons">phone_iphone</span>
+            iPhone 14 Pro
+          </div>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="act-icon">
+          <span class="material-icons">check_circle</span>
+        </div>
+        <div class="act-body">
+          <div class="act-title">Read Daily · Day 4</div>
+          <div class="act-meta">
+            <span class="material-icons">access_time</span>
+            Yesterday, 9:03 PM
+          </div>
+          <div class="device-attr">
+            <span class="material-icons">laptop_mac</span>
+            MacBook Pro
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      Home
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">flag</span>
+      Campaigns
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      Profile
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<div class="annotation-divider"><span class="annotation-label">State 2 — Offline + Reconnect Catch-Up</span></div>
+<!-- ════════════════════════════════════════════════ -->
+
+<!-- STATE 2: OFFLINE then CATCH-UP -->
+<div class="screen">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_off</span>
+      <span class="material-icons">wifi_off</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="app-bar">
+    <div class="app-bar-left">
+      <span class="app-bar-title">MTBox</span>
+    </div>
+    <div class="sync-badge offline">
+      <span class="material-icons">cloud_off</span>
+      Offline
+    </div>
+  </div>
+
+  <!-- Offline warning -->
+  <div class="offline-bar">
+    <span class="material-icons">wifi_off</span>
+    No connection — changes saved locally
+  </div>
+
+  <!-- Catch-up progress bar (reconnecting) -->
+  <div class="catchup-bar">
+    <span class="material-icons">sync</span>
+    Catching up · 3 changes from other devices
+    <div class="catchup-track">
+      <div class="catchup-fill"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="today-card">
+      <div class="section-header">Today</div>
+      <div class="stats-row">
+        <div class="stat-cell">
+          <span class="material-icons">flag</span>
+          <span class="stat-value">3</span>
+          <span class="stat-label">Active</span>
+        </div>
+        <div class="stat-cell">
+          <span class="material-icons">check_circle</span>
+          <span class="stat-value">1</span>
+          <span class="stat-label">Done</span>
+        </div>
+        <div class="stat-cell">
+          <span class="material-icons">cloud_sync</span>
+          <span class="stat-value">3</span>
+          <span class="stat-label">Pending</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">Active Campaigns</div>
+
+    <!-- Campaign created offline — pending sync -->
+    <div class="campaign-card accent-left">
+      <div class="card-header">
+        <span class="card-name">Morning Run</span>
+        <div class="card-badges">
+          <div class="badge pending">
+            <span class="material-icons">cloud_upload</span>
+            Pending Sync
+          </div>
+        </div>
+      </div>
+      <div class="day-label">
+        <span>Day 13 of 30</span>
+        <span class="pct">43%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill fill-primary" style="width:43%"></div>
+      </div>
+      <div class="tick-strip">
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div><div class="tick done"></div>
+        <div class="tick done"></div>
+        <div class="tick today"></div>
+      </div>
+      <div class="device-attr">
+        <span class="material-icons">phone_iphone</span>
+        Checked in offline — will sync when connected
+      </div>
+    </div>
+
+    <!-- Campaign 2 normal -->
+    <div class="campaign-card accent-terracotta">
+      <div class="card-header">
+        <span class="card-name">Read Daily</span>
+        <div class="card-badges">
+          <div class="badge active">Active</div>
+        </div>
+      </div>
+      <div class="day-label">
+        <span>Day 6 of 21</span>
+        <span class="pct">29%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill fill-accent" style="width:29%"></div>
+      </div>
+      <div class="tick-strip">
+        <div class="tick done-acc"></div><div class="tick done-acc"></div>
+        <div class="tick done-acc"></div><div class="tick done-acc"></div>
+        <div class="tick done-acc"></div><div class="tick done-acc"></div>
+        <div class="tick today"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div><div class="tick future"></div>
+        <div class="tick future"></div>
+      </div>
+      <div class="card-actions">
+        <div class="btn-check">
+          <span class="material-icons">add_task</span>
+          Check In
+        </div>
+        <div class="btn-detail">
+          <span class="material-icons">chevron_right</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      Home
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">flag</span>
+      Campaigns
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      Profile
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<div class="annotation-divider"><span class="annotation-label">State 3 — Silent Sync Notification + Device List</span></div>
+<!-- ════════════════════════════════════════════════ -->
+
+<!-- STATE 3: SILENT NOTIFICATION + SYNCING indicator -->
+<div class="screen">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="app-bar">
+    <div class="app-bar-left">
+      <span class="app-bar-title">MTBox</span>
+    </div>
+    <div class="sync-badge syncing">
+      <span class="material-icons">sync</span>
+      Syncing…
+    </div>
+  </div>
+
+  <!-- Silent sync notification — slides in below app bar -->
+  <div class="sync-notification">
+    <div class="notif-icon">
+      <span class="material-icons">sync_alt</span>
+    </div>
+    <div class="notif-body">
+      <div class="notif-title">Changes synced</div>
+      <div class="notif-text">MacBook Pro checked in Morning Run · 2 new changes applied</div>
+    </div>
+    <div class="notif-time">Just now</div>
+  </div>
+
+  <div class="content" style="padding-top:10px">
+    <!-- Device sync panel -->
+    <div class="today-card" style="margin-bottom:14px">
+      <div class="section-header">Your Devices</div>
+      <!-- This device -->
+      <div class="device-row">
+        <div class="device-icon-box">
+          <span class="material-icons">phone_iphone</span>
+        </div>
+        <div style="flex:1">
+          <div class="device-name">iPhone 14 Pro</div>
+          <div style="font-size:9px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.5px;">Last active: now</div>
+        </div>
+        <div class="device-status-badge this">
+          <span class="material-icons">check</span>
+          This Device
+        </div>
+      </div>
+      <!-- Other device synced -->
+      <div class="device-row">
+        <div class="device-icon-box">
+          <span class="material-icons">laptop_mac</span>
+        </div>
+        <div style="flex:1">
+          <div class="device-name">MacBook Pro</div>
+          <div style="font-size:9px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.5px;">Last active: 2 min ago</div>
+        </div>
+        <div class="device-status-badge synced">
+          <span class="material-icons">sync</span>
+          Synced
+        </div>
+      </div>
+      <!-- Third device offline -->
+      <div class="device-row">
+        <div class="device-icon-box">
+          <span class="material-icons">tablet_mac</span>
+        </div>
+        <div style="flex:1">
+          <div class="device-name">iPad Air</div>
+          <div style="font-size:9px;font-weight:700;color:var(--text-sec);text-transform:uppercase;letter-spacing:0.5px;">Last active: 3 hrs ago</div>
+        </div>
+        <div class="device-status-badge offline">
+          <span class="material-icons">cloud_off</span>
+          Offline
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity feed with device attribution (recent sync changes) -->
+    <div class="section-header">Synced Changes</div>
+    <div class="activity-item">
+      <div class="act-icon">
+        <span class="material-icons">check_circle</span>
+      </div>
+      <div class="act-body">
+        <div class="act-title">Morning Run · Day 13</div>
+        <div class="act-meta">
+          <span class="material-icons">access_time</span>
+          Today, 9:39 AM
+        </div>
+        <div class="device-attr">
+          <span class="material-icons">laptop_mac</span>
+          MacBook Pro · synced 2 min ago
+        </div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="act-icon">
+        <span class="material-icons">edit</span>
+      </div>
+      <div class="act-body">
+        <div class="act-title">Read Daily · Goal updated</div>
+        <div class="act-meta">
+          <span class="material-icons">access_time</span>
+          Yesterday, 11:48 PM
+        </div>
+        <div class="device-attr">
+          <span class="material-icons">laptop_mac</span>
+          MacBook Pro · synced now
+        </div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="act-icon">
+        <span class="material-icons">add_circle</span>
+      </div>
+      <div class="act-body">
+        <div class="act-title">New campaign created · "Cold Shower"</div>
+        <div class="act-meta">
+          <span class="material-icons">access_time</span>
+          Yesterday, 8:12 AM
+        </div>
+        <div class="device-attr">
+          <span class="material-icons">laptop_mac</span>
+          MacBook Pro · synced now
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-tab active">
+      <span class="material-icons">home</span>
+      Home
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">flag</span>
+      Campaigns
+    </div>
+    <div class="nav-tab">
+      <span class="material-icons">person</span>
+      Profile
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

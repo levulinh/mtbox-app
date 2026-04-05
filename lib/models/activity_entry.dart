@@ -5,6 +5,7 @@ class ActivityEntry {
   final int dayNumber;
   final int totalDays;
   final bool isPending;
+  final String? deviceName; // device that performed this action (null = this device)
 
   const ActivityEntry({
     required this.campaignName,
@@ -13,5 +14,6 @@ class ActivityEntry {
     this.dayNumber = 0,
     this.totalDays = 0,
     this.isPending = false,
+    this.deviceName,
   });
 }

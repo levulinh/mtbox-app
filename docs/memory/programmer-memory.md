@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-04 (run 27 — implemented MTB-23 color palette refresh)
+2026-04-05 (run 41 — MTB-36: wired live Supabase credentials on main; PR #29/MTB-10 branch still open but superseded by PR #30/MTB-36)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -15,6 +15,8 @@ Track architecture decisions, libraries used, patterns established, and things t
 | flutter_local_notifications | ^21.0.0 | Local push notifications | 2026-04-04 |
 | timezone | ^0.11.0 | Required by flutter_local_notifications for zonedSchedule | 2026-04-04 |
 | hive_flutter | ^1.1.0 | Local persistence for campaign data | 2026-04-04 |
+| image_picker | ^1.2.1 | Pick photos from gallery or camera for avatar | 2026-04-05 |
+| supabase_flutter | ^2.12.2 | Real Supabase auth + PostgreSQL + Realtime | 2026-04-05 |
 
 ## Architecture Decisions
 - **Riverpod 3.x uses `Notifier<T>` + `NotifierProvider`** — `StateNotifier` was removed in Riverpod 3. Use `class Foo extends Notifier<T>` with a `build()` method, and `NotifierProvider<Foo, T>(Foo.new)`. The `state` field works the same way inside the notifier.
@@ -106,6 +108,86 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **`_ReminderSection` widget** (ConsumerWidget, inline in `campaign_detail_screen.dart`): brutalist toggle row, opacity-0.35 time row when disabled, active `showTimePicker` time row when enabled, blue info bar at card bottom. Calls `NotificationService.scheduleDaily()` / `.cancel()` after Hive state update.
 - **`CampaignDetailScreen` → ConsumerStatefulWidget**: converted from ConsumerWidget to ConsumerStatefulWidget because _ReminderSection needs to be a child ConsumerWidget — both work fine as separate classes.
 
+- **MTB-25 screen transitions**: Use `_slidePage(key, child)` helper in `router.dart` returning `CustomTransitionPage` with 250ms right-to-left slide + easeOut for all non-tab pushed routes. Tab routes keep `NoTransitionPage`.
+- **MTB-25 animated progress bar**: `TweenAnimationBuilder<double>` wrapping `FractionallySizedBox` in `_ProgressBar` — animates 0→percent in 600ms `Curves.easeOutCubic`. Replace static fill to trigger on first build.
+- **MTB-25 button press animation**: Convert `_CheckInButton` to `StatefulWidget` with `AnimationController` (80ms) + `ScaleTransition` — `onTapDown` forward, `onTapUp`/`onTapCancel` reverse. Target scale 0.96.
+- **MTB-25 celebration toast**: Converted `_CheckInToast` to `StatefulWidget` with slide+fade-in (300ms easeOut). Add 24-square confetti strip above the message. Parent sets `Timer(2500ms)` to auto-dismiss. Also add `dispose()` + `_toastTimer?.cancel()` in the screen state.
+- **MTB-25 empty state CTA**: Campaigns empty state uses `GestureDetector` + full-width blue `Container` navigating to `/campaigns/new`. Activity feed empty state adds "GO TO CAMPAIGNS →" nav link (required importing `go_router` in `home_screen.dart`).
+
+- **MTB-24 shadow/border two-tier spec**: `kSoftBorderColor=#5A5A5A`, `kSoftBorderWidth=1.5`, `kSoftShadowColor=Color(0x732C2C2C)` (rgba(44,44,44,0.45)). `brutalistBox()` uses soft values. All content surfaces (cards, buttons, badges, progress bars, form fields) use soft values. Structural chrome (bottom nav top border, nav item separators, app bar bottom borders, onboarding page header borders) kept at `kBlack`/`kBorderWidth` (2px). Structural headers identifiable by `offset: Offset(0, 2)` downward shadow pattern.
+
+- **MTB-26 campaign color/icon fields**: `colorHex` (String hex, no `#`, default `'4C6EAD'`) and `iconName` (String, default `'fitness_center'`) added to `Campaign`. Computed getters `campaignColor` (Color) and `iconData` (IconData) on the model — requires `import 'package:flutter/material.dart'` in campaign.dart.
+- **Backward-compat Hive optional string fields**: for string optional fields (not nullable), read with `reader.readString()` directly (no bool sentinel needed) — only guard with `if (reader.availableBytes > 0)` block. This differs from nullable fields which use a bool `hasField` sentinel.
+- **`kCampaignColorOptions`**: list of 8 hex strings (no `#`) in campaign.dart. `kCampaignIconOptions`: list of 8 `(name, IconData)` record tuples in campaign.dart.
+- **`AppearancePickers` shared widget** (`lib/widgets/appearance_pickers.dart`): two 4-column `GridView.builder` (shrinkWrap + NeverScrollableScrollPhysics) for color swatches and icons. Selected color swatch shows check icon; selected icon cell fills with current accent color. Used in both Create and Edit campaign screens.
+- **CampaignCard accent stripe**: outer `Container` now contains a `Row` — 4px `Container` in campaign color + `Expanded` card body. `Stack` wrapping the `Row` for streak badge overlay.
+- **Campaign card icon box**: 40×40 `Container` with `color: campaign.campaignColor` and white icon inside — replaces the plain name text header; name + "DAY X OF Y" move to a `Column` next to the icon.
+- **Progress bar fill color**: `_ProgressBar` now takes a `Color color` param — uses `color` for active campaigns (was always kBlue).
+- **Day tick done color**: `_DayTickStrip` takes `Color color` param — done ticks use campaign color (was kBlue). Border for done/missed ticks softened to `kSoftBorderColor`.
+- **Streak badge color**: stays fixed at `kBlue` regardless of campaign color — per design spec.
+- **`CampaignsNotifier.update()` extended**: now accepts optional `colorHex` and `iconName` params (nullable, default null = keep existing). Also preserves `reminderEnabled`/`reminderTime` fields (fix: these were lost before). All other mutations (checkIn, setReminder) explicitly carry forward colorHex/iconName.
+
+- **MTB-27 share progress screen**: `ShareProgressScreen` at `/campaigns/:id/share` (top-level GoRoute, no bottom nav). Entry point: `_ShareProgressButton` widget on campaign detail screen (between progress section and campaign days).
+- **`screenshot` package (v3.0.0)**: wrap target widget in `Screenshot(controller: _controller, child: ...)`. Capture with `await controller.capture(pixelRatio: 3.0)` → `Uint8List?`.
+- **`gal` package (v2.3.2)**: `await Gal.putImageBytes(bytes, name: 'filename')` to save to device gallery (no extension in name).
+- **`share_plus` package (v12.0.2)**: write bytes to temp file via `path_provider` `getTemporaryDirectory()`, then `Share.shareXFiles([XFile(path, mimeType: 'image/png')])`.
+- **Share card design**: 20px padding white container with 2px kBlack border + 4px offset shadow. Brand strip (bolt icon + MTBOX label + terracotta "Campaign Tracker" tag), 22px/900w campaign name, 54px big percentage + count block, 14px progress bar (2px kBlack border), `Wrap`-based tick strip (4px spacing), footer with kBlue streak badge + date. Uses kBlue for all progress elements (fixed brand color, not campaign color).
+- **`Wrap` for tick strip in share card**: use `Wrap(spacing: 4, runSpacing: 4)` so ticks reflow naturally at any width without overflow.
+- **`path_provider` package**: required for `getTemporaryDirectory()` when saving file for share_plus.
+
+- **MTB-28 sample data pattern**: Sample campaigns use fixed IDs (`sample-read-daily`, `sample-exercise`) so they can be deleted by ID on dismiss. `hasSampleDataProvider` is a `NotifierProvider<SampleDataNotifier, bool>` reading from `Hive.box('settings')` key `hasSampleData`. `CampaignsNotifier.build()` sets `hasSampleData = true` when seeding. `CampaignsNotifier.dismissSamples()` deletes sample IDs and writes `false` to Hive. Home screen watches `hasSampleDataProvider` and conditionally renders the sample pill + welcome card.
+- **Integration tests that use old seed data** (`Morning Run`, `No Sugar`) will need QA updates whenever seed data changes — this is expected.
+
+- **MTB-29 flexible goal types**: `GoalType` enum (`days`, `hours`, `sessions`, `custom`) added to `campaign.dart`. New fields: `goalType` (default `GoalType.days`) and `metricName` (String, default `''`). Computed getters: `unitLabel` (e.g. `'DAYS'`, `'HRS'`, `'SESSIONS'`, uppercased metricName) and `checkInLabel` (`'CHECK IN TODAY'`, `'LOG HOURS'`, `'LOG SESSION'`, `'LOG PAGES'`).
+- **`GoalTypeSelector` widget** (`lib/widgets/goal_type_selector.dart`): 4-cell brutalist segmented control (calendar_today / schedule / repeat / tune icons). Active cell fills kBlue; cells separated by `kSoftBorderColor` left borders. Outer container has `kSoftBorderColor` border + shadow.
+- **`_GoalSection` pattern in Create/Edit screens**: replaces the old `_GoalField`. Contains `GoalTypeSelector` + amount input with dynamic unit pill + conditional Metric Name input (blue focused border, shown only when `goalType == GoalType.custom`). `_metricController` + `_metricError` validation added to both screens.
+- **Hive backward-compat for MTB-29**: `goalType` stored as int (enum index via `writeInt(obj.goalType.index)`), `metricName` as string. Both read inside `if (reader.availableBytes > 0)` block. On read, clamp goalType index: `GoalType.values[index.clamp(0, GoalType.values.length - 1)]`.
+- **All notifier mutations carry forward goalType + metricName**: `checkIn()`, `update()` (now accepts optional `goalType?` and `metricName?`), `setReminder()` all explicitly copy these fields.
+- **Campaign card goal-type chip**: `_GoalTypeChip` widget — small grey `(icon + label)` chip in bottom-left of the name column. Uses Dart 3 switch expression with record destructuring `(IconData, String)`.
+- **`_CheckInButton` now takes `label` param**: pass `campaign.checkInLabel` from `CampaignCard` to make the button label dynamic.
+
+- **MTB-30 focus session mode**: `FocusSessionScreen` at `/campaigns/:id/focus` (top-level GoRoute, no bottom nav). Manages `_Phase` enum (`running` / `complete`) internally with a `Timer.periodic`. Captures campaign state snapshot (currentDay, totalDays, streak) *before* calling `checkIn()` so the completion screen can show accurate before→after comparison. Dark palette constants (`_kDark`, `_kDarkCard`, `_kDarkBorder`, `_kDarkSecondary`) are file-private — do not export. Uses `AnnotatedRegion<SystemUiOverlayStyle>` (import `package:flutter/services.dart`) for dark status/nav bar tinting.
+- **Focus session CTA on detail screen**: "START FOCUS SESSION" button uses `brutalistBox()`-style border/shadow on `kBackground` fill (not blue) to visually distinguish it from the blue "SHARE MY PROGRESS" button above it. Only shown when `campaign.isActive && !campaign.checkedInToday`.
+- **Duration picker dialog**: `showDialog` with custom `Dialog(backgroundColor: _kDarkCard)` + manual `Container` — matches dark theme. Options list (5/10/15/20/25/30/45/60 min). Selected option fills `kBlue`.
+
+- **MTB-31 local auth pattern**: `UserAccount` model (typeId=1) with `email` + `password` stored in `Hive.box<UserAccount>('users')` keyed by normalized email. `AuthNotifier extends Notifier<AuthState>` with `signIn()`/`register()`/`clearError()` — stores `currentUser` email in `Hive.box('settings')`. Startup logic in `main()`: no `currentUser` → `/sign-in`, has user but no onboarding → `/onboarding`, fully onboarded → `/`.
+- **Auth error state pattern**: `AuthState` carries `AuthError? error` (enum: `invalidCredentials`, `emailAlreadyInUse`). On error, Sign In button turns red + label → "TRY AGAIN"; error banner + red-bordered fields shown. `clearError()` called before each new submission and on field `onChanged`.
+- **Shared auth widgets** (`lib/widgets/auth_widgets.dart`): `AuthField`, `AuthFieldLabel`, `AuthErrorBanner`, `AuthOrDivider`, `AuthSecurityNote`, `authFieldError()`. Use these for any future auth-related screens. `kAuthRed = Color(0xFFC0392B)` exported from this file.
+- **Password strength bar**: 4-segment `Row` of `Container(height:3)` tiles. Score computed from: length≥6, has uppercase, has digit, has special char. Colors: 1=red, 2=orange, 3=green, 4=kBlue.
+- **Auth routes outside ShellRoute**: `/sign-in` and `/register` are top-level GoRoutes (no bottom nav). `/register` pushed via `context.push()` from sign-in screen; "Sign In Instead" uses `context.pop()`.
+
+- **MTB-32 user profile screen**: `UserProfileScreen` at `/my-profile` (top-level GoRoute, no bottom nav). Entry: Profile tab account card (tappable, shows initials + real email). Three inline modes via `_EditMode` enum (`none`/`editName`/`uploadAvatar`) — no navigation between states, all within the same Scaffold.
+- **`UserProfileNotifier`** in `lib/providers/user_profile_provider.dart`: reads/writes `displayName`, `avatarPath`, `memberSince` from Hive `settings` box. `UserProfileState.initials` derives 2-char uppercase initials from display name.
+- **Avatar initials vs photo**: when `avatarPath` is non-null, shows `Image.file` with `errorBuilder` fallback to initials. Upload mode dims initials to opacity 0.5 and overlays camera icon + blue border.
+- **`_EditMode.editName`**: dims avatar section to opacity 0.6 (using `Opacity` widget), shows inline form with focused blue border `TextField`, cancel (kWhite) + save (kBlue) buttons — no new route needed.
+- **`_EditMode.uploadAvatar`**: shows camera overlay on avatar + 3-button picker strip (Gallery/Camera/Initials) using `image_picker`. All three options call `updateAvatarPath()` and switch back to `none` mode with a 2.5s toast.
+- **`memberSince` init**: set in `main()` with `if (!settings.containsKey('memberSince'))` to stamp first-run date. Never overwritten.
+- **Mock devices section**: hard-coded `_DeviceInfo` list (no real device tracking). Current device badge = kBlue fill; past device badge = kWhite + kSoftBorderColor border.
+- **Profile tab update**: account card now reads `userProfileProvider` (initials, displayName) + `authProvider` (email) and shows chevron pushing to `/my-profile`.
+
+- **MTB-33 cloud sync screen**: `CloudSyncScreen` at `/cloud-sync` (top-level GoRoute, no bottom nav). 3 phases managed via `_SyncPhase` enum: `syncing` → `success` → `failed`. Simulation uses `Timer`-based sequential per-campaign upload. `_SyncItem` is a mutable wrapper (field `status` mutated directly, not via constructor param — avoids unused_element_parameter analyzer warning). Sign-in routes to `/cloud-sync` if `Hive.box('settings').get('cloudSyncDone')` is false; success state sets flag to true. Failed state offers Retry (restarts `_startSync()`) and Continue Offline (goes to `/` without setting flag).
+
+- **MTB-34 real-time multi-device sync**: `SyncStateNotifier` in `lib/providers/sync_provider.dart` — `NotifierProvider<SyncStateNotifier, SyncState>` with `SyncPhase` enum (`synced`/`syncing`/`offline`). Simulates a 30s cycle: synced→offline(15s)→syncing+progress(6s+3s)→synced+notification(4s). `SyncState` carries `pendingChanges`, `catchUpProgress`, `incomingNotification`. `kMockDevices` list of `DeviceInfo` in sync_provider.dart for the devices panel.
+- **`ActivityEntry.deviceName`**: optional `String?` field — null = this device, non-null = device name for remote check-ins. Added to `activityFeedProvider`: completed entries get a rotated mock device name (`_kMockActivityDevices[i % 3]`).
+- **Home screen sync integration pattern**: `SliverToBoxAdapter` children inserted between `SliverAppBar` and `SliverPadding` for `_OfflineBar` (yellow) and `_CatchUpBar` (blue progress) — avoids padding issues. App bar right widget switches between `SAMPLE DATA` badge and `_SyncBadge` based on `hasSampleData`. `_SyncNotification` shown in the content list when `incomingNotification != null`. `_DevicesPanel` shown when signed in and not offline.
+- **`CampaignCard.isPendingSync`**: optional bool param (default false). When `true && campaign.checkedInToday`, shows `_PendingSyncChip` (yellow/amber) instead of `_ConfirmedState`. Used in `CampaignsScreen` which watches `syncStateProvider` and passes `isOffline && c.checkedInToday`.
+
+- **MTB-35 account management screen**: `AccountManagementScreen` at `/account` (top-level GoRoute, no bottom nav). Entry: Profile tab → "Account" row under SETTINGS section. Three sections: SESSION (Sign Out), DATA MANAGEMENT (Clear Local Data), DANGER ZONE (Delete Account). Each row triggers a `showDialog` with `_BrutalistDialog`.
+- **`_BrutalistDialog` pattern**: custom `Dialog(backgroundColor: Colors.transparent)` with `Container` — colored header bar (blue/terracotta/red), body content slot, two-button footer (white cancel + colored confirm). Used for all 3 account dialogs.
+- **`AuthNotifier.clearLocalData()`**: clears campaigns box + onboarding/cloudSyncDone/hasSampleData settings keys. Preserves `currentUser` (auth stays). User remains signed in with empty local data.
+- **`AuthNotifier.deleteAccount()`**: removes user from users box, clears all of settings box, clears campaigns box, sets state = AuthState(). Navigate to `/sign-in` after calling.
+- **`_kRed = Color(0xFFB83232)`**: file-private constant in `account_management_screen.dart` for danger zone styling — same red as MTB-13 delete flow. Not exported from theme.dart (one-off screen use).
+
+- **Supabase integration (MTB-10 CEO directive)**: `SupabaseService` in `lib/services/supabase_service.dart` — holds URL + publishable key, campaign serialization helpers (`campaignToMap` / `campaignFromMap`), and DB helpers (`fetchCampaigns`, `upsertCampaign`, `deleteCampaign`). Project URL: `https://euxbkoxtetsqhiiitpvv.supabase.co`. Uses new publishable key (not legacy JWT anon key).
+- **Supabase auth replaces Hive local auth**: `AuthNotifier` calls `supabase.auth.signInWithPassword` / `signUp` / `signOut`. Session persisted automatically by supabase_flutter (no manual Hive `currentUser` key). Startup routing reads `SupabaseService.client.auth.currentSession`. `AuthError` enum and `AuthState` unchanged — UI works as-is.
+- **Supabase account deletion limitation**: client-side `supabase.auth.admin.deleteUser()` requires service role key (not safe in client app). Current `deleteAccount()` clears local data + signs out only. Full deletion needs a server-side Supabase Edge Function.
+- **Campaign sync pattern**: `CampaignsNotifier.build()` calls `Future.microtask(_syncFromSupabase)` to load from Supabase after Hive. On startup with empty Supabase, pushes local (sample) campaigns up. Otherwise Supabase is source of truth — overwrites Hive. Every mutation calls `_upsertAsync(campaign)` (fire-and-forget). Delete calls `SupabaseService.deleteCampaign(id).ignore()`.
+- **Supabase Realtime in CampaignsNotifier**: subscribes to `campaigns` table filtered by `user_id`. Handles `insert`/`update` (merge into Hive + state) and `delete` (remove from Hive + state). Channel name: `campaigns_data_$userId`. Unsubscribed via `ref.onDispose`.
+- **Supabase Realtime in SyncStateNotifier**: subscribes to `campaigns` table for `update` events. Channel subscription status drives `SyncPhase` (subscribed=synced, channelError/timedOut/closed=offline). Remote updates show a 4s notification.
+- **`PostgresChangeFilterType.eq`** — the correct enum for equality filter in `PostgresChangeFilter`. Not `FilterType.eq` (that doesn't exist).
+- **`docs/supabase_migration.sql`**: CEO must run this in Supabase SQL editor to create `campaigns` table + RLS policy + enable Realtime publication.
+- **`SharePlus.instance.share(ShareParams(files: [...], subject: ...))`** — updated from deprecated `Share.shareXFiles` in share_plus v12.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -125,3 +207,17 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/14 | MTB-21 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/15 | MTB-22 | In Review |
 | 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/16 | MTB-23 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/17 | MTB-24 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/18 | MTB-25 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/19 | MTB-26 | In Review |
+| 2026-04-04 | https://github.com/levulinh/mtbox-app/pull/20 | MTB-27 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/21 | MTB-28 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/22 | MTB-29 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/23 | MTB-30 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/24 | MTB-31 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/25 | MTB-32 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/26 | MTB-33 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/27 | MTB-34 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/28 | MTB-35 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/29 | MTB-10 (Supabase) | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/30 | MTB-36 | In Review |

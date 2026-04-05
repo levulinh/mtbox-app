@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/mock_data_provider.dart';
+import '../providers/sync_provider.dart';
 import '../theme.dart';
 import '../widgets/campaign_card.dart';
 
@@ -47,6 +48,8 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
   @override
   Widget build(BuildContext context) {
     final campaigns = ref.watch(campaignsProvider);
+    final syncState = ref.watch(syncStateProvider);
+    final isOffline = syncState.phase == SyncPhase.offline;
     final active = campaigns.where((c) => c.isActive).toList();
     final completed = campaigns.where((c) => !c.isActive).toList();
 
@@ -89,6 +92,7 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
                       ...active.map((c) => CampaignCard(
                             campaign: c,
                             onCheckIn: () => _handleCheckIn(c.id),
+                            isPendingSync: isOffline && c.checkedInToday,
                           )),
                     ],
                     if (completed.isNotEmpty) ...[
