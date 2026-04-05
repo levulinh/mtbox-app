@@ -110,3 +110,5 @@ Track issues processed, routing decisions made, and patterns noticed across all 
 2026-04-05 | Run 59. No Backlog, Awaiting Design Approval, or Awaiting Decision issues. All queues empty. Nothing to route this run.
 2026-04-05 | Run 60. No Backlog, Awaiting Design Approval, Awaiting Decision, or In Review issues. One archived issue in In Design (MTB-5). All queues empty. Nothing to route this run.
 2026-04-05 | Run 61. No Backlog, Awaiting Decision, or Awaiting Design Approval issues. All queues empty. Nothing to route this run.
+2026-04-05 | MTB-36 | Connect live Supabase credentials and wire backend integration | CEO direct mention: wrote acceptance criteria (behavioral), moved Backlog → In Progress (skipped design phase for backend wiring)
+2026-04-05 | Run 62. CEO direct mention on MTB-36 (skip design, move to In Progress). Three behavioral acceptance criteria written: auth, data persistence, real-time sync. No Backlog, Awaiting Design Approval, or Awaiting Decision issues. All queues empty. Direct mention file cleaned.
