@@ -4,27 +4,28 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/campaign.dart';
 import 'models/campaign_adapter.dart';
-import 'models/user_account.dart';
-import 'models/user_account_adapter.dart';
 import 'router.dart';
 import 'services/notification_service.dart';
+import 'services/supabase_service.dart';
 import 'theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(CampaignAdapter());
-  Hive.registerAdapter(UserAccountAdapter());
   await Hive.openBox<Campaign>('campaigns');
-  await Hive.openBox<UserAccount>('users');
   await Hive.openBox('settings');
+  await SupabaseService.initialize();
   await NotificationService.initialize();
 
   final settings = Hive.box('settings');
   if (!settings.containsKey('memberSince')) {
     settings.put('memberSince', DateTime.now().millisecondsSinceEpoch);
   }
-  final currentUser = settings.get('currentUser') as String?;
+
+  // Use Supabase session for routing — no local credential storage needed.
+  final session = SupabaseService.client.auth.currentSession;
+  final currentUser = session?.user.email;
   final onboardingDone = settings.get('onboardingDone', defaultValue: false) as bool;
 
   final String initialLocation;

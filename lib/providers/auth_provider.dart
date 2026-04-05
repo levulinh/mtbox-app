@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/campaign.dart';
-import '../models/user_account.dart';
+import '../services/supabase_service.dart';
 
 enum AuthError { invalidCredentials, emailAlreadyInUse }
 
@@ -22,43 +23,49 @@ class AuthState {
 }
 
 class AuthNotifier extends Notifier<AuthState> {
-  static const _usersBoxName = 'users';
-  static const _currentUserKey = 'currentUser';
-
-  Box<UserAccount> get _usersBox => Hive.box<UserAccount>(_usersBoxName);
-  Box get _settingsBox => Hive.box('settings');
+  SupabaseClient get _supabase => SupabaseService.client;
 
   @override
   AuthState build() {
-    final currentEmail = _settingsBox.get(_currentUserKey) as String?;
-    return AuthState(currentEmail: currentEmail);
+    return AuthState(currentEmail: _supabase.auth.currentUser?.email);
   }
 
   Future<void> signIn(String email, String password) async {
-    final normalizedEmail = email.trim().toLowerCase();
-    final account = _usersBox.get(normalizedEmail);
-
-    if (account == null || account.password != password) {
-      state = AuthState(currentEmail: null, error: AuthError.invalidCredentials);
-      return;
+    try {
+      final response = await _supabase.auth.signInWithPassword(
+        email: email.trim(),
+        password: password,
+      );
+      state = AuthState(currentEmail: response.user?.email);
+    } on AuthException {
+      state = const AuthState(error: AuthError.invalidCredentials);
+    } catch (_) {
+      state = const AuthState(error: AuthError.invalidCredentials);
     }
-
-    await _settingsBox.put(_currentUserKey, normalizedEmail);
-    state = AuthState(currentEmail: normalizedEmail);
   }
 
   Future<void> register(String email, String password) async {
-    final normalizedEmail = email.trim().toLowerCase();
-
-    if (_usersBox.containsKey(normalizedEmail)) {
-      state = AuthState(currentEmail: null, error: AuthError.emailAlreadyInUse);
-      return;
+    try {
+      final response = await _supabase.auth.signUp(
+        email: email.trim(),
+        password: password,
+      );
+      if (response.user == null) {
+        // Email confirmation required — user exists but session not started
+        state = const AuthState(error: AuthError.emailAlreadyInUse);
+        return;
+      }
+      state = AuthState(currentEmail: response.user!.email);
+    } on AuthException catch (e) {
+      final msg = e.message.toLowerCase();
+      if (msg.contains('already') || msg.contains('registered') || msg.contains('taken')) {
+        state = const AuthState(error: AuthError.emailAlreadyInUse);
+      } else {
+        state = const AuthState(error: AuthError.invalidCredentials);
+      }
+    } catch (_) {
+      state = const AuthState(error: AuthError.invalidCredentials);
     }
-
-    final account = UserAccount(email: normalizedEmail, password: password);
-    await _usersBox.put(normalizedEmail, account);
-    await _settingsBox.put(_currentUserKey, normalizedEmail);
-    state = AuthState(currentEmail: normalizedEmail);
   }
 
   void clearError() {
@@ -66,28 +73,24 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> signOut() async {
-    await _settingsBox.delete(_currentUserKey);
+    await _supabase.auth.signOut();
     state = const AuthState();
   }
 
   Future<void> clearLocalData() async {
-    final campaignsBox = Hive.box<Campaign>('campaigns');
-    await campaignsBox.clear();
-    // Reset non-auth settings so onboarding runs fresh on next sign-in
-    await _settingsBox.delete('onboardingDone');
-    await _settingsBox.delete('cloudSyncDone');
-    await _settingsBox.delete('hasSampleData');
-    // Auth (currentUser) intentionally preserved — keeps cloud account
+    await Hive.box<Campaign>('campaigns').clear();
+    final settings = Hive.box('settings');
+    await settings.delete('onboardingDone');
+    await settings.delete('cloudSyncDone');
+    await settings.delete('hasSampleData');
   }
 
   Future<void> deleteAccount() async {
-    final email = state.currentEmail;
-    if (email != null) {
-      await _usersBox.delete(email);
-    }
-    final campaignsBox = Hive.box<Campaign>('campaigns');
-    await campaignsBox.clear();
-    await _settingsBox.clear();
+    // Clear all local data and sign out. Full server-side account deletion
+    // requires a Supabase Edge Function with the service role key.
+    await Hive.box<Campaign>('campaigns').clear();
+    await Hive.box('settings').clear();
+    await _supabase.auth.signOut();
     state = const AuthState();
   }
 }

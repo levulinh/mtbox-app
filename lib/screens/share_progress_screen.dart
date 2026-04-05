@@ -64,9 +64,11 @@ class _ShareProgressScreenState extends ConsumerState<ShareProgressScreen> {
       final dir = await getTemporaryDirectory();
       final file = File('${dir.path}/mtbox_progress.png');
       await file.writeAsBytes(bytes);
-      await Share.shareXFiles(
-        [XFile(file.path, mimeType: 'image/png')],
-        subject: 'My MTBox Progress',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path, mimeType: 'image/png')],
+          subject: 'My MTBox Progress',
+        ),
       );
     } catch (_) {
       if (mounted) {

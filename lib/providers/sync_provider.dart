@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../services/supabase_service.dart';
 
 enum SyncPhase { synced, syncing, offline }
 
@@ -34,28 +36,15 @@ class SyncState {
   });
 }
 
-// Hard-coded mock device list — current device is always first.
+// Current device is always first. Remote devices are derived from Supabase presence
+// in future iterations; hard-coded for now since we don't have multi-device registration.
 const kMockDevices = [
   DeviceInfo(
-    name: 'iPhone 14 Pro',
+    name: 'This Device',
     icon: Icons.phone_iphone,
     isCurrentDevice: true,
     isOffline: false,
     lastActive: 'now',
-  ),
-  DeviceInfo(
-    name: 'MacBook Pro',
-    icon: Icons.laptop_mac,
-    isCurrentDevice: false,
-    isOffline: false,
-    lastActive: '2 min ago',
-  ),
-  DeviceInfo(
-    name: 'iPad Air',
-    icon: Icons.tablet_mac,
-    isCurrentDevice: false,
-    isOffline: true,
-    lastActive: '3 hrs ago',
   ),
 ];
 
@@ -63,58 +52,74 @@ final syncStateProvider =
     NotifierProvider<SyncStateNotifier, SyncState>(SyncStateNotifier.new);
 
 class SyncStateNotifier extends Notifier<SyncState> {
-  Timer? _t1;
-  Timer? _t2;
-  Timer? _progressTimer;
+  RealtimeChannel? _channel;
+  Timer? _notificationTimer;
 
   @override
   SyncState build() {
     ref.onDispose(() {
-      _t1?.cancel();
-      _t2?.cancel();
-      _progressTimer?.cancel();
+      _channel?.unsubscribe();
+      _notificationTimer?.cancel();
     });
-    _scheduleOffline();
+    _subscribe();
     return const SyncState(phase: SyncPhase.synced);
   }
 
-  void _scheduleOffline() {
-    _t1 = Timer(const Duration(seconds: 15), _goOffline);
-  }
+  void _subscribe() {
+    final userId = SupabaseService.client.auth.currentUser?.id;
+    if (userId == null) return;
 
-  void _goOffline() {
-    state = const SyncState(phase: SyncPhase.offline, pendingChanges: 3);
-    _t2 = Timer(const Duration(seconds: 6), _goSyncing);
-  }
+    _channel = SupabaseService.client
+        .channel('sync_status_$userId')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.update,
+          schema: 'public',
+          table: 'campaigns',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'user_id',
+            value: userId,
+          ),
+          callback: _onRemoteChange,
+        );
 
-  void _goSyncing() {
-    state = const SyncState(
-        phase: SyncPhase.syncing, pendingChanges: 3, catchUpProgress: 0.0);
-    double progress = 0.0;
-    _progressTimer =
-        Timer.periodic(const Duration(milliseconds: 150), (timer) {
-      progress = (progress + 0.05).clamp(0.0, 1.0);
-      state = SyncState(
-          phase: SyncPhase.syncing,
-          pendingChanges: 3,
-          catchUpProgress: progress);
-      if (progress >= 1.0) {
-        timer.cancel();
-        _goSynced();
+    _channel!.subscribe((RealtimeSubscribeStatus status, Object? error) {
+      switch (status) {
+        case RealtimeSubscribeStatus.subscribed:
+          if (state.phase == SyncPhase.offline) {
+            state = const SyncState(phase: SyncPhase.syncing, catchUpProgress: 0.5);
+            Future.delayed(const Duration(seconds: 2), () {
+              state = const SyncState(phase: SyncPhase.synced);
+            });
+          }
+        case RealtimeSubscribeStatus.channelError:
+        case RealtimeSubscribeStatus.timedOut:
+          state = const SyncState(phase: SyncPhase.offline, pendingChanges: 0);
+        case RealtimeSubscribeStatus.closed:
+          state = const SyncState(phase: SyncPhase.offline, pendingChanges: 0);
       }
     });
   }
 
-  void _goSynced() {
-    state = const SyncState(
+  void _onRemoteChange(PostgresChangePayload payload) {
+    final name = payload.newRecord['name'] as String?;
+    state = SyncState(
       phase: SyncPhase.synced,
-      incomingNotification:
-          'MacBook Pro checked in Morning Run · 2 new changes applied',
+      incomingNotification: 'Remote update: ${name ?? 'campaign'} synced',
     );
-    // Dismiss notification after 4s, then schedule next cycle
-    _t1 = Timer(const Duration(seconds: 4), () {
+    _notificationTimer?.cancel();
+    _notificationTimer = Timer(const Duration(seconds: 4), () {
       state = const SyncState(phase: SyncPhase.synced);
-      _scheduleOffline();
     });
+  }
+
+  /// Called by upstream code (e.g. cloud sync screen) to signal sync started.
+  void markSyncing() {
+    state = const SyncState(phase: SyncPhase.syncing, catchUpProgress: 0.0);
+  }
+
+  /// Called when a local write has been successfully pushed to Supabase.
+  void markSynced() {
+    state = const SyncState(phase: SyncPhase.synced);
   }
 }
