@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=375">
-  <title>MTB-35 — Sign-out and Data Management</title>
+  <title>MTB-35 — Sign-out & Data Management (Revised)</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,66 +14,63 @@
       --surface: #FFFDF9;
       --text: #1A1A1A;
       --text-sec: #6B6B6B;
-      --border-structural: #2C2C2C;
-      --border-content: #5A5A5A;
+      --border-chrome: 2px solid #2C2C2C;
+      --border-content: 1.5px solid #5A5A5A;
       --shadow-content: 2px 2px 0 rgba(44,44,44,0.45);
-      --shadow-structural: 2px 2px 0 #2C2C2C;
+      --shadow-dialog: 2px 2px 0 #2C2C2C;
       --red: #B83232;
-      --terracotta: #B5735A;
+      --terra: #B5735A;
     }
 
     body {
       width: 375px;
-      background: #E8E2DA;
+      background: #E8E4E0;
       font-family: -apple-system, 'SF Pro Display', sans-serif;
-      color: var(--text);
     }
 
-    /* ── ANNOTATION DIVIDER ── */
-    .annotation-divider {
+    /* ── ANNOTATION DIVIDER ─────────────────────────────────────── */
+    .divider {
       width: 375px;
-      padding: 12px 16px;
-      background: #E8E2DA;
+      background: var(--bg);
+      border-top: 2px dashed #5A5A5A;
+      border-bottom: 2px dashed #5A5A5A;
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-    .annotation-divider::before,
-    .annotation-divider::after {
-      content: '';
-      flex: 1;
-      border-top: 1.5px dashed #9A9080;
-    }
-    .annotation-divider span {
-      font-size: 9px;
+      justify-content: center;
+      height: 36px;
+      color: var(--text-sec);
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: #9A9080;
-      white-space: nowrap;
     }
 
-    /* ── PANEL WRAPPER ── */
+    /* ── PANEL WRAPPER ──────────────────────────────────────────── */
     .panel {
       width: 375px;
+      min-height: 812px;
       background: var(--bg);
+      display: flex;
+      flex-direction: column;
       position: relative;
+      overflow: hidden;
     }
 
-    /* ── STATUS BAR ── */
+    /* ── STATUS BAR ─────────────────────────────────────────────── */
     .status-bar {
       height: 44px;
       background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 16px;
-      color: white;
+      padding: 0 18px;
+      flex-shrink: 0;
     }
     .status-bar .time {
-      font-size: 12px;
+      color: #fff;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
     .status-bar .icons {
       display: flex;
@@ -81,386 +78,337 @@
       gap: 4px;
     }
     .status-bar .icons .material-icons {
+      color: #fff;
       font-size: 16px;
     }
 
-    /* ── APP BAR ── */
+    /* ── APP BAR ────────────────────────────────────────────────── */
     .app-bar {
       height: 56px;
       background: var(--primary);
       display: flex;
       align-items: center;
       padding: 0 16px;
-      gap: 12px;
-      border-bottom: 2px solid var(--border-structural);
-      box-shadow: 0 2px 0 var(--border-structural);
-      color: white;
+      gap: 10px;
+      border-bottom: var(--border-chrome);
+      box-shadow: 0 2px 0 #2C2C2C;
+      flex-shrink: 0;
     }
     .app-bar .back-btn {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1.5px solid rgba(255,255,255,0.6);
-      box-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+      color: #fff;
+      font-size: 24px;
       cursor: pointer;
     }
-    .app-bar .back-btn .material-icons {
-      font-size: 18px;
-      color: white;
-    }
     .app-bar .title {
+      color: #fff;
       font-size: 18px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
     }
 
-    /* ── CONTENT AREA ── */
+    /* ── CONTENT AREA ───────────────────────────────────────────── */
     .content {
-      padding: 16px;
+      flex: 1;
+      padding: 20px 16px;
       display: flex;
       flex-direction: column;
-      gap: 0;
+      gap: 20px;
     }
 
-    /* ── SECTION HEADER ── */
+    /* ── SECTION HEADER ─────────────────────────────────────────── */
     .section-header {
-      padding: 16px 0 8px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-sec);
       border-left: 3px solid var(--primary);
+      padding-left: 8px;
       margin-bottom: 8px;
-      margin-top: 8px;
     }
     .section-header.danger {
       border-left-color: var(--red);
     }
-    .section-header span {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-sec);
+
+    /* ── SECTION BLOCK ──────────────────────────────────────────── */
+    .section-block {
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ── ACTION ROW ── */
-    .action-row {
-      width: 100%;
+    /* ── LIST ROW ───────────────────────────────────────────────── */
+    .list-row {
       background: var(--surface);
-      border: 1.5px solid var(--border-content);
+      border: var(--border-content);
       box-shadow: var(--shadow-content);
       display: flex;
       align-items: center;
+      padding: 14px 14px;
       gap: 12px;
-      padding: 12px;
       cursor: pointer;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
-    .action-row.danger {
-      border-color: var(--red);
-      box-shadow: 2px 2px 0 rgba(184,50,50,0.35);
-    }
-
-    /* ── ICON BOX ── */
-    .icon-box {
+    .list-row:last-child { margin-bottom: 0; }
+    .row-icon {
       width: 36px;
       height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #EEE9E4;
+      border: var(--border-content);
       flex-shrink: 0;
-      border: 1.5px solid var(--border-content);
-      box-shadow: var(--shadow-content);
-      background: var(--surface);
     }
-    .icon-box .material-icons {
-      font-size: 20px;
-      color: var(--primary);
-    }
-    .icon-box.terracotta .material-icons { color: var(--terracotta); }
-    .icon-box.red .material-icons { color: var(--red); }
-
-    /* ── ROW CONTENT ── */
-    .row-content {
+    .row-icon .material-icons { font-size: 20px; color: var(--text-sec); }
+    .row-icon.terra .material-icons { color: var(--terra); }
+    .row-icon.red .material-icons   { color: var(--red); }
+    .row-body {
       flex: 1;
-      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
     .row-label {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text);
-      line-height: 1.2;
     }
-    .row-label.red { color: var(--red); }
+    .row-label.red-label { color: var(--red); }
     .row-caption {
       font-size: 11px;
       font-weight: 600;
       color: var(--text-sec);
-      margin-top: 2px;
-      line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .row-caption.red { color: rgba(184,50,50,0.7); }
+    .row-chevron .material-icons { font-size: 20px; color: #AEAEAE; }
 
-    .chevron {
+    /* ── PROFILE HEADER ─────────────────────────────────────────── */
+    .profile-header {
+      background: var(--surface);
+      border: var(--border-content);
+      box-shadow: var(--shadow-content);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .avatar {
+      width: 56px;
+      height: 56px;
+      background: var(--primary);
+      border: var(--border-content);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
-      color: var(--border-content);
     }
-    .chevron.red { color: rgba(184,50,50,0.5); }
-    .chevron .material-icons { font-size: 18px; }
+    .avatar span { color: #fff; font-size: 20px; font-weight: 900; letter-spacing: -1px; }
+    .profile-name { font-size: 16px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+    .profile-email { font-size: 11px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
 
-    /* ── DIALOG OVERLAY ── */
-    .dialog-overlay {
-      position: relative;
-      width: 375px;
-    }
-    .overlay-bg {
+    /* ── OVERLAY ────────────────────────────────────────────────── */
+    .overlay {
       position: absolute;
       inset: 0;
-      background: rgba(26,26,26,0.55);
-      z-index: 1;
-    }
-    .dialog-panel {
-      position: relative;
-      width: 375px;
-    }
-    /* blurred/dimmed screen behind dialog */
-    .screen-behind {
-      width: 375px;
-      background: var(--bg);
-      filter: brightness(0.85);
-    }
-    .dialog-card-wrapper {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: calc(375px - 40px);
+      background: rgba(0,0,0,0.42);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 10;
     }
-    .dialog-card {
+
+    /* ── DIALOG CARD ────────────────────────────────────────────── */
+    .dialog {
+      width: 311px;
       background: var(--surface);
-      border: 1.5px solid var(--border-content);
-      box-shadow: 3px 3px 0 rgba(44,44,44,0.55);
-      padding: 20px;
-    }
-
-    .dialog-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .dialog-icon-box {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      border: 1.5px solid var(--border-content);
-      box-shadow: var(--shadow-content);
-      background: var(--primary);
-    }
-    .dialog-icon-box.red {
-      background: var(--red);
-      border-color: var(--red);
-      box-shadow: 2px 2px 0 rgba(184,50,50,0.35);
-    }
-    .dialog-icon-box .material-icons {
-      font-size: 22px;
-      color: white;
-    }
-    .dialog-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--text);
-    }
-    .dialog-title.red { color: var(--red); }
-
-    .dialog-divider {
-      height: 1.5px;
-      background: var(--border-content);
-      margin: 0 0 14px 0;
-    }
-
-    .dialog-body {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      line-height: 1.5;
-      margin-bottom: 14px;
-    }
-
-    .info-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(76,110,173,0.08);
-      border: 1.5px solid rgba(76,110,173,0.3);
-      padding: 8px 10px;
-      margin-bottom: 16px;
-    }
-    .info-row .material-icons {
-      font-size: 16px;
-      color: var(--primary);
-      flex-shrink: 0;
-    }
-    .info-row span {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--primary);
-    }
-
-    .warning-checklist {
-      margin-bottom: 16px;
+      border: 2px solid #2C2C2C;
+      box-shadow: var(--shadow-dialog);
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      overflow: hidden;
     }
-    .warning-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .warning-item .material-icons {
-      font-size: 16px;
-      color: var(--red);
-      flex-shrink: 0;
-    }
-    .warning-item span {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .dialog-footer {
-      display: flex;
-      gap: 10px;
-    }
-    .btn {
-      flex: 1;
-      height: 40px;
+    .dialog-header {
+      height: 52px;
+      background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      border: 1.5px solid var(--border-content);
-      box-shadow: var(--shadow-content);
-      cursor: pointer;
-      background: var(--surface);
-      color: var(--text);
+      gap: 10px;
+      border-bottom: 2px solid #2C2C2C;
     }
-    .btn.primary {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-    .btn.danger {
-      background: var(--red);
-      color: white;
-      border-color: var(--red);
-      box-shadow: 2px 2px 0 rgba(184,50,50,0.45);
-    }
-
-    /* account screen mini (for dialog backdrop) */
-    .mini-screen {
-      padding: 16px;
-    }
-    .mini-section {
-      margin-bottom: 8px;
-    }
-    .mini-header {
-      font-size: 9px;
+    .dialog-header.red-header   { background: var(--red); }
+    .dialog-header.terra-header { background: var(--terra); }
+    .dialog-header .material-icons { color: #fff; font-size: 22px; }
+    .dialog-header-title {
+      color: #fff;
+      font-size: 14px;
       font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: var(--text-sec);
-      padding-left: 8px;
-      border-left: 2px solid var(--primary);
-      margin-bottom: 6px;
-      margin-top: 10px;
     }
-    .mini-header.danger { border-left-color: var(--red); }
-    .mini-row {
-      background: var(--surface);
-      border: 1.5px solid var(--border-content);
+    .dialog-body {
+      padding: 18px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .dialog-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* Info note row inside dialog */
+    .info-row {
+      background: #EDF1F8;
+      border: var(--border-content);
+      box-shadow: var(--shadow-content);
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px;
-      margin-bottom: 8px;
+      gap: 8px;
+      padding: 9px 10px;
     }
-    .mini-icon {
-      width: 28px;
-      height: 28px;
-      border: 1px solid var(--border-content);
+    .info-row .material-icons { font-size: 16px; color: var(--primary); flex-shrink: 0; }
+    .info-row .info-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    /* Consequence list */
+    .consequence-list { display: flex; flex-direction: column; gap: 8px; }
+    .consequence-row { display: flex; align-items: flex-start; gap: 8px; }
+    .consequence-row .material-icons { font-size: 16px; color: var(--red); flex-shrink: 0; margin-top: 1px; }
+    .consequence-row.terra-row .material-icons { color: var(--terra); }
+    .consequence-row.safe-row  .material-icons { color: var(--primary); }
+    .c-text { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.4; }
+    .c-text.safe { color: var(--primary); font-weight: 700; }
+
+    .warning-text {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .note-text {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-sec);
+      line-height: 1.5;
+    }
+
+    /* Dialog footer */
+    .dialog-footer { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+    .btn {
+      width: 100%;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 2px solid #2C2C2C;
+      box-shadow: var(--shadow-content);
     }
-    .mini-icon .material-icons {
-      font-size: 16px;
-      color: var(--primary);
-    }
-    .mini-icon.terracotta .material-icons { color: var(--terracotta); }
-    .mini-icon.red .material-icons { color: var(--red); }
-    .mini-label {
-      flex: 1;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .mini-label.red { color: var(--red); }
-    .mini-chevron .material-icons { font-size: 14px; color: var(--border-content); }
+    .btn-white   { background: var(--surface); color: var(--text); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-danger  { background: var(--red); color: #fff; }
+    .btn-terra   { background: var(--terra); color: #fff; }
 
-    /* panel height for dialogs */
-    .dialog-scene {
-      position: relative;
-      width: 375px;
-      height: 560px;
-      overflow: hidden;
-    }
-    .dialog-scene .screen-fill {
+    /* Ghost background screen behind dialog panels */
+    .bg-screen-ghost {
       position: absolute;
       inset: 0;
-      background: var(--bg);
+      display: flex;
+      flex-direction: column;
     }
-    .dialog-scene .dim-layer {
-      position: absolute;
-      inset: 0;
-      background: rgba(26,26,26,0.55);
-      z-index: 2;
-    }
-    .dialog-scene .float-card {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 315px;
-      z-index: 3;
-      background: var(--surface);
-      border: 1.5px solid var(--border-content);
-      box-shadow: 3px 3px 0 rgba(44,44,44,0.55);
-      padding: 20px;
-    }
-    .dialog-scene .float-card.red-card {
-      box-shadow: 3px 3px 0 rgba(184,50,50,0.4);
+    .bg-content {
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      opacity: 0.38;
     }
   </style>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════
-       PANEL 1 — ACCOUNT MANAGEMENT SCREEN
-  ═══════════════════════════════════════════ -->
-  <div class="panel">
-    <!-- Status Bar -->
+<!-- ═══════════════════════════════════════════════════════════════════
+     PANEL 1 — ACCOUNT MANAGEMENT SCREEN
+═══════════════════════════════════════════════════════════════════ -->
+<div class="panel">
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <span class="material-icons">signal_cellular_alt</span>
+      <span class="material-icons">wifi</span>
+      <span class="material-icons">battery_full</span>
+    </div>
+  </div>
+  <div class="app-bar">
+    <span class="material-icons back-btn">arrow_back_ios</span>
+    <span class="title">Account</span>
+  </div>
+  <div class="content">
+    <div class="profile-header">
+      <div class="avatar"><span>VL</span></div>
+      <div>
+        <div class="profile-name">Vu Linh</div>
+        <div class="profile-email">vulinh@example.com</div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header">Session</div>
+      <div class="list-row">
+        <div class="row-icon"><span class="material-icons">logout</span></div>
+        <div class="row-body"><span class="row-label">Sign Out</span></div>
+        <div class="row-chevron"><span class="material-icons">chevron_right</span></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header">Data Management</div>
+      <div class="list-row">
+        <div class="row-icon terra"><span class="material-icons">delete_sweep</span></div>
+        <div class="row-body">
+          <span class="row-label">Clear Local Data</span>
+          <span class="row-caption">Keeps your cloud account</span>
+        </div>
+        <div class="row-chevron"><span class="material-icons">chevron_right</span></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header danger">Danger Zone</div>
+      <div class="list-row">
+        <div class="row-icon red"><span class="material-icons">delete_forever</span></div>
+        <div class="row-body">
+          <span class="row-label red-label">Delete Account</span>
+          <span class="row-caption">Cannot be undone</span>
+        </div>
+        <div class="row-chevron"><span class="material-icons">chevron_right</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider">[ Panel 2: Sign Out Dialog ]</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PANEL 2 — SIGN OUT CONFIRMATION DIALOG
+═══════════════════════════════════════════════════════════════════ -->
+<div class="panel">
+  <div class="bg-screen-ghost">
     <div class="status-bar">
       <span class="time">9:41</span>
       <div class="icons">
@@ -469,215 +417,193 @@
         <span class="material-icons">battery_full</span>
       </div>
     </div>
-
-    <!-- App Bar -->
     <div class="app-bar">
-      <div class="back-btn"><span class="material-icons">arrow_back</span></div>
+      <span class="material-icons back-btn">arrow_back_ios</span>
       <span class="title">Account</span>
     </div>
-
-    <!-- Content -->
-    <div class="content">
-
-      <!-- SESSION section -->
-      <div class="section-header">
-        <span>Session</span>
+    <div class="bg-content">
+      <div class="profile-header">
+        <div class="avatar"><span>VL</span></div>
+        <div><div class="profile-name">Vu Linh</div><div class="profile-email">vulinh@example.com</div></div>
       </div>
-
-      <div class="action-row">
-        <div class="icon-box">
-          <span class="material-icons">logout</span>
+      <div class="section-block">
+        <div class="section-header">Session</div>
+        <div class="list-row">
+          <div class="row-icon"><span class="material-icons">logout</span></div>
+          <div class="row-body"><span class="row-label">Sign Out</span></div>
+          <div class="row-chevron"><span class="material-icons">chevron_right</span></div>
         </div>
-        <div class="row-content">
-          <div class="row-label">Sign Out</div>
-        </div>
-        <div class="chevron"><span class="material-icons">chevron_right</span></div>
       </div>
-
-      <!-- DATA MANAGEMENT section -->
-      <div class="section-header" style="margin-top:4px;">
-        <span>Data Management</span>
-      </div>
-
-      <div class="action-row">
-        <div class="icon-box terracotta">
-          <span class="material-icons">cleaning_services</span>
+      <div class="section-block">
+        <div class="section-header">Data Management</div>
+        <div class="list-row">
+          <div class="row-icon terra"><span class="material-icons">delete_sweep</span></div>
+          <div class="row-body">
+            <span class="row-label">Clear Local Data</span>
+            <span class="row-caption">Keeps your cloud account</span>
+          </div>
+          <div class="row-chevron"><span class="material-icons">chevron_right</span></div>
         </div>
-        <div class="row-content">
-          <div class="row-label">Clear Local Data</div>
-          <div class="row-caption">Removes data from this device only</div>
-        </div>
-        <div class="chevron"><span class="material-icons">chevron_right</span></div>
       </div>
-
-      <!-- DANGER ZONE section -->
-      <div class="section-header danger" style="margin-top:4px;">
-        <span>Danger Zone</span>
-      </div>
-
-      <div class="action-row danger">
-        <div class="icon-box red">
-          <span class="material-icons">delete_forever</span>
-        </div>
-        <div class="row-content">
-          <div class="row-label red">Delete Account</div>
-          <div class="row-caption red">Permanently removes all data</div>
-        </div>
-        <div class="chevron red"><span class="material-icons">chevron_right</span></div>
-      </div>
-
     </div>
   </div>
-
-  <!-- ═══════════════════════════════════════════
-       ANNOTATION DIVIDER
-  ═══════════════════════════════════════════ -->
-  <div class="annotation-divider"><span>Sign Out — Confirmation Dialog</span></div>
-
-  <!-- ═══════════════════════════════════════════
-       PANEL 2 — SIGN OUT CONFIRMATION DIALOG
-  ═══════════════════════════════════════════ -->
-  <div class="dialog-scene">
-    <!-- Dimmed background screen -->
-    <div class="screen-fill">
-      <div style="height:44px;background:var(--primary);"></div>
-      <div style="height:56px;background:var(--primary);border-bottom:2px solid var(--border-structural);"></div>
-      <div class="mini-screen">
-        <div class="mini-header">Session</div>
-        <div class="mini-row">
-          <div class="mini-icon"><span class="material-icons">logout</span></div>
-          <div class="mini-label">Sign Out</div>
-          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
-        </div>
-        <div class="mini-header">Data Management</div>
-        <div class="mini-row">
-          <div class="mini-icon terracotta"><span class="material-icons">cleaning_services</span></div>
-          <div class="mini-label">Clear Local Data</div>
-          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
-        </div>
-        <div class="mini-header danger">Danger Zone</div>
-        <div class="mini-row" style="border-color:var(--red);">
-          <div class="mini-icon red"><span class="material-icons">delete_forever</span></div>
-          <div class="mini-label red">Delete Account</div>
-          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Dim overlay -->
-    <div class="dim-layer"></div>
-
-    <!-- Dialog Card -->
-    <div class="float-card">
-      <!-- Header -->
+  <div class="overlay">
+    <div class="dialog">
       <div class="dialog-header">
-        <div class="dialog-icon-box">
-          <span class="material-icons">logout</span>
-        </div>
-        <div class="dialog-title">Sign Out?</div>
+        <span class="material-icons">logout</span>
+        <span class="dialog-header-title">Sign Out?</span>
       </div>
-
-      <!-- Divider -->
-      <div class="dialog-divider"></div>
-
-      <!-- Body -->
       <div class="dialog-body">
-        You'll be signed out of this device. Your cloud data remains safe and accessible when you sign back in.
+        <p class="dialog-text">You'll need to sign back in to access your campaigns across devices.</p>
+        <div class="info-row">
+          <span class="material-icons">cloud_done</span>
+          <span class="info-text">Your data stays safely in the cloud</span>
+        </div>
       </div>
-
-      <!-- Info note -->
-      <div class="info-row">
-        <span class="material-icons">cloud_done</span>
-        <span>Your data stays in the cloud</span>
-      </div>
-
-      <!-- Footer -->
       <div class="dialog-footer">
-        <div class="btn">Cancel</div>
-        <div class="btn primary">Sign Out</div>
+        <div class="btn btn-white">Keep Me Signed In</div>
+        <div class="btn btn-primary">Sign Out</div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ═══════════════════════════════════════════
-       ANNOTATION DIVIDER
-  ═══════════════════════════════════════════ -->
-  <div class="annotation-divider"><span>Delete Account — Confirmation Dialog</span></div>
+<div class="divider">[ Panel 3: Delete Account Dialog ]</div>
 
-  <!-- ═══════════════════════════════════════════
-       PANEL 3 — DELETE ACCOUNT CONFIRMATION DIALOG
-  ═══════════════════════════════════════════ -->
-  <div class="dialog-scene" style="height:600px;">
-    <!-- Dimmed background screen -->
-    <div class="screen-fill">
-      <div style="height:44px;background:var(--primary);"></div>
-      <div style="height:56px;background:var(--primary);border-bottom:2px solid var(--border-structural);"></div>
-      <div class="mini-screen">
-        <div class="mini-header">Session</div>
-        <div class="mini-row">
-          <div class="mini-icon"><span class="material-icons">logout</span></div>
-          <div class="mini-label">Sign Out</div>
-          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
-        </div>
-        <div class="mini-header">Data Management</div>
-        <div class="mini-row">
-          <div class="mini-icon terracotta"><span class="material-icons">cleaning_services</span></div>
-          <div class="mini-label">Clear Local Data</div>
-          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
-        </div>
-        <div class="mini-header danger">Danger Zone</div>
-        <div class="mini-row" style="border-color:var(--red);">
-          <div class="mini-icon red"><span class="material-icons">delete_forever</span></div>
-          <div class="mini-label red">Delete Account</div>
-          <div class="mini-chevron"><span class="material-icons">chevron_right</span></div>
-        </div>
+<!-- ═══════════════════════════════════════════════════════════════════
+     PANEL 3 — DELETE ACCOUNT CONFIRMATION DIALOG
+═══════════════════════════════════════════════════════════════════ -->
+<div class="panel">
+  <div class="bg-screen-ghost">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
       </div>
     </div>
-
-    <!-- Dim overlay -->
-    <div class="dim-layer"></div>
-
-    <!-- Dialog Card -->
-    <div class="float-card red-card" style="border-color:var(--red);">
-      <!-- Header -->
-      <div class="dialog-header">
-        <div class="dialog-icon-box red">
-          <span class="material-icons">warning</span>
-        </div>
-        <div class="dialog-title red">Delete Account?</div>
+    <div class="app-bar">
+      <span class="material-icons back-btn">arrow_back_ios</span>
+      <span class="title">Account</span>
+    </div>
+    <div class="bg-content">
+      <div class="profile-header">
+        <div class="avatar"><span>VL</span></div>
+        <div><div class="profile-name">Vu Linh</div><div class="profile-email">vulinh@example.com</div></div>
       </div>
-
-      <!-- Divider -->
-      <div class="dialog-divider" style="background:rgba(184,50,50,0.3);"></div>
-
-      <!-- Body -->
-      <div class="dialog-body">
-        This permanently deletes your account and <strong>ALL data</strong> from both this device and the cloud. This cannot be undone.
-      </div>
-
-      <!-- Warning checklist -->
-      <div class="warning-checklist">
-        <div class="warning-item">
-          <span class="material-icons">close</span>
-          <span>All campaigns deleted</span>
+      <div class="section-block">
+        <div class="section-header danger">Danger Zone</div>
+        <div class="list-row">
+          <div class="row-icon red"><span class="material-icons">delete_forever</span></div>
+          <div class="row-body">
+            <span class="row-label red-label">Delete Account</span>
+            <span class="row-caption">Cannot be undone</span>
+          </div>
+          <div class="row-chevron"><span class="material-icons">chevron_right</span></div>
         </div>
-        <div class="warning-item">
-          <span class="material-icons">close</span>
-          <span>All check-ins erased</span>
-        </div>
-        <div class="warning-item">
-          <span class="material-icons">close</span>
-          <span>Account unrecoverable</span>
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="dialog-footer">
-        <div class="btn">Keep My Account</div>
-        <div class="btn danger">Delete Forever</div>
       </div>
     </div>
   </div>
+  <div class="overlay">
+    <div class="dialog">
+      <div class="dialog-header red-header">
+        <span class="material-icons">warning</span>
+        <span class="dialog-header-title">Delete Account?</span>
+      </div>
+      <div class="dialog-body">
+        <div class="consequence-list">
+          <div class="consequence-row">
+            <span class="material-icons">close</span>
+            <span class="c-text">All campaigns deleted</span>
+          </div>
+          <div class="consequence-row">
+            <span class="material-icons">close</span>
+            <span class="c-text">All check-in history deleted</span>
+          </div>
+          <div class="consequence-row">
+            <span class="material-icons">close</span>
+            <span class="c-text">Account removed from cloud</span>
+          </div>
+        </div>
+        <p class="warning-text">This action cannot be undone.</p>
+      </div>
+      <div class="dialog-footer">
+        <div class="btn btn-white">Keep My Account</div>
+        <div class="btn btn-danger">Delete Forever</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider">[ Panel 4: Clear Local Data Dialog — New ]</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PANEL 4 — CLEAR LOCAL DATA CONFIRMATION DIALOG (NEW)
+═══════════════════════════════════════════════════════════════════ -->
+<div class="panel">
+  <div class="bg-screen-ghost">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="icons">
+        <span class="material-icons">signal_cellular_alt</span>
+        <span class="material-icons">wifi</span>
+        <span class="material-icons">battery_full</span>
+      </div>
+    </div>
+    <div class="app-bar">
+      <span class="material-icons back-btn">arrow_back_ios</span>
+      <span class="title">Account</span>
+    </div>
+    <div class="bg-content">
+      <div class="profile-header">
+        <div class="avatar"><span>VL</span></div>
+        <div><div class="profile-name">Vu Linh</div><div class="profile-email">vulinh@example.com</div></div>
+      </div>
+      <div class="section-block">
+        <div class="section-header">Data Management</div>
+        <div class="list-row">
+          <div class="row-icon terra"><span class="material-icons">delete_sweep</span></div>
+          <div class="row-body">
+            <span class="row-label">Clear Local Data</span>
+            <span class="row-caption">Keeps your cloud account</span>
+          </div>
+          <div class="row-chevron"><span class="material-icons">chevron_right</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="overlay">
+    <div class="dialog">
+      <div class="dialog-header terra-header">
+        <span class="material-icons">delete_sweep</span>
+        <span class="dialog-header-title">Clear Local Data?</span>
+      </div>
+      <div class="dialog-body">
+        <p class="dialog-text">This removes all data from this device only.</p>
+        <div class="consequence-list">
+          <div class="consequence-row terra-row">
+            <span class="material-icons">info_outline</span>
+            <span class="c-text">All campaigns removed from this device</span>
+          </div>
+          <div class="consequence-row terra-row">
+            <span class="material-icons">info_outline</span>
+            <span class="c-text">All check-in history cleared from this device</span>
+          </div>
+          <div class="consequence-row safe-row">
+            <span class="material-icons">check_circle_outline</span>
+            <span class="c-text safe">Your cloud account and data are unaffected</span>
+          </div>
+        </div>
+        <p class="note-text">Sign back in to restore your data from the cloud.</p>
+      </div>
+      <div class="dialog-footer">
+        <div class="btn btn-white">Cancel</div>
+        <div class="btn btn-terra">Clear Data</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
