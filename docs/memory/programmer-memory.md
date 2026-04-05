@@ -4,7 +4,7 @@
 Track architecture decisions, libraries used, patterns established, and things to avoid.
 
 ## Last Updated
-2026-04-05 (run 35 — implemented MTB-31 account registration and sign-in)
+2026-04-05 (run 36 — implemented MTB-32 user profile screen)
 
 ## Dependencies Added
 | Package | Version | Reason | Date |
@@ -15,6 +15,7 @@ Track architecture decisions, libraries used, patterns established, and things t
 | flutter_local_notifications | ^21.0.0 | Local push notifications | 2026-04-04 |
 | timezone | ^0.11.0 | Required by flutter_local_notifications for zonedSchedule | 2026-04-04 |
 | hive_flutter | ^1.1.0 | Local persistence for campaign data | 2026-04-04 |
+| image_picker | ^1.2.1 | Pick photos from gallery or camera for avatar | 2026-04-05 |
 
 ## Architecture Decisions
 - **Riverpod 3.x uses `Notifier<T>` + `NotifierProvider`** — `StateNotifier` was removed in Riverpod 3. Use `class Foo extends Notifier<T>` with a `build()` method, and `NotifierProvider<Foo, T>(Foo.new)`. The `state` field works the same way inside the notifier.
@@ -154,6 +155,15 @@ Track architecture decisions, libraries used, patterns established, and things t
 - **Password strength bar**: 4-segment `Row` of `Container(height:3)` tiles. Score computed from: length≥6, has uppercase, has digit, has special char. Colors: 1=red, 2=orange, 3=green, 4=kBlue.
 - **Auth routes outside ShellRoute**: `/sign-in` and `/register` are top-level GoRoutes (no bottom nav). `/register` pushed via `context.push()` from sign-in screen; "Sign In Instead" uses `context.pop()`.
 
+- **MTB-32 user profile screen**: `UserProfileScreen` at `/my-profile` (top-level GoRoute, no bottom nav). Entry: Profile tab account card (tappable, shows initials + real email). Three inline modes via `_EditMode` enum (`none`/`editName`/`uploadAvatar`) — no navigation between states, all within the same Scaffold.
+- **`UserProfileNotifier`** in `lib/providers/user_profile_provider.dart`: reads/writes `displayName`, `avatarPath`, `memberSince` from Hive `settings` box. `UserProfileState.initials` derives 2-char uppercase initials from display name.
+- **Avatar initials vs photo**: when `avatarPath` is non-null, shows `Image.file` with `errorBuilder` fallback to initials. Upload mode dims initials to opacity 0.5 and overlays camera icon + blue border.
+- **`_EditMode.editName`**: dims avatar section to opacity 0.6 (using `Opacity` widget), shows inline form with focused blue border `TextField`, cancel (kWhite) + save (kBlue) buttons — no new route needed.
+- **`_EditMode.uploadAvatar`**: shows camera overlay on avatar + 3-button picker strip (Gallery/Camera/Initials) using `image_picker`. All three options call `updateAvatarPath()` and switch back to `none` mode with a 2.5s toast.
+- **`memberSince` init**: set in `main()` with `if (!settings.containsKey('memberSince'))` to stamp first-run date. Never overwritten.
+- **Mock devices section**: hard-coded `_DeviceInfo` list (no real device tracking). Current device badge = kBlue fill; past device badge = kWhite + kSoftBorderColor border.
+- **Profile tab update**: account card now reads `userProfileProvider` (initials, displayName) + `authProvider` (email) and shows chevron pushing to `/my-profile`.
+
 ## PRs Opened
 | Date | PR URL | Issue | Status |
 |---|---|---|---|
@@ -181,3 +191,4 @@ Track architecture decisions, libraries used, patterns established, and things t
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/22 | MTB-29 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/23 | MTB-30 | In Review |
 | 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/24 | MTB-31 | In Review |
+| 2026-04-05 | https://github.com/levulinh/mtbox-app/pull/25 | MTB-32 | In Review |
